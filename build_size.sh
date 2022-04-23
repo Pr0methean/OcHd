@@ -98,11 +98,17 @@ MUSHROOM_STEM_S='#c2bcac'
 
 layer () {
   sed -e "s/#000000/$2/" "svg/$1.svg" > "$TMPDIR/recolor.svg"
-  inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png"  ${@:4:999}
+  inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" ${@:4:999}
+  rm "$TMPDIR/recolor.svg"
 }
 
 stack () {
-  magick "$TMPDIR"/*.png -layers flatten "$OUTDIR/$1.png"
+  NUMFILES=$(ls | wc -l)
+  if [ $NUMFILES -eq 1 ]; then
+    cp "$TMPDIR"/*.png "$OUTDIR/$1.png"
+  else
+    magick "$TMPDIR"/*.png -layers flatten "$OUTDIR/$1.png"
+  fi
   find "$TMPDIR" -name '*.png' | xargs rm
 }
 
@@ -115,20 +121,21 @@ TMPDIR="tmp/${SIZE}x${SIZE}"
 OUTDIR="out/${SIZE}x${SIZE}"
 rm -rf $OUTDIR || true
 mkdir -p $OUTDIR
+mkdir -p $OUTDIR/block
 rm -rf "$TMPDIR" || true
 mkdir -p "$TMPDIR"
 cp -r metadata $OUTDIR
 
+layer checksLarge $STONE_H stone1 -b $STONE_S
+stack block/cobblestone
+
 layer dots2 $GRASS_H grass1 -b $GRASS
 layer dots1 $GRASS_S grass2
-stack grass_block_top
+stack block/grass_block_top
 
 layer checksSmall $STONE_H stone1 -b $STONE_S
-stack stone
+stack block/stone
 
-copy stone sb1
-layer bricks $STONE_SS sb2
-stack stone_bricks
-
-layer checksLarge $STONE_H stone1 -b $STONE_S
-stack cobblestone
+copy block/stone sb1
+layer bricks $STONE_SS 0.5 sb2
+stack block/stone_bricks
