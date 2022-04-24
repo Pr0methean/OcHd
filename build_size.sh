@@ -1,5 +1,4 @@
 #!/bin/bash
-SIZE=$1
 WOODS=('ACACIA' 'BIRCH' 'CRIMSON' 'DARK_OAK' 'JUNGLE' 'OAK' 'SPRUCE' 'WARPED')
 
 # COLOR CONSTANTS
@@ -7,20 +6,20 @@ WOODS=('ACACIA' 'BIRCH' 'CRIMSON' 'DARK_OAK' 'JUNGLE' 'OAK' 'SPRUCE' 'WARPED')
 
 # Dye
 BLACK='#000000'
-RED='#B00000'
-GREEN='#007C00'
+RED='#b00000'
+GREEN='#007c00'
 BROWN='#835400'
-BLUE='#0000AA'
-PURPLE='#8900B8'
-CYAN='#009C9C'
-LIGHT_GRAY='#9D9D9D'
-GRAY='#4F4F4F'
-PINK='#FF9A9A'
-LIME='#80FF00'
-YELLOW='#FFFF00'
-LIGHT_BLUE='#7777FF'
-MAGENTA='#FF4EFF'
-ORANGE='#FF8000'
+BLUE='#0000aa'
+PURPLE='#8900b8'
+CYAN='#009c9c'
+LIGHT_GRAY='#9d9d9d'
+GRAY='#4f4f4f'
+PINK='#ff9a9a'
+LIME='#80ff00'
+YELLOW='#ffff00'
+LIGHT_BLUE='#7777ff'
+MAGENTA='#ff4eff'
+ORANGE='#ff8000'
 WHITE='#ffffff'
 
 # Wood
@@ -97,7 +96,7 @@ MUSHROOM_STEM='#c7c1b4'
 MUSHROOM_STEM_S='#c2bcac'
 
 layer () {
-  sed -e "s/#000000/$2/" "svg/$1.svg" > "$TMPDIR/recolor.svg"
+  sed -e "s/#000000/$2/g" "svg/$1.svg" > "$TMPDIR/recolor.svg"
   inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" ${@:4:999}
   rm "$TMPDIR/recolor.svg"
 }
@@ -107,7 +106,7 @@ stack () {
   if [ $NUMFILES -eq 1 ]; then
     cp "$TMPDIR"/*.png "$OUTDIR/$1.png"
   else
-    magick "$TMPDIR"/*.png -layers flatten "$OUTDIR/$1.png"
+    magick "$TMPDIR"/*.png -colorspace sRGB -layers flatten -set colorspace RGB "$OUTDIR/$1.png"
   fi
   find "$TMPDIR" -name '*.png' | xargs rm
 }
@@ -116,6 +115,7 @@ copy () {
   cp "$OUTDIR/$1.png" "$TMPDIR/$2.png"
 }
 
+SIZE=$1
 declare -i DENSITY=$SIZE*72
 TMPDIR="tmp/${SIZE}x${SIZE}"
 OUTDIR="out/${SIZE}x${SIZE}"
@@ -137,5 +137,10 @@ layer checksSmall $STONE_H stone1 -b $STONE_S
 stack block/stone
 
 copy block/stone sb1
-layer bricks $STONE_SS 0.5 sb2
+layer bricks $STONE_SS sb2
 stack block/stone_bricks
+
+copy block/stone go1
+layer gold $YELLOW go2
+stack block/gold_ore
+
