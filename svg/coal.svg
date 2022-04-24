@@ -56,20 +56,20 @@
     <circle
        style="fill:#000000;stroke-width:0.264583"
        id="path2368"
-       cx="2.1166666"
-       cy="2.1166666"
+       cx="2.9104166"
+       cy="2.9104166"
        r="1.0583333" />
     <circle
        style="fill:#000000;stroke-width:0.264583"
        id="path2370"
-       cx="6.3499999"
-       cy="2.1166666"
+       cx="5.5562501"
+       cy="2.9104166"
        r="1.0583333" />
     <circle
        style="fill:#000000;stroke-width:0.264583"
        id="path2372"
-       cx="2.1166666"
-       cy="6.3499999"
+       cx="2.9104166"
+       cy="5.5562506"
        r="1.0583333" />
     <circle
        style="fill:#000000;stroke-width:0.264583"
@@ -80,8 +80,8 @@
     <circle
        style="fill:#000000;stroke-width:0.264583"
        id="path2376"
-       cx="6.3499999"
-       cy="6.3499999"
+       cx="5.5562506"
+       cy="5.5562506"
        r="1.0583333" />
   </g>
   <metadata

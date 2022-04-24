@@ -112,8 +112,8 @@ copper_h='#ff8268'
 copper='#e0734d'
 copper_s='#c16746'
 coal_h='#494949'
-coal='#393939'
-coal_s='#252525'
+coal='#2f2f2f'
+coal_s='#000000'
 lapis_h='#6995ff'
 lapis='#1855bd'
 lapis_s='#00009c'
@@ -266,7 +266,7 @@ for ore in ${ORES[@]}; do
   highlight="${ore}_h"
   shadow="${ore}_s"
 
-  layer checksLarge ${!highlight} ${ore}_block1 ${!ore}
+  layer checksLarge ${!ore} ${ore}_block1 ${!highlight}
   layer $ore ${!shadow} ${ore}_block2
   layer borderSolidTopLeft ${!highlight} ${ore}_block3
   layer borderSolidBottomRight ${!shadow} ${ore}_block4
