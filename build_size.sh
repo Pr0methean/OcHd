@@ -125,8 +125,8 @@ diamond_hh='#d5ffff'
 diamond_h='#77e7d1'
 diamond='#1ed0d6'
 diamond_s='#239698'
-quartz_h='#eae5de'
-quartz='#d4caba'
+quartz_h='#ffffff'
+quartz='#eae5de'
 quartz_s='#b6a48e'
 
 # Water
