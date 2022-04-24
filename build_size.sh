@@ -1,103 +1,158 @@
 #!/bin/bash
 WOODS=('ACACIA' 'BIRCH' 'CRIMSON' 'DARK_OAK' 'JUNGLE' 'OAK' 'SPRUCE' 'WARPED')
+SIMPLE_ORES=('coal' 'copper' 'iron' 'redstone' 'lapis' 'gold' 'quartz')
+ORES=('coal' 'copper' 'iron' 'redstone' 'lapis' 'gold' 'quartz' 'diamond' 'emerald')
+GROUND_COVERS=('grass' 'podzol' 'mycelium')
 
 # COLOR CONSTANTS
 # H = highlight, S = shadow
 
 # Dye
-BLACK='#000000'
-RED='#b00000'
-GREEN='#007c00'
-BROWN='#835400'
-BLUE='#0000aa'
-PURPLE='#8900b8'
-CYAN='#009c9c'
-LIGHT_GRAY='#9d9d9d'
-GRAY='#4f4f4f'
-PINK='#ff9a9a'
-LIME='#80ff00'
-YELLOW='#ffff00'
-LIGHT_BLUE='#7777ff'
-MAGENTA='#ff4eff'
-ORANGE='#ff8000'
-WHITE='#ffffff'
+black='#000000'
+red='#b00000'
+green='#007c00'
+brown='#835400'
+blue='#0000aa'
+purple='#8900b8'
+cyan='#009c9c'
+light_gray='#9d9d9d'
+gray='#4f4f4f'
+pink='#ff9a9a'
+lime='#80ff00'
+yellow='#ffff00'
+light_blue='#7777ff'
+magenta='#ff4eff'
+orange='#ff8000'
+white='#ffffff'
 
-# Wood
-WOOD_ACACIA_H='#c26d3f'
-WOOD_ACACIA='#ad5d32'
-WOOD_ACACIA_S='#8f4c2a'
-WOOD_BIRCH_H='#d7cb8d'
-WOOD_BIRCH='#c8b77a'
-WOOD_BIRCH_S='#9e8b61'
-WOOD_CRIMSON_H='#863e5a'
-WOOD_CRIMSON='#6a344b'
-WOOD_CRIMSON_S='#4b2737'
-WOOD_DARK_OAK_H='#53381a'
-WOOD_DARK_OAK='#3e2912'
-WOOD_DARK_OAK_S='#3a2411'
-WOOD_JUNGLE_H='#bf8e6b'
-WOOD_JUNGLE='#9f714a'
-WOOD_JUNGLE_S='#785437'
-WOOD_OAK_H='#c29d62'
-WOOD_OAK='#af8f55'
-WOOD_OAK_S='#7e6237'
-WOOD_SPRUCE_H='#886539'
-WOOD_SPRUCE='#70522e'
-WOOD_SPRUCE_S='#5a4424'
-WOOD_WARPED_H='#3a8e8c'
-WOOD_WARPED='#287067'
-WOOD_WARPED_S='#1e4340'
+# wood
+wood_acacia_h='#c26d3f'
+wood_acacia='#ad5d32'
+wood_acacia_s='#8f4c2a'
+wood_birch_h='#d7cb8d'
+wood_birch='#c8b77a'
+wood_birch_s='#9e8b61'
+wood_crimson_h='#863e5a'
+wood_crimson='#6a344b'
+wood_crimson_s='#4b2737'
+wood_dark_oak_h='#53381a'
+wood_dark_oak='#3e2912'
+wood_dark_oak_s='#3a2411'
+wood_jungle_h='#bf8e6b'
+wood_jungle='#9f714a'
+wood_jungle_s='#785437'
+wood_oak_h='#c29d62'
+wood_oak='#af8f55'
+wood_oak_s='#7e6237'
+wood_spruce_h='#886539'
+wood_spruce='#70522e'
+wood_spruce_s='#5a4424'
+wood_warped_h='#3a8e8c'
+wood_warped='#287067'
+wood_warped_s='#1e4340'
 
-# Earth - Overworld
-STONE_HH='#b5b5b5'
-STONE_H='#a6a6a6'
-STONE='#888888'
-STONE_S='#6d6d6d'
-STONE_SS='#525252'
-SAND_H='#edebcb'
-SAND='#dfd5aa' # Compromise between dacfa3 & e3dbb0
-SAND_S='#d1ba8a'
-GRAVEL_H='#aeaeae'
-GRAVEL='#7f7f7f'
-GRAVEL_S='#5f5f5f'
-CLAY_H='#afb9d6'
-CLAY='#9aa3b3'
-CLAY_S='#9499a4'
-DIRT_H='#b9855c'
-DIRT='#966c4a'
-DIRT_S='#593d29'
-# Grass is a gray texture modified by a colormap according to the biome.
-GRASS_HH='#c3c3c3'
-GRASS_H='#bababa'
-GRASS='#9d9d9d'
-GRASS_S='#828282'
-GRASS_SS='#757575'
-PODZOL_H='#8b5920'
-PODZOL='#6a4418'
-PODZOL_S='#4a3018'
-MYCELIUM_H='#7b6d73'
-MYCELIUM='#6a656a'
-MYCELIUM_S='#5a5952'
-DEEPSLATE_H='#797979'
-DEEPSLATE='#515151'
-DEEPSLATE_S='#2f2f37'
-TERRACOTTA='#965d43'
-BEDROCK_H='#979797'
-BEDROCK='#575757'
-BEDROCK_S='#222222'
+# earth - overworld
+stone_hh='#b5b5b5'
+stone_h='#a6a6a6'
+stone='#888888'
+stone_s='#6d6d6d'
+stone_ss='#525252'
+sand_h='#edebcb'
+sand='#dfd5aa' # compromise between dacfa3 & e3dbb0
+sand_s='#d1ba8a'
+gravel_h='#aeaeae'
+gravel='#7f7f7f'
+gravel_s='#5f5f5f'
+clay_h='#afb9d6'
+clay='#9aa3b3'
+clay_s='#9499a4'
+dirt_h='#b9855c'
+dirt='#966c4a'
+dirt_s='#593d29'
+# grass is a gray texture modified by a colormap according to the biome.
+grass_hh='#c3c3c3'
+grass_h='#bababa'
+grass='#9d9d9d'
+grass_s='#828282'
+grass_ss='#757575'
+podzol_h='#8b5920'
+podzol='#6a4418'
+podzol_s='#4a3018'
+mycelium_h='#7b6d73'
+mycelium='#6a656a'
+mycelium_s='#5a5952'
+deepslate_h='#797979'
+deepslate='#515151'
+deepslate_s='#2f2f37'
+terracotta='#965d43'
+bedrock_h='#979797'
+bedrock='#575757'
+bedrock_s='#222222'
 
-# Mushrooms
-MUSHROOM_BROWN_CAP_H='#9c795a'
-MUSHROOM_BROWN_CAP='#977251'
-MUSHROOM_BROWN_CAP_S='#8d6850'
-MUSHROOM_RED_CAP='#ff0000'
-MUSHROOM_STEM_H='#d3ccc4'
-MUSHROOM_STEM='#c7c1b4'
-MUSHROOM_STEM_S='#c2bcac'
+# mushrooms
+mushroom_brown_cap_h='#9c795a'
+mushroom_brown_cap='#977251'
+mushroom_brown_cap_s='#8d6850'
+mushroom_red_cap='#ff0000'
+mushroom_stem_h='#d3ccc4'
+mushroom_stem='#c7c1b4'
+mushroom_stem_s='#c2bcac'
+
+# Ores
+gold_h='#ffffb5'
+gold='#ffff00'
+gold_s='#eb9d00'
+iron_h='#e2c0aa'
+iron='#d8af93'
+iron_s='#af8e77'
+redstone_h='#ff5e5e'
+redstone='#ff0000'
+redstone_s='#ca0000'
+copper_h='#ff8268'
+copper='#e0734d'
+copper_s='#c16746'
+coal_h='#494949'
+coal='#393939'
+coal_s='#252525'
+lapis_h='#6995ff'
+lapis='#1855bd'
+lapis_s='#00009c'
+emerald_hh='#d9ffeb'
+emerald_h='#1cdd62'
+emerald='#1c9829'
+emerald_s='#007b18'
+diamond_hh='#d5ffff'
+diamond_h='#77e7d1'
+diamond='#1ed0d6'
+diamond_s='#239698'
+quartz_h='#eae5de'
+quartz='#d4caba'
+quartz_s='#b6a48e'
+
+# Water
+# Ice is partly transparent unless it's packed/blue ice
+ice_h='#cee0ff'
+ice='#92b9fe'
+ice_s='#70a4fc'
+
+# Lava
+lava_h='#faeb72'
+lava='#e69836'
+lava_s='#cc4108'
+
+# Nether
+netherrack_h='#854242'
+netherrack='#723232'
+netherrack_s='#411616'
+
 
 layer () {
   sed -e "s/#000000/$2/g" "svg/$1.svg" > "$TMPDIR/recolor.svg"
-  inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" ${@:4:999}
+  if [ -z ${4+x} ]; then
+    inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" -y 0.0
+  else
+    inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" -b $4 -y 1.0
+  fi
   rm "$TMPDIR/recolor.svg"
 }
 
@@ -106,41 +161,126 @@ stack () {
   if [ $NUMFILES -eq 1 ]; then
     cp "$TMPDIR"/*.png "$OUTDIR/$1.png"
   else
-    magick "$TMPDIR"/*.png -colorspace sRGB -layers flatten -set colorspace RGB "$OUTDIR/$1.png"
+    magick "$TMPDIR"/*.png -colorspace sRGB -background none -layers flatten -set colorspace RGBA "$OUTDIR/$1.png"
   fi
-  find "$TMPDIR" -name '*.png' | xargs rm
+  mv "$TMPDIR"/*.png "$DEBUGDIR"
 }
 
 copy () {
   cp "$OUTDIR/$1.png" "$TMPDIR/$2.png"
 }
 
+move () {
+  mv "$OUTDIR/$1.png" "$OUTDIR/$2.png"
+}
+
 SIZE=$1
 declare -i DENSITY=$SIZE*72
 TMPDIR="tmp/${SIZE}x${SIZE}"
+DEBUGDIR="debug/${SIZE}x${SIZE}"
 OUTDIR="out/${SIZE}x${SIZE}"
 rm -rf $OUTDIR || true
 mkdir -p $OUTDIR
-mkdir -p $OUTDIR/block
+mkdir $OUTDIR/block
+mkdir $OUTDIR/item
 rm -rf "$TMPDIR" || true
 mkdir -p "$TMPDIR"
+rm -rf "$DEBUGDIR" || true
+mkdir -p "$DEBUGDIR"
 cp -r metadata $OUTDIR
 
-layer checksLarge $STONE_H stone1 -b $STONE_S
+layer checksSmall $stone_h cobblestone $stone_s
 stack block/cobblestone
 
-layer dots2 $GRASS_H grass1 -b $GRASS
-layer dots1 $GRASS_S grass2
+layer vees $grass_s grass $grass
 stack block/grass_block_top
 
-layer checksSmall $STONE_H stone1 -b $STONE_S
+layer dots2 $dirt_h dirt1 $dirt
+layer dots1 $dirt_s dirt2
+stack block/dirt
+
+layer topPart $grass grass_side_ol1
+layer veesTop $grass_s grass_side_ol2
+stack block/grass_block_side_overlay
+
+copy block/dirt grass_side1
+copy block/grass_block_side_overlay grass_side2
+stack block/grass_block_side
+
+layer checksLarge $stone_h stone $stone_s
 stack block/stone
 
+layer strokeBottomLeftTopRight2 $deepslate_h deep1 $deepslate
+layer strokeBottomLeftTopRight $deepslate_s deep2
+layer borderLongDashes $deepslate_s deep3
+stack block/deepslate
+
+layer strokeBottomLeftTopRight2 $netherrack_s nether1 $netherrack
+layer strokeTopLeftBottomRight2 $netherrack_h nether2
+layer borderDotted $netherrack_s nether3
+stack block/netherrack
+
 copy block/stone sb1
-layer bricks $STONE_SS sb2
+layer bricks $stone_ss sb2
 stack block/stone_bricks
 
-copy block/stone go1
-layer gold $YELLOW go2
-stack block/gold_ore
+for ore in ${SIMPLE_ORES[@]}; do
+  layer $ore ${!ore} ${ore}_item
+  stack "item/${ore}"
 
+  highlight="${ore}_h"
+  shadow="${ore}_s"
+
+  layer checksSmall ${!highlight} ${ore}_rawblock1 ${!ore}
+  layer $ore ${!shadow} ${ore}_rawblock2
+  stack "block/raw_${ore}_block"
+
+  layer ingotMask ${!ore} ${ore}_ingot1
+  layer ingotBorder ${!shadow} ${ore}_ingot2
+  layer ingotBorderTopLeft ${!highlight} ${ore}_ingot3
+  layer $ore ${!shadow} ${ore}_ingot4
+  stack "item/${ore}_ingot"
+done
+
+layer diamond1 ${diamond_h} diamond1
+layer diamond2 ${diamond_s} diamond2
+stack item/diamond
+
+layer emeraldTopLeft ${emerald_h} emerald1
+layer emeraldBottomRight ${emerald_s} emerald2
+stack item/emerald
+
+for ore in ${ORES[@]}; do
+  copy block/stone ${ore}1
+  copy item/${ore} ${ore}2
+  stack "block/${ore}_ore"
+
+  copy block/deepslate deep${ore}1
+  copy item/${ore} deep${ore}2
+  stack "block/deepslate_${ore}_ore"
+
+  copy block/netherrack nether${ore}1
+  copy item/${ore} nether${ore}2
+  stack "block/nether_${ore}_ore"
+
+  highlight="${ore}_h"
+  shadow="${ore}_s"
+
+  layer checksLarge ${!highlight} ${ore}_block1 ${!ore}
+  layer $ore ${!shadow} ${ore}_block2
+  layer borderSolidTopLeft ${!highlight} ${ore}_block3
+  layer borderSolidBottomRight ${!shadow} ${ore}_block4
+  stack "block/${ore}_block"
+done
+
+copy block/diamond_block diamond_block1
+layer diamond1 ${diamond_hh} diamond_block2
+layer diamond2 ${diamond_s} diamond_block3
+stack block/diamond_block
+
+copy block/emerald_block emerald_block1
+layer emeraldTopLeft ${emerald_hh} emerald_block2
+layer emeraldBottomRight ${emerald_s} emerald_block3
+stack block/emerald_block
+
+move item/quartz_ingot item/quartz

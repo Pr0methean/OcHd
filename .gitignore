@@ -1,5 +1,6 @@
 out/
 tmp/
+debug/
 .idea/
 vanilla_textures/
 .DS_Store
