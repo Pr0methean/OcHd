@@ -281,7 +281,7 @@ layer borderShortDashes $stone_s sb3
 stack block/stone_bricks
 
 layer bricks $mortar bricks1 $terracotta
-layer borderDotted $stone_h bricks2
+layer borderDotted $mortar bricks2
 stack block/bricks
 
 for wood in ${WOODS[@]}; do
@@ -325,6 +325,9 @@ done
 layer craftingGrid ${wood_oak_s} table1 ${wood_oak}
 layer borderSolid ${black} table2
 stack "block/crafting_table_top"
+
+layer bookShelves ${black} shelf1 ${wood_oak}
+stack "block/bookshelf"
 
 for wood in ${FUNGI[@]}; do
   highlight="wood_${wood}_h"
@@ -434,6 +437,31 @@ move block/quartz_block block/quartz_block_top
 
 copy block/quartz_block_top quartz_side
 stack block/quartz_block_side
+
+layer rings ${quartz_s} quartz1 ${quartz}
+layer borderSolid ${quartz_s} quartz2
+layer borderDotted ${quartz_h} quartz3
+stack block/quartz_pillar_top
+
+layer bricks ${quartz_s} qb1 ${quartz}
+layer borderDotted ${quartz_h} qb2
+stack block/quartz_bricks
+
+layer tntSticksSide ${quartz} qp1 ${quartz_s}
+layer borderLongDashes ${quartz_h} qp2
+stack block/quartz_pillar
+
+layer tntSticksSide ${red} tnt1 ${black}
+layer tntStripe ${white} tnt2
+layer tntSign ${black} tnt3
+stack block/tnt_side
+
+layer tntSticksEnd ${red} tnt1 ${black}
+stack block/tnt_bottom
+
+copy block/tnt_bottom tnt1
+layer tntFuzes ${black} tnt2
+stack block/tnt_top
 
 layer mushroomStem $mushroom_stem mush1
 layer mushroomCap $mushroom_red_cap mush2
