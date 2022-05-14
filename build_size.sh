@@ -1,8 +1,11 @@
 #!/bin/bash
-WOODS=('ACACIA' 'BIRCH' 'CRIMSON' 'DARK_OAK' 'JUNGLE' 'OAK' 'SPRUCE' 'WARPED')
+WOODS=('acacia' 'birch' 'crimson' 'dark_oak' 'jungle' 'oak' 'spruce' 'warped')
+OVERWORLD_WOODS=('acacia' 'birch' 'dark_oak' 'jungle' 'oak' 'spruce')
+FUNGI=('crimson' 'warped')
 SIMPLE_ORES=('coal' 'copper' 'iron' 'redstone' 'lapis' 'gold' 'quartz')
 ORES=('coal' 'copper' 'iron' 'redstone' 'lapis' 'gold' 'quartz' 'diamond' 'emerald')
 GROUND_COVERS=('grass' 'podzol' 'mycelium')
+DYES=('black' 'red' 'green' 'brown' 'blue' 'purple' 'cyan' 'light_gray' 'pink' 'lime' 'yellow' 'light_blue' 'magenta' 'orange' 'white')
 
 # COLOR CONSTANTS
 # H = highlight, S = shadow
@@ -50,6 +53,30 @@ wood_spruce_s='#5a4424'
 wood_warped_h='#3a8e8c'
 wood_warped='#287067'
 wood_warped_s='#1e4340'
+bark_acacia_h='#8d8477'
+bark_acacia='#696259'
+bark_acacia_s='#504b40'
+bark_birch_h='#ffffff'
+bark_birch='#eeffea'
+bark_birch_s='#605e54'
+bark_crimson_h='#b10000'
+bark_crimson='#4b2737'
+bark_crimson_s='#442131'
+bark_dark_oak_h='#584428'
+bark_dark_oak='#3f3100'
+bark_dark_oak_s='#292000'
+bark_jungle_h='#7d5d26'
+bark_jungle='#503f00'
+bark_jungle_s='#3e3000'
+bark_oak_h='#987849'
+bark_oak='#745a36'
+bark_oak_s='#4c3d26'
+bark_spruce_h='#553a1f'
+bark_spruce='#3b2700'
+bark_spruce_s='#2e1c00'
+bark_warped_h='#14956f'
+bark_warped='#562c3e'
+bark_warped_s='#442131'
 
 # earth - overworld
 stone_hh='#b5b5b5'
@@ -75,6 +102,9 @@ grass_h='#bababa'
 grass='#9d9d9d'
 grass_s='#828282'
 grass_ss='#757575'
+grass_item_h='#9ccb6c'
+grass_item='#83b253'
+grass_item_ss='#64a43a'
 podzol_h='#8b5920'
 podzol='#6a4418'
 podzol_s='#4a3018'
@@ -85,6 +115,7 @@ deepslate_h='#797979'
 deepslate='#515151'
 deepslate_s='#2f2f37'
 terracotta='#965d43'
+mortar='#a2867d'
 bedrock_h='#979797'
 bedrock='#575757'
 bedrock_s='#222222'
@@ -156,6 +187,10 @@ layer () {
   rm "$TMPDIR/recolor.svg"
 }
 
+semitrans () {
+  convert "$TMPDIR/$1.png" -alpha set -background none -channel A -evaluate multiply $2 +channel "$TMPDIR/$1.png"
+}
+
 stack () {
   NUMFILES=$(ls | wc -l)
   if [ $NUMFILES -eq 1 ]; then
@@ -189,7 +224,9 @@ rm -rf "$DEBUGDIR" || true
 mkdir -p "$DEBUGDIR"
 cp -r metadata $OUTDIR
 
-layer checksSmall $stone_h cobblestone $stone_s
+layer checksSmall $stone_h cobblestone1 $stone
+layer borderSolid $stone_ss cobblestone3
+layer borderShortDashes $stone_hh cobblestone6
 stack block/cobblestone
 
 layer vees $grass_s grass $grass
@@ -204,25 +241,124 @@ layer veesTop $grass_s grass_side_ol2
 stack block/grass_block_side_overlay
 
 copy block/dirt grass_side1
-copy block/grass_block_side_overlay grass_side2
+layer topPart $grass_item grass_side_ol1
+layer veesTop $grass_item_s grass_side_ol2
 stack block/grass_block_side
 
 layer checksLarge $stone_h stone $stone_s
 stack block/stone
 
-layer strokeBottomLeftTopRight2 $deepslate_h deep1 $deepslate
-layer strokeBottomLeftTopRight $deepslate_s deep2
-layer borderLongDashes $deepslate_s deep3
+copy block/stone stone1
+layer borderSolid $stone_ss stone2
+stack block/smooth_stone
+
+copy block/smooth_stone furnace1
+layer furnaceFront $black furnace2
+stack block/furnace_front
+
+copy block/smooth_stone furnace1
+layer furnaceFrontLit $black furnace2
+stack block/furnace_front_on
+
+layer checksLarge $deepslate deep1 $deepslate_h
+layer strokeTopLeftBottomRight $deepslate_s deep2
+layer borderLongDashes $deepslate_h deep3
 stack block/deepslate
 
-layer strokeBottomLeftTopRight2 $netherrack_s nether1 $netherrack
-layer strokeTopLeftBottomRight2 $netherrack_h nether2
-layer borderDotted $netherrack_s nether3
+layer borderSolid $bedrock_s bedrock1 $bedrock
+layer borderLongDashes $bedrock_h bedrock2
+layer strokeTopLeftBottomRight2 $bedrock_s bedrock3
+layer strokeBottomLeftTopRight2 $bedrock_h bedrock4
+stack block/bedrock
+
+layer diagonalChecksTopLeftBottomRight $netherrack_s nether1 $netherrack
+layer diagonalChecksBottomLeftTopRight $netherrack_h nether2
 stack block/netherrack
 
-copy block/stone sb1
+layer checksSmall $stone_h sb1 $stone
 layer bricks $stone_ss sb2
+layer borderShortDashes $stone_s sb3
 stack block/stone_bricks
+
+layer bricks $mortar bricks1 $terracotta
+layer borderDotted $stone_h bricks2
+stack block/bricks
+
+for wood in ${WOODS[@]}; do
+  highlight="wood_${wood}_h"
+  shadow="wood_${wood}_s"
+  midtone="wood_${wood}"
+
+  layer planksTop ${!midtone} planks1 ${!shadow}
+  layer borderSolidTopLeft ${!highlight} planks2
+  stack "block/${wood}_planks"
+done
+
+for wood in ${OVERWORLD_WOODS[@]}; do
+  highlight="wood_${wood}_h"
+  shadow="wood_${wood}_s"
+  midtone="wood_${wood}"
+  bark_h="bark_${wood}_h"
+  bark_s="bark_${wood}_s"
+  bark="bark_${wood}"
+
+  layer rings ${!shadow} strippedLog1 ${!midtone}
+  layer borderSolid ${!shadow} strippedLog2
+  stack "block/stripped_${wood}_log_top"
+
+  copy "block/stripped_${wood}_log_top" logTop1
+  layer borderSolid ${!bark} logTop2
+  layer borderDotted ${!bark_s} logTop3
+  stack "block/${wood}_log_top"
+
+  layer borderSolid ${!bark_s} logSide3 ${!bark}
+  layer borderDotted ${!bark_h} logSide4
+  layer zigzagSolid ${!bark_s} logSide5
+  layer zigzagSolid2 ${!bark_h} logSide6
+  stack "block/${wood}_log"
+
+  layer borderSolid ${!shadow} strippedLogSide1 ${!midtone}
+  layer borderShortDashes ${!highlight} strippedLogSide2
+  stack "block/stripped_${wood}_log"
+done
+
+layer craftingGrid ${wood_oak_s} table1 ${wood_oak}
+layer borderSolid ${black} table2
+stack "block/crafting_table_top"
+
+for wood in ${FUNGI[@]}; do
+  highlight="wood_${wood}_h"
+  shadow="wood_${wood}_s"
+  midtone="wood_${wood}"
+  bark_h="bark_${wood}_h"
+  bark_s="bark_${wood}_s"
+  bark="bark_${wood}"
+
+  layer rings ${!shadow} strippedLog1 ${!midtone}
+  layer borderSolid ${!shadow} strippedLog2
+  stack "block/stripped_${wood}_stem_top"
+
+  copy "block/stripped_${wood}_stem_top" logTop1
+  layer borderSolid ${!bark} logTop2
+  layer borderShortDashes ${!bark_s} logTop3
+  stack "block/${wood}_stem_top"
+
+  layer borderSolid ${!bark_s} stemSide1 ${!bark}
+  layer waves ${!bark_h} stemSide2
+  stack "block/${wood}_stem"
+
+  layer borderSolid ${!shadow} strippedLogSide1 ${!midtone}
+  layer borderDotted ${!highlight} strippedLogSide2
+  stack "block/stripped_${wood}_stem"
+done
+
+layer diamond1 ${diamond_hh} diamond1
+layer diamond2 ${diamond_s} diamond2
+stack item/diamond
+
+layer emeraldTopLeft ${emerald_h} emerald1
+layer emeraldBottomRight ${emerald_s} emerald2
+stack item/emerald
 
 for ore in ${SIMPLE_ORES[@]}; do
   layer $ore ${!ore} ${ore}_item
@@ -242,13 +378,10 @@ for ore in ${SIMPLE_ORES[@]}; do
   stack "item/${ore}_ingot"
 done
 
-layer diamond1 ${diamond_h} diamond1
-layer diamond2 ${diamond_s} diamond2
-stack item/diamond
-
-layer emeraldTopLeft ${emerald_h} emerald1
-layer emeraldBottomRight ${emerald_s} emerald2
-stack item/emerald
+layer borderSolid $white glass1
+layer borderSolidBottomRight $gray glass2
+layer streaks $white glass3
+stack "block/glass"
 
 for ore in ${ORES[@]}; do
   copy block/stone ${ore}1
@@ -262,7 +395,9 @@ for ore in ${ORES[@]}; do
   copy block/netherrack nether${ore}1
   copy item/${ore} nether${ore}2
   stack "block/nether_${ore}_ore"
+done
 
+for ore in ${SIMPLE_ORES[@]}; do
   highlight="${ore}_h"
   shadow="${ore}_s"
 
@@ -273,14 +408,63 @@ for ore in ${ORES[@]}; do
   stack "block/${ore}_block"
 done
 
-copy block/diamond_block diamond_block1
+layer checksSmall ${lapis} lapis_block1 ${lapis_h}
+layer borderSolidTopLeft ${lapis_h} lapis_block3
+layer borderSolidBottomRight ${lapis_s} lapis_block4
+stack block/lapis_block
+
+layer checksLarge ${diamond} diamond_block1 ${diamond_h}
 layer diamond1 ${diamond_hh} diamond_block2
 layer diamond2 ${diamond_s} diamond_block3
 stack block/diamond_block
 
-copy block/emerald_block emerald_block1
+layer checksLarge ${emerald} emerald_block1 ${emerald_h}
 layer emeraldTopLeft ${emerald_hh} emerald_block2
 layer emeraldBottomRight ${emerald_s} emerald_block3
 stack block/emerald_block
 
+copy block/copper_block cutcopper1
+layer cutInQuarters1 ${copper_h} cutcopper2
+layer cutInQuarters2 ${copper_s} cutcopper3
+stack block/cut_copper
+
 move item/quartz_ingot item/quartz
+move block/raw_quartz_block block/quartz_block_bottom
+move block/quartz_block block/quartz_block_top
+
+copy block/quartz_block_top quartz_side
+stack block/quartz_block_side
+
+layer mushroomStem $mushroom_stem mush1
+layer mushroomCap $mushroom_red_cap mush2
+stack block/red_mushroom
+
+layer mushroomStem $mushroom_stem mush1
+layer mushroomCap $mushroom_brown_cap mush2
+stack block/brown_mushroom
+
+layer railTies $wood_oak rail1
+layer rail $iron rail2
+stack block/rail
+
+layer railCorner $iron rail1
+stack block/rail_corner
+
+for dye in ${DYES[@]}; do
+  layer empty ${!dye} wool1 ${!dye}
+  layer zigzagBroken ${gray} wool2
+  semitrans wool2 0.25
+  layer zigzagBroken ${light_gray} wool3
+  semitrans wool3 0.25
+  layer borderSolid ${gray} wool4
+  semitrans wool4 0.5
+  layer borderDotted ${light_gray} wool5
+  semitrans wool5 0.5
+  stack block/${dye}_wool
+
+  layer empty ${black} glass1 ${!dye}
+  semitrans glass1 0.25
+  layer borderSolid ${!dye} glass2
+  layer streaks ${!dye} glass3
+  stack block/${dye}_stained_glass
+done
