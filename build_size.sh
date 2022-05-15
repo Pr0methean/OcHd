@@ -485,9 +485,10 @@ layer borderSolid ${quartz_s} qp2
 layer borderLongDashes ${quartz_h} qp3
 stack block/quartz_pillar
 
-layer tntSticksSide ${red} tnt1 ${black}
-layer tntStripe ${white} tnt2
-layer tntSign ${black} tnt3
+layer tntSticksSide ${red} tnt10 ${black}
+layer borderDotted ${black} tnt15
+layer tntStripe ${white} tnt20
+layer tntSign ${black} tnt30
 stack block/tnt_side
 
 layer tntSticksEnd ${red} tnt1 ${black}
