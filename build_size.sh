@@ -267,7 +267,6 @@ stack block/furnace_front_on
 
 layer checksLarge $deepslate deep1 $deepslate_h
 layer strokeTopLeftBottomRight $deepslate_s deep2
-layer borderLongDashes $deepslate_h deep3
 stack block/deepslate
 
 layer borderSolid $bedrock_s bedrock1 $bedrock
