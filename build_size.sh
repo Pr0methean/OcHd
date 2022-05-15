@@ -286,6 +286,7 @@ stack block/stone_bricks
 
 layer bricks $mortar bricks1 $terracotta
 layer borderDotted $mortar bricks2
+semitrans bricks2 0.5
 stack block/bricks
 
 for wood in ${WOODS[@]}; do
@@ -477,6 +478,7 @@ stack block/quartz_pillar_top
 
 layer bricks ${quartz_s} qb1 ${quartz}
 layer borderDotted ${quartz_h} qb2
+semitrans qb2 0.5
 stack block/quartz_bricks
 
 layer tntSticksSide ${quartz} qp1 ${quartz_s}
@@ -509,10 +511,10 @@ layer mushroomSpots ${white} mush1 $mushroom_red_cap
 stack block/red_mushroom_block
 
 layer railTies $wood_oak rail1
-layer rail $iron rail2
+layer rail $stone_h rail2
 stack block/rail
 
-layer railCorner $iron rail1
+layer railCorner $stone_h rail1
 stack block/rail_corner
 
 for dye in ${DYES[@]}; do
