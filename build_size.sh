@@ -454,9 +454,11 @@ layer borderSolid ${emerald_s} emerald_block4
 layer borderSolidTopLeft ${emerald_h} emerald_block5
 stack block/emerald_block
 
-copy block/copper_block cutcopper1
-layer cutInQuarters1 ${copper_h} cutcopper2
-layer cutInQuarters2 ${copper_s} cutcopper3
+layer streaks ${copper_h} cutcopper10 ${copper}
+layer borderSolid ${copper_s} cutcopper11
+layer borderSolidTopLeft ${copper_h} cutcopper12
+layer cutInQuarters1 ${copper_s} cutcopper20
+layer cutInQuarters2 ${copper_h} cutcopper30
 stack block/cut_copper
 
 move item/quartz_ingot item/quartz
