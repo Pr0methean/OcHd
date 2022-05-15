@@ -476,7 +476,7 @@ layer borderSolid ${quartz_s} quartz2
 layer borderDotted ${quartz_h} quartz3
 stack block/quartz_pillar_top
 
-layer borderSolid ${quartz_h} qb0 ${quartz}
+layer borderDotted ${quartz_h} qb0 ${quartz}
 layer bricks ${quartz_s} qb1
 stack block/quartz_bricks
 
