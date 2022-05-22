@@ -347,6 +347,17 @@ stack block/mud
 layer snow ${snow_s} snow1 ${snow}
 stack block/snow
 
+# Concrete powder
+
+for dye in ${DYES[@]}; do
+  layer empty ${!dye} conc1 ${!dye}
+  layer checksSmall ${gray} conc2
+  semitrans conc2 0.25
+  layer checksSmall ${light_gray} conc3
+  semitrans conc3 0.25
+  stack block/${dye}_concrete_powder
+done
+
 # todo: farmland
 
 # S2. PICKAXE BLOCKS
@@ -544,6 +555,23 @@ for dye in ${DYES[@]}; do
   layer borderSolid ${!dye} glass2
   layer streaks ${!dye} glass3
   stack block/${dye}_stained_glass
+
+  layer paneTop ${!dye} glass_top1
+  stack block/${dye}_stained_glass_pane_top
+done
+
+copy "block/white_stained_glass_pane_top" glassTop1
+stack block/glass_pane_top
+
+# Concrete
+
+for dye in ${DYES[@]}; do
+  layer empty ${!dye} conc1 ${!dye}
+  layer x ${gray} conc2
+  semitrans conc2 0.25
+  layer borderLongDashes ${light_gray} conc3
+  semitrans conc3 0.25
+  stack block/${dye}_concrete
 done
 
 # Rails
@@ -552,17 +580,31 @@ layer railTies $wood_oak rail1
 layer rail $stone_h rail2
 stack block/rail
 
+layer railTies $wood_oak rail1
+layer thirdRail $black rail2
+layer rail $gold rail3
+stack block/powered_rail
+
+layer railTies $wood_oak rail1
+layer thirdRail $redstone_h rail2
+layer rail $gold rail3
+stack block/powered_rail_on
+
 layer railCorner $stone_h rail1
 stack block/rail_corner
 
 # Functional pickaxe blocks
 
-copy block/smooth_stone furnace1
+layer bottomHalf $stone_h furnaceside1 $stone
+layer borderSolid $stone_ss stone2
+stack block/furnace_side
+
+copy block/furnace_side furnace1
 layer furnaceFront $black furnace2
 stack block/furnace_front
 
-copy block/smooth_stone furnace1
-layer furnaceFrontLit $black furnace2
+copy block/furnace_side furnacel1
+layer furnaceFrontLit $black furnacel2
 stack block/furnace_front_on
 
 # S3. AXE BLOCKS
