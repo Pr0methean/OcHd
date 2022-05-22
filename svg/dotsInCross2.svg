@@ -8,7 +8,7 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.2 (dc2aeda, 2022-05-15)"
-   sodipodi:docname="commandBlockArrowUnconditional.svg"
+   sodipodi:docname="dotsInCross2.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +33,7 @@
      inkscape:snap-tangential="true"
      inkscape:zoom="34.90625"
      inkscape:cx="16.014324"
-     inkscape:cy="16.057296"
+     inkscape:cy="13.736795"
      inkscape:window-width="2560"
      inkscape:window-height="1301"
      inkscape:window-x="0"
@@ -54,11 +54,18 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <path
-       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 1.5875001,6.8791667 5.2916666,0 0,-4.7624999 L 4.7625,6.6666665e-8 H 3.7041667 L 1.5875001,2.1166668 Z"
-       id="path3952"
-       sodipodi:nodetypes="ccccccc" />
+    <circle
+       style="fill:#000000;stroke-width:0"
+       id="circle2844"
+       cx="5.8208318"
+       cy="4.2333331"
+       r="0.26458332" />
+    <circle
+       style="fill:#000000;stroke-width:0"
+       id="circle2930"
+       cx="4.2333331"
+       cy="4.2333331"
+       r="0.26458332" />
   </g>
   <metadata
      id="metadata33">

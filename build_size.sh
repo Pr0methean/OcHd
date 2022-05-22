@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# S00. ARRAY CONSTANTS
+
 WOODS=('acacia' 'birch' 'crimson' 'dark_oak' 'jungle' 'mangrove' 'oak' 'spruce' 'warped')
 OVERWORLD_WOODS=('acacia' 'birch' 'dark_oak' 'jungle' 'mangrove' 'oak' 'spruce')
 FUNGI=('crimson' 'warped')
@@ -6,8 +9,9 @@ SIMPLE_ORES=('coal' 'copper' 'iron' 'redstone' 'gold' 'quartz')
 ORES=('coal' 'copper' 'iron' 'redstone' 'lapis' 'gold' 'quartz' 'diamond' 'emerald')
 GROUND_COVERS=('grass' 'podzol' 'mycelium')
 DYES=('black' 'red' 'green' 'brown' 'blue' 'purple' 'cyan' 'light_gray' 'pink' 'lime' 'yellow' 'light_blue' 'magenta' 'orange' 'white')
+CMD_BLOCK_TYPES=('command_block' 'repeating_command_block' 'chain_command_block')
 
-# COLOR CONSTANTS
+# S01. COLOR CONSTANTS
 # H = highlight, S = shadow
 
 # Dye
@@ -188,6 +192,12 @@ tnt='#db2f00'
 tnt_s='#912d00'
 
 # Technical blocks
+repeating_command_block_h='#9b8bcf'
+repeating_command_block='#6a4fc7'
+repeating_command_block_s='#553b9b'
+chain_command_block_h='#a1c3b4'
+chain_command_block='#76b297'
+chain_command_block_s='#5f8f7a'
 command_block_h='#d7b49d'
 command_block='#c77e4f'
 command_block_s='#a66030'
@@ -227,6 +237,18 @@ move () {
   mv "$OUTDIR/$1.png" "$OUTDIR/$2.png"
 }
 
+donewith () {
+  mv "$OUTDIR/$1.png" "$DEBUGDIR"
+}
+
+animate4 () {
+  convert "$OUTDIR/$1_1.png" "$OUTDIR/$1_2.png" "$OUTDIR/$1_3.png" "$OUTDIR/$1_4.png" -append "OUTDIR/$1.png"
+  donewith "$OUTDIR/$1_1.png"
+  donewith "$OUTDIR/$1_2.png" 
+  donewith "$OUTDIR/$1_3.png"
+  donewith "$OUTDIR/$1_4.png"
+}
+
 SIZE=$1
 declare -i DENSITY=$SIZE*72
 TMPDIR="tmp/${SIZE}x${SIZE}"
@@ -261,7 +283,7 @@ stack block/sand
 layer diagonalChecksTopLeftBottomRight ${clay_s} clay1 ${clay}
 layer diagonalChecksBottomLeftTopRight ${clay_h} clay2
 layer diagonalOutlineChecksTopLeftBottomRight ${clay_h} clay3
-layer diagonalOutlineChecksTopLeftBottomRight ${clay_s} clay4
+layer diagonalOutlineChecksBottomLeftTopRight ${clay_s} clay4
 stack block/clay
 
 # Ground covers
@@ -290,7 +312,7 @@ stack block/podzol_side
 layer diagonalChecksTopLeftBottomRight ${mycelium_s} mycelium1 ${mycelium}
 layer diagonalChecksBottomLeftTopRight ${mycelium_h} mycelium2
 layer diagonalOutlineChecksTopLeftBottomRight ${mycelium_h} mycelium3
-layer diagonalOutlineChecksTopLeftBottomRight ${mycelium_s} mycelium4
+layer diagonalOutlineChecksBottomLeftTopRight ${mycelium_s} mycelium4
 stack block/mycelium_top
 
 copy block/dirt mycelium_side1
@@ -637,3 +659,86 @@ layer borderLongDashes $bedrock_h bedrock2
 layer strokeTopLeftBottomRight2 $bedrock_s bedrock3
 layer strokeBottomLeftTopRight2 $bedrock_h bedrock4
 stack block/bedrock
+
+# Command blocks
+
+for type in ${CMD_BLOCK_TYPES[@]}; do
+  shadow=${type}_s
+  highlight=${type}_h
+
+  layer diagonalChecksTopLeftBottomRight ${!shadow} cbb1 ${!type}
+  layer diagonalChecksBottomLeftTopRight ${!highlight} cbb2
+  layer diagonalOutlineChecksTopLeftBottomRight ${!highlight} cbb3
+  layer diagonalOutlineChecksBottomLeftTopRight ${!shadow} cbb4
+  stack "block/${type}_basebase"
+done
+
+move block/command_block_basebase block/command_block_base
+
+copy block/chain_command_block_basebase chcb1
+layer commandBlockChains $black chcb2
+stack block/chain_command_block_base
+donewith block/chain_command_block_basebase
+
+copy block/repeating_command_block_basebase rcb1
+layer loopArrow $black rcb2
+stack block/repeating_command_block_base
+donewith block/repeating_command_block_basebase
+
+for type in ${CMD_BLOCK_TYPES[@]}; do
+  shadow=${type}_s
+  highlight=${type}_h
+
+  copy "block/${type}_base" frontbase1
+  layer commandBlockOctagon $black frontbase2
+  layer craftingGridSpacesCross $white frontbase3
+  stack "block/${type}_front_base"
+
+  for frame in `seq 1 4`; do
+    copy "block/${type}_front_base" front1
+    layer "dotsInCross${frame}" $command_block_dot front2
+    stack "block/${type}_front_${frame}"
+  done
+  animate4 "block/${type}_front"
+  donewith "block/${type}_front_base"
+
+  copy "block/${type}_base" backbase1
+  layer commandBlockSquare $black backbase2
+  layer craftingGridSpaces $white backbase3
+  stack "block/${type}_back_base"
+
+  for frame in `seq 1 4`; do
+    copy "block/${type}_back_base" back1
+    layer "glider${frame}" $command_block_dot back2
+    stack "block/${type}_back_${frame}"
+  done
+  donewith "$OUTDIR/${type}_back_base"
+  animate4 "block/${type}_back"
+
+  copy "block/${type}_base" sidebase1
+  layer commandBlockArrowUnconditional $black sidebase2
+  layer craftingGridSpaces $white sidebase3
+  stack "block/${type}_side_base"
+
+  for frame in `seq 1 4`; do
+    copy "block/${type}_side_base" front1
+    layer "glider${frame}" $command_block_dot front2
+    stack "block/${type}_side_${frame}"
+  done
+  donewith "$OUTDIR/${type}_side_base"
+  animate4 "block/${type}_side"
+
+  copy "block/${type}_base" condbase1
+  layer commandBlockArrow $black condbase2
+  layer craftingGridSpaces $white condbase3
+  stack "block/${type}_conditional_base"
+  donewith "block/${type}_base"
+
+  for frame in `seq 1 4`; do
+    copy "block/${type}_conditional_base" front1
+    layer "glider${frame}" $command_block_dot front2
+    stack "block/${type}_conditional_${frame}"
+  done
+  donewith "$OUTDIR/${type}_conditional_base"
+  animate4 "block/${type}_conditional"
+done

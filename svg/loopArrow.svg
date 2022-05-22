@@ -8,7 +8,7 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.2 (dc2aeda, 2022-05-15)"
-   sodipodi:docname="commandBlockArrowUnconditional.svg"
+   sodipodi:docname="loopArrow.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -32,8 +32,8 @@
      inkscape:snap-perpendicular="true"
      inkscape:snap-tangential="true"
      inkscape:zoom="34.90625"
-     inkscape:cx="16.014324"
-     inkscape:cy="16.057296"
+     inkscape:cx="11.444942"
+     inkscape:cy="16.028648"
      inkscape:window-width="2560"
      inkscape:window-height="1301"
      inkscape:window-x="0"
@@ -55,10 +55,10 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 1.5875001,6.8791667 5.2916666,0 0,-4.7624999 L 4.7625,6.6666665e-8 H 3.7041667 L 1.5875001,2.1166668 Z"
-       id="path3952"
-       sodipodi:nodetypes="ccccccc" />
+       id="rect863"
+       style="fill:#000000;stroke-width:0"
+       d="M 0.52916667,0.52916667 V 7.9375 H 7.9375 V 5.2916667 h 0.5291667 l -0.79375,-0.79375 -0.79375,0.79375 h 0.5291666 v 2.1166666 h -6.35 v -6.35 h 6.35 l 0,2.6458334 0.2645834,-0.2645834 0.2645833,0.2645834 0,-3.17500003 z"
+       sodipodi:nodetypes="ccccccccccccccccc" />
   </g>
   <metadata
      id="metadata33">
