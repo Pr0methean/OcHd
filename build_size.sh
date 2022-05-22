@@ -220,13 +220,13 @@ layer () {
   if [ -z ${4+x} ]; then
     inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" -y 0.0
   else
-    inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" -b $4 -y 1.0
+    inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" -b "$4" -y 1.0
   fi
   rm "$TMPDIR/recolor.svg"
 }
 
 semitrans () {
-  convert "$TMPDIR/$1.png" -alpha set -background none -channel A -evaluate multiply $2 +channel "$TMPDIR/$1.png"
+  convert "$TMPDIR/$1.png" -alpha set -background none -channel A -evaluate multiply "$2" +channel "$TMPDIR/$1.png"
 }
 
 stack () {
@@ -346,6 +346,11 @@ stack block/mud
 layer snow ${snow_s} snow1 ${snow}
 stack block/snow
 
+copy block/dirt snow_side_1
+layer topPart ${snow} snow_side_2
+layer snowTopPart ${snow_s} snow_side_3
+stack block/grass_block_snow
+
 # Concrete powder
 
 for dye in ${DYES[@]}; do
@@ -354,7 +359,7 @@ for dye in ${DYES[@]}; do
   semitrans conc2 0.25
   layer checksSmall ${light_gray} conc3
   semitrans conc3 0.25
-  stack block/${dye}_concrete_powder
+  stack "block/${dye}_concrete_powder"
 done
 
 # todo: farmland
@@ -553,15 +558,15 @@ layer streaks $white tglass3
 semitrans tglass3 0.25
 stack "block/tinted_glass"
 
-for dye in ${DYES[@]}; do
-  layer empty ${black} glass1 ${!dye}
+for dye in "${DYES[@]}"; do
+  layer empty ${black} glass1 "${!dye}"
   semitrans glass1 0.25
-  layer borderSolid ${!dye} glass2
-  layer streaks ${!dye} glass3
-  stack block/${dye}_stained_glass
+  layer borderSolid "${!dye}" glass2
+  layer streaks "${!dye}" glass3
+  stack "block/${dye}_stained_glass"
 
-  layer paneTop ${!dye} glass_top1
-  stack block/${dye}_stained_glass_pane_top
+  layer paneTop "${!dye}" glass_top1
+  stack "block/${dye}_stained_glass_pane_top"
 done
 
 copy "block/white_stained_glass_pane_top" glassTop1
@@ -569,13 +574,13 @@ stack block/glass_pane_top
 
 # Concrete
 
-for dye in ${DYES[@]}; do
-  layer empty ${!dye} conc1 ${!dye}
+for dye in "${DYES[@]}"; do
+  layer empty "${!dye}" conc1 "${!dye}"
   layer x ${gray} conc2
   semitrans conc2 0.25
   layer borderLongDashes ${light_gray} conc3
   semitrans conc3 0.25
-  stack block/${dye}_concrete
+  stack "block/${dye}_concrete"
 done
 
 # Rails
@@ -777,10 +782,10 @@ for type in ${CMD_BLOCK_TYPES[@]}; do
   shadow=${type}_s
   highlight=${type}_h
 
-  layer diagonalChecksTopLeftBottomRight ${!shadow} cbb1 ${!type}
-  layer diagonalChecksBottomLeftTopRight ${!highlight} cbb2
-  layer diagonalOutlineChecksTopLeftBottomRight ${!highlight} cbb3
-  layer diagonalOutlineChecksBottomLeftTopRight ${!shadow} cbb4
+  layer diagonalChecksTopLeftBottomRight "${!shadow}" cbb1 "${!type}"
+  layer diagonalChecksBottomLeftTopRight "${!highlight}" cbb2
+  layer diagonalOutlineChecksTopLeftBottomRight "${!highlight}" cbb3
+  layer diagonalOutlineChecksBottomLeftTopRight "${!shadow}" cbb4
   stack "block/${type}_basebase"
 done
 
