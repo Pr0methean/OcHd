@@ -114,13 +114,19 @@ grass_s='#828282'
 grass_ss='#757575'
 grass_item_h='#9ccb6c'
 grass_item='#83b253'
-grass_item_ss='#64a43a'
+grass_item_s='#64a43a'
 podzol_h='#8b5920'
 podzol='#6a4418'
 podzol_s='#4a3018'
 mycelium_h='#7b6d73'
 mycelium='#6a656a'
 mycelium_s='#5a5952'
+mud_h='#494949'
+mud='#3a3a3a'
+mud_s='#333333'
+mud_brick_h='#ab8661'
+mud_brick='#8c674f'
+mud_brick_s='#5e4841'
 deepslate_h='#797979'
 deepslate='#515151'
 deepslate_s='#2f2f37'
@@ -298,9 +304,9 @@ layer topPart $grass_h grass_side_ol1
 layer veesTop $grass_s grass_side_ol2
 stack block/grass_block_side_overlay
 
-copy block/dirt grass_side1
-layer topPart $grass_item_h grass_side_1
-layer veesTop $grass_item_s grass_side_2
+copy block/dirt grass_side_1
+layer topPart $grass_item_h grass_side_2
+layer veesTop $grass_item_s grass_side_3
 stack block/grass_block_side
 
 layer zigzagBroken ${podzol_s} podzol1 ${podzol}
@@ -319,16 +325,25 @@ layer diagonalOutlineChecksBottomLeftTopRight ${mycelium_s} mycelium4
 stack block/mycelium_top
 
 copy block/dirt mycelium_side1
-magick "${OUTDIR}/block/mycelium_top.png" -crop '100%x34.375%' "${TMPDIR}/mycelium_side2.png"
+magick "${OUTDIR}/block/mycelium_top.png" -crop '100%x34.375%' -y 0.0 "${TMPDIR}/mycelium_side2.png"
+# FIXME: Find a way to not output these
+rm "${TMPDIR}/mycelium_side2_1.png"
+rm "${TMPDIR}/mycelium_side2_2.png"
 stack block/mycelium_side
 
 layer strokeTopLeftBottomRight4 ${moss_h} moss1 ${moss}
 layer strokeBottomLeftTopRight4 ${moss_s} moss2
 layer borderSolid ${moss_h} moss3
-layer borderDotted ${moss_s} moss4
+layer borderShortDashes ${moss_s} moss4
 stack block/moss_block
 
-# todo: farmland, snow, mud
+layer strokeTopLeftBottomRight2 ${mud_h} mud1 ${mud}
+layer strokeBottomLeftTopRight2 ${mud_s} mud2
+layer borderSolid ${mud_h} mud3
+layer borderDotted ${mud_s} mud4
+stack block/mud
+
+# todo: farmland, snow
 
 # S2. PICKAXE BLOCKS
 
@@ -367,17 +382,21 @@ stack block/netherrack
 
 # Bricks
 
-layer checksSmall $stone_h sb1 $stone
+layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
+layer strokeBottomLeftTopRight2 ${mud_brick_s} mb2
+layer bricks ${mud_s} mb3
+layer borderDotted ${mud_h} mb4
+stack block/mud_bricks
+
+layer checksLarge $stone_h sb1 $stone
 layer bricks $stone_ss sb2
 layer borderShortDashes $stone_s sb3
 stack block/stone_bricks
 
-layer checksSmall $stone_h msb1 $stone
-layer strokeBottomLeftTopRight4 ${moss_s} msb2
-layer strokeBottomLeftTopRight2 ${moss_h} msb3
-layer strokeBottomLeftTopRight2 ${moss} msb4
-layer bricks $stone_ss msb5
-layer borderShortDashes $stone_s msb6
+copy block/stone_bricks msb1
+layer strokeBottomLeftTopRight2 ${moss_s} msb3
+layer strokeBottomLeftTopRight1 ${moss_h} msb4
+layer borderShortDashes ${moss} msb5
 stack block/mossy_stone_bricks
 
 layer bricks $mortar bricks1 $terracotta
@@ -385,7 +404,7 @@ layer borderDotted $mortar bricks2
 semitrans bricks2 0.5
 stack block/bricks
 
-# todo: cracked stone bricks, end stone bricks, nether bricks, mud bricks
+# todo: cracked stone bricks, end stone bricks, nether bricks
 
 # Ores
 
@@ -509,6 +528,12 @@ layer borderSolidBottomRight $gray glass2
 layer streaks $white glass3
 stack "block/glass"
 
+layer borderSolid $white tglass1
+semitrans tglass1 0.5
+layer streaks $white tglass3
+semitrans tglass3 0.25
+stack "block/tinted_glass"
+
 for dye in ${DYES[@]}; do
   layer empty ${black} glass1 ${!dye}
   semitrans glass1 0.25
@@ -611,6 +636,8 @@ done
 layer mushroomSpots ${white} mush1 $mushroom_red_cap
 layer borderRoundDotsVaryingSize ${white} mush2
 stack block/red_mushroom_block
+
+# todo: stem and brown cap
 
 # Functional wooden blocks
 
