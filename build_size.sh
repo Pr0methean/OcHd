@@ -184,6 +184,8 @@ quartz_s='#b6a48e'
 ice_h='#cee0ff'
 ice='#92b9fe'
 ice_s='#70a4fc'
+snow='#ffffff'
+snow_s='#cfcfdf'
 
 # Lava
 lava_h='#faeb72'
@@ -259,7 +261,6 @@ animate4 () {
 }
 
 SIZE=$1
-declare -i DENSITY=$SIZE*72
 TMPDIR="tmp/${SIZE}x${SIZE}"
 DEBUGDIR="debug/${SIZE}x${SIZE}"
 OUTDIR="out/${SIZE}x${SIZE}/assets/minecraft/textures"
@@ -325,10 +326,10 @@ layer diagonalOutlineChecksBottomLeftTopRight ${mycelium_s} mycelium4
 stack block/mycelium_top
 
 copy block/dirt mycelium_side1
-magick "${OUTDIR}/block/mycelium_top.png" -crop '100%x34.375%' -y 0.0 "${TMPDIR}/mycelium_side2.png"
+magick "${OUTDIR}/block/mycelium_top.png" -crop '100%x34.375%' "${TMPDIR}/mycelium_side2.png"
 # FIXME: Find a way to not output these
-rm "${TMPDIR}/mycelium_side2_1.png"
-rm "${TMPDIR}/mycelium_side2_2.png"
+rm "${TMPDIR}/mycelium_side2-1.png"
+rm "${TMPDIR}/mycelium_side2-2.png"
 stack block/mycelium_side
 
 layer strokeTopLeftBottomRight4 ${moss_h} moss1 ${moss}
@@ -343,7 +344,10 @@ layer borderSolid ${mud_h} mud3
 layer borderDotted ${mud_s} mud4
 stack block/mud
 
-# todo: farmland, snow
+layer snow ${snow_s} snow1 ${snow}
+stack block/snow
+
+# todo: farmland
 
 # S2. PICKAXE BLOCKS
 
@@ -395,7 +399,7 @@ stack block/stone_bricks
 
 copy block/stone_bricks msb1
 layer strokeBottomLeftTopRight2 ${moss_s} msb3
-layer strokeBottomLeftTopRight1 ${moss_h} msb4
+layer strokeBottomLeftTopRight ${moss_h} msb4
 layer borderShortDashes ${moss} msb5
 stack block/mossy_stone_bricks
 
