@@ -309,8 +309,8 @@ layer topPart $grass_item_h grass_side_2
 layer veesTop $grass_item_s grass_side_3
 stack block/grass_block_side
 
-layer zigzagBroken ${podzol_s} podzol1 ${podzol}
-layer borderDotted ${podzol_h} podzol2
+layer zigzagBroken ${podzol_h} podzol1 ${podzol}
+layer borderDotted ${podzol_s} podzol2
 stack block/podzol_top
 
 copy block/dirt podzol_side1
@@ -353,8 +353,8 @@ stack block/grass_block_snow
 
 # Concrete powder
 
-for dye in ${DYES[@]}; do
-  layer empty ${!dye} conc1 ${!dye}
+for dye in "${DYES[@]}"; do
+  layer empty "${!dye}" conc1 "${!dye}"
   layer checksSmall ${gray} conc2
   semitrans conc2 0.25
   layer checksSmall ${light_gray} conc3
@@ -445,43 +445,43 @@ layer lapisHighlight ${lapis_h} lapis2
 layer lapisShadow ${lapis_s} lapis3
 stack item/lapis
 
-for ore in ${SIMPLE_ORES[@]}; do
-  layer $ore ${!ore} ${ore}_item
+for ore in "${SIMPLE_ORES[@]}"; do
+  layer "$ore" "${!ore}" "${ore}_item"
   stack "item/${ore}"
 
   highlight="${ore}_h"
   shadow="${ore}_s"
 
-  layer bigCircle ${!shadow} rawitem1
-  layer $ore ${!highlight} rawitem3
+  layer bigCircle "${!shadow}" "${ore}_rawitem1"
+  layer "$ore" "${!highlight}" "${ore}_rawitem3"
   stack "item/raw_${ore}"
 
-  layer checksSmall ${!highlight} ${ore}_rawblock1 ${!ore}
-  layer $ore ${!shadow} ${ore}_rawblock2
+  layer checksSmall "${!highlight}" "${ore}_rawblock1" ${!ore}
+  layer "$ore" "${!shadow}" "${ore}_rawblock2"
   stack "block/raw_${ore}_block"
 
-  layer ingotMask ${!ore} ${ore}_ingot1
-  layer ingotBorder ${!shadow} ${ore}_ingot2
-  layer ingotBorderTopLeft ${!highlight} ${ore}_ingot3
-  layer $ore ${!shadow} ${ore}_ingot4
+  layer ingotMask "${!ore}" "${ore}_ingot1"
+  layer ingotBorder "${!shadow}" "${ore}_ingot2"
+  layer ingotBorderTopLeft "${!highlight}" "${ore}_ingot3"
+  layer "$ore" "${!shadow}" "${ore}_ingot4"
   stack "item/${ore}_ingot"
 done
 
-for ore in ${ORES[@]}; do
-  copy block/stone ${ore}1
-  copy item/${ore} ${ore}2
+for ore in "${ORES[@]}"; do
+  copy block/stone "${ore}1"
+  copy "item/${ore}" "${ore}2"
   stack "block/${ore}_ore"
 
-  copy block/deepslate deep${ore}1
-  copy item/${ore} deep${ore}2
+  copy block/deepslate "deep${ore}1"
+  copy "item/${ore}" "deep${ore}2"
   stack "block/deepslate_${ore}_ore"
 
-  copy block/netherrack nether${ore}1
-  copy item/${ore} nether${ore}2
+  copy block/netherrack "nether${ore}1"
+  copy "item/${ore}" "nether${ore}2"
   stack "block/nether_${ore}_ore"
 done
 
-for ore in ${SIMPLE_ORES[@]}; do
+for ore in "${SIMPLE_ORES[@]}"; do
   highlight="${ore}_h"
   shadow="${ore}_s"
 
