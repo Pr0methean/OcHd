@@ -7,7 +7,6 @@ OVERWORLD_WOODS=('acacia' 'birch' 'dark_oak' 'jungle' 'mangrove' 'oak' 'spruce')
 FUNGI=('crimson' 'warped')
 SIMPLE_ORES=('coal' 'copper' 'iron' 'redstone' 'gold' 'quartz')
 ORES=('coal' 'copper' 'iron' 'redstone' 'lapis' 'gold' 'quartz' 'diamond' 'emerald')
-GROUND_COVERS=('grass' 'podzol' 'mycelium')
 DYES=('black' 'red' 'green' 'brown' 'blue' 'purple' 'cyan' 'light_gray' 'pink' 'lime' 'yellow' 'light_blue' 'magenta' 'orange' 'white')
 CMD_BLOCK_TYPES=('command_block' 'repeating_command_block' 'chain_command_block')
 
@@ -396,6 +395,11 @@ layer diagonalOutlineChecksBottomLeftTopRight $netherrack_h nether2
 stack block/netherrack
 
 # Bricks
+
+layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
+layer strokeBottomLeftTopRight2 ${mud_brick_s} mb2
+layer borderDotted ${mud_h} mb4
+stack block/packed_mud
 
 layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
 layer strokeBottomLeftTopRight2 ${mud_brick_s} mb2
@@ -793,7 +797,7 @@ for type in ${CMD_BLOCK_TYPES[@]}; do
   layer craftingGridSpacesCross $white frontbase3
   stack "block/${type}_front_base"
 
-  for frame in `seq 1 4`; do
+  for frame in $(seq 1 4); do
     copy "block/${type}_front_base" front1
     layer "dotsInCross${frame}" $command_block_dot front2
     stack "block/${type}_front_${frame}"
@@ -806,7 +810,7 @@ for type in ${CMD_BLOCK_TYPES[@]}; do
   layer craftingGridSpaces $white backbase3
   stack "block/${type}_back_base"
 
-  for frame in `seq 1 4`; do
+  for frame in $(seq 1 4); do
     copy "block/${type}_back_base" back1
     layer "glider${frame}" $command_block_dot back2
     stack "block/${type}_back_${frame}"
@@ -819,7 +823,7 @@ for type in ${CMD_BLOCK_TYPES[@]}; do
   layer craftingGridSpaces $white sidebase3
   stack "block/${type}_side_base"
 
-  for frame in `seq 1 4`; do
+  for frame in $(seq 1 4); do
     copy "block/${type}_side_base" front1
     layer "glider${frame}" $command_block_dot front2
     stack "block/${type}_side_${frame}"
@@ -833,7 +837,7 @@ for type in ${CMD_BLOCK_TYPES[@]}; do
   stack "block/${type}_conditional_base"
   donewith "block/${type}_base"
 
-  for frame in `seq 1 4`; do
+  for frame in $(seq 1 4); do
     copy "block/${type}_conditional_base" front1
     layer "glider${frame}" $command_block_dot front2
     stack "block/${type}_conditional_${frame}"
