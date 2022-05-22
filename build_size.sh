@@ -126,6 +126,9 @@ deepslate='#515151'
 deepslate_s='#2f2f37'
 terracotta='#965d43'
 mortar='#a2867d'
+moss_h='#70922d'
+moss='#647233'
+moss_s='#42552d'
 bedrock_h='#979797'
 bedrock='#575757'
 bedrock_s='#222222'
@@ -202,7 +205,7 @@ command_block_h='#d7b49d'
 command_block='#c77e4f'
 command_block_s='#a66030'
 command_block_dot='#c2873e'
-structure_block_bg='#675230'
+structure_block_bg='#26002a'
 structure_block_fg='#d7c2d7'
 
 layer () {
@@ -242,11 +245,11 @@ donewith () {
 }
 
 animate4 () {
-  convert "$OUTDIR/$1_1.png" "$OUTDIR/$1_2.png" "$OUTDIR/$1_3.png" "$OUTDIR/$1_4.png" -append "OUTDIR/$1.png"
-  donewith "$OUTDIR/$1_1.png"
-  donewith "$OUTDIR/$1_2.png" 
-  donewith "$OUTDIR/$1_3.png"
-  donewith "$OUTDIR/$1_4.png"
+  convert "${OUTDIR}/${1}_1.png" "${OUTDIR}/${1}_2.png" "${OUTDIR}/${1}_3.png" "${OUTDIR}/${1}_4.png" -append "${OUTDIR}/${1}.png"
+  donewith "${1}_1"
+  donewith "${1}_2"
+  donewith "${1}_3"
+  donewith "${1}_4"
 }
 
 SIZE=$1
@@ -316,10 +319,14 @@ layer diagonalOutlineChecksBottomLeftTopRight ${mycelium_s} mycelium4
 stack block/mycelium_top
 
 copy block/dirt mycelium_side1
-magick "$OUTDIR"/block/mycelium_top -crop 100%x34.375% "$TMPDIR"/mycelium_side2.png
+magick "$OUTDIR"/block/mycelium_top.png -crop 100%x34.375% "$TMPDIR"/mycelium_side2.png
 stack block/mycelium_side
 
-# todo: moss, farmland, snow
+layer strokeTopLeftBottomRight4 ${moss_h} moss1 ${moss}
+layer strokeBottomLeftTopRight4 ${moss_s} moss2
+stack block/moss_block
+
+# todo: farmland, snow, mud
 
 # S2. PICKAXE BLOCKS
 
@@ -336,6 +343,12 @@ layer checksSmall $stone cobblestone2
 layer borderSolid $stone_hh cobblestone3
 layer borderShortDashes $stone_ss cobblestone6
 stack block/cobblestone
+
+copy block/cobblestone mcs1
+layer strokeBottomLeftTopRight4 ${moss_s} mcs2
+layer strokeBottomLeftTopRight2 ${moss_h} mcs3
+layer strokeBottomLeftTopRight2 ${moss} mcs4
+stack block/mossy_cobblestone
 
 layer checksLarge $deepslate_h deepslate1 $deepslate_s
 layer checksSmall $deepslate deepslate2
@@ -356,10 +369,20 @@ layer bricks $stone_ss sb2
 layer borderShortDashes $stone_s sb3
 stack block/stone_bricks
 
+layer checksSmall $stone_h msb1 $stone
+layer strokeBottomLeftTopRight4 ${moss_s} msb2
+layer strokeBottomLeftTopRight2 ${moss_h} msb3
+layer strokeBottomLeftTopRight2 ${moss} msb4
+layer bricks $stone_ss msb5
+layer borderShortDashes $stone_s msb6
+stack block/mossy_stone_bricks
+
 layer bricks $mortar bricks1 $terracotta
 layer borderDotted $mortar bricks2
 semitrans bricks2 0.5
 stack block/bricks
+
+# todo: cracked stone bricks, end stone bricks, nether bricks, mud bricks
 
 # Ores
 
@@ -742,3 +765,38 @@ for type in ${CMD_BLOCK_TYPES[@]}; do
   donewith "$OUTDIR/${type}_conditional_base"
   animate4 "block/${type}_conditional"
 done
+
+# Structure & jigsaw blocks
+
+layer empty $structure_block_fg sb1 $structure_block_bg
+layer borderDotted $structure_block_fg sb2
+semitrans sb2 0.25
+stack block/jigsaw_bottom
+
+layer cornerCrosshairs $structure_block_fg sbc1 $structure_block_bg
+stack block/structure_block_corner
+
+copy block/jigsaw_bottom sbd1
+layer data $structure_block_fg sbd2
+stack block/structure_block_data
+
+copy block/jigsaw_bottom sbl1
+layer folderLoad $structure_block_fg sbl2
+stack block/structure_block_load
+
+copy block/jigsaw_bottom sbs1
+layer folderSave $structure_block_fg sbs2
+stack block/structure_block_save
+
+copy block/jigsaw_bottom jbt1
+layer jigsaw $structure_block_fg jbt2
+stack block/jigsaw_top
+
+copy block/jigsaw_bottom jbs1
+layer arrowUp $structure_block_fg jbs2
+stack block/jigsaw_side
+
+copy block/jigsaw_bottom jbl1
+layer jigsawLock $structure_block_fg jbl2
+stack block/jigsaw_lock
+
