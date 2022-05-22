@@ -745,6 +745,14 @@ copy block/tnt_bottom tnt1
 layer tntFuzes ${black} tnt2
 stack block/tnt_top
 
+# Plants
+
+# Lily pads are biome-colored starting from gray, like grass blocks
+
+layer lilyPad ${grass_s} pad1
+layer lilyPadInterior ${grass_h} pad2
+stack block/lily_pad
+
 # Mushrooms
 
 layer mushroomStem $mushroom_stem mush1
