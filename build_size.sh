@@ -241,7 +241,7 @@ move () {
 }
 
 donewith () {
-  mv "$OUTDIR/$1.png" "$DEBUGDIR"
+  mv "${OUTDIR}/${1}.png" "${DEBUGDIR}"
 }
 
 animate4 () {
@@ -291,16 +291,16 @@ stack block/clay
 
 # Ground covers
 
-layer vees $grass_s grass $grass
+layer vees $grass_s grass $grass_h
 stack block/grass_block_top
 
-layer topPart $grass grass_side_ol1
+layer topPart $grass_h grass_side_ol1
 layer veesTop $grass_s grass_side_ol2
 stack block/grass_block_side_overlay
 
 copy block/dirt grass_side1
-layer topPart $grass_item grass_side_ol1
-layer veesTop $grass_item_s grass_side_ol2
+layer topPart $grass_item_h grass_side_1
+layer veesTop $grass_item_s grass_side_2
 stack block/grass_block_side
 
 layer zigzagBroken ${podzol_s} podzol1 ${podzol}
@@ -309,7 +309,7 @@ stack block/podzol_top
 
 copy block/dirt podzol_side1
 layer topPart $podzol podzol_side2
-layer zigzagBrokenTopPart ${podzol_h} podzol3
+layer zigzagBrokenTopPart ${podzol_h} podzol_side3
 stack block/podzol_side
 
 layer diagonalChecksTopLeftBottomRight ${mycelium_s} mycelium1 ${mycelium}
@@ -319,11 +319,13 @@ layer diagonalOutlineChecksBottomLeftTopRight ${mycelium_s} mycelium4
 stack block/mycelium_top
 
 copy block/dirt mycelium_side1
-magick "$OUTDIR"/block/mycelium_top.png -crop 100%x34.375% "$TMPDIR"/mycelium_side2.png
+magick "${OUTDIR}/block/mycelium_top.png" -crop '100%x34.375%' "${TMPDIR}/mycelium_side2.png"
 stack block/mycelium_side
 
 layer strokeTopLeftBottomRight4 ${moss_h} moss1 ${moss}
 layer strokeBottomLeftTopRight4 ${moss_s} moss2
+layer borderSolid ${moss_h} moss3
+layer borderDotted ${moss_s} moss4
 stack block/moss_block
 
 # todo: farmland, snow, mud
@@ -345,9 +347,10 @@ layer borderShortDashes $stone_ss cobblestone6
 stack block/cobblestone
 
 copy block/cobblestone mcs1
-layer strokeBottomLeftTopRight4 ${moss_s} mcs2
-layer strokeBottomLeftTopRight2 ${moss_h} mcs3
 layer strokeBottomLeftTopRight2 ${moss} mcs4
+layer strokeBottomLeftTopRight ${moss_s} mcs5
+layer borderSolid ${moss_h} mcs6
+layer borderShortDashes $stone_ss mcs7
 stack block/mossy_cobblestone
 
 layer checksLarge $deepslate_h deepslate1 $deepslate_s
@@ -722,8 +725,8 @@ for type in ${CMD_BLOCK_TYPES[@]}; do
     layer "dotsInCross${frame}" $command_block_dot front2
     stack "block/${type}_front_${frame}"
   done
-  animate4 "block/${type}_front"
   donewith "block/${type}_front_base"
+  animate4 "block/${type}_front"
 
   copy "block/${type}_base" backbase1
   layer commandBlockSquare $black backbase2
@@ -735,7 +738,7 @@ for type in ${CMD_BLOCK_TYPES[@]}; do
     layer "glider${frame}" $command_block_dot back2
     stack "block/${type}_back_${frame}"
   done
-  donewith "$OUTDIR/${type}_back_base"
+  donewith "block/${type}_back_base"
   animate4 "block/${type}_back"
 
   copy "block/${type}_base" sidebase1
@@ -748,7 +751,7 @@ for type in ${CMD_BLOCK_TYPES[@]}; do
     layer "glider${frame}" $command_block_dot front2
     stack "block/${type}_side_${frame}"
   done
-  donewith "$OUTDIR/${type}_side_base"
+  donewith "block/${type}_side_base"
   animate4 "block/${type}_side"
 
   copy "block/${type}_base" condbase1
@@ -762,7 +765,7 @@ for type in ${CMD_BLOCK_TYPES[@]}; do
     layer "glider${frame}" $command_block_dot front2
     stack "block/${type}_conditional_${frame}"
   done
-  donewith "$OUTDIR/${type}_conditional_base"
+  donewith "block/${type}_conditional_base"
   animate4 "block/${type}_conditional"
 done
 
