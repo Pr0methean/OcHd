@@ -1,6 +1,6 @@
 #!/bin/bash
-WOODS=('acacia' 'birch' 'crimson' 'dark_oak' 'jungle' 'oak' 'spruce' 'warped')
-OVERWORLD_WOODS=('acacia' 'birch' 'dark_oak' 'jungle' 'oak' 'spruce')
+WOODS=('acacia' 'birch' 'crimson' 'dark_oak' 'jungle' 'mangrove' 'oak' 'spruce' 'warped')
+OVERWORLD_WOODS=('acacia' 'birch' 'dark_oak' 'jungle' 'mangrove' 'oak' 'spruce')
 FUNGI=('crimson' 'warped')
 SIMPLE_ORES=('coal' 'copper' 'iron' 'redstone' 'gold' 'quartz')
 ORES=('coal' 'copper' 'iron' 'redstone' 'lapis' 'gold' 'quartz' 'diamond' 'emerald')
@@ -44,6 +44,9 @@ wood_dark_oak_s='#3a2411'
 wood_jungle_h='#bf8e6b'
 wood_jungle='#9f714a'
 wood_jungle_s='#785437'
+wood_mangrove_h='#8b4d3a'
+wood_mangrove='#773934'
+wood_mangrove_s='#5d0000'
 wood_oak_h='#c29d62'
 wood_oak='#af8f55'
 wood_oak_s='#7e6237'
@@ -68,6 +71,9 @@ bark_dark_oak_s='#292000'
 bark_jungle_h='#7d5d26'
 bark_jungle='#503f00'
 bark_jungle_s='#3e3000'
+bark_mangrove_h='#675230'
+bark_mangrove='#5a482c'
+bark_mangrove_s='#443522'
 bark_oak_h='#987849'
 bark_oak='#745a36'
 bark_oak_s='#4c3d26'
@@ -176,6 +182,18 @@ netherrack_h='#854242'
 netherrack='#723232'
 netherrack_s='#411616'
 
+# Misc
+tnt_h='#ff4300'
+tnt='#db2f00'
+tnt_s='#912d00'
+
+# Technical blocks
+command_block_h='#d7b49d'
+command_block='#c77e4f'
+command_block_s='#a66030'
+command_block_dot='#c2873e'
+structure_block_bg='#675230'
+structure_block_fg='#d7c2d7'
 
 layer () {
   sed -e "s/#000000/$2/g" "svg/$1.svg" > "$TMPDIR/recolor.svg"
@@ -224,23 +242,32 @@ rm -rf "$DEBUGDIR" || true
 mkdir -p "$DEBUGDIR"
 cp -r metadata/*.* $OUTDIR
 
-layer checksLarge $stone_s cobblestone1 $stone_h
-layer checksSmall $stone cobblestone2
-layer borderSolid $stone_hh cobblestone3
-layer borderShortDashes $stone_ss cobblestone6
-stack block/cobblestone
+# S1. SHOVEL BLOCKS
 
-layer checksLarge $deepslate_h deepslate1 $deepslate_s
-layer checksSmall $deepslate deepslate2
-stack block/cobbled_deepslate
-
-
-layer vees $grass_s grass $grass
-stack block/grass_block_top
+# Soft earth
 
 layer dots2 $dirt_h dirt1 $dirt
 layer dots1 $dirt_s dirt2
 stack block/dirt
+
+layer checksLarge ${gravel_s} gravel1 ${gravel}
+layer checksLargeOutline ${gravel_h} gravel2
+stack block/gravel
+
+layer checksSmall ${sand_s} sand1 ${sand}
+layer checksSmallOutline ${sand_h} sand2
+stack block/sand
+
+layer diagonalChecksTopLeftBottomRight ${clay_s} clay1 ${clay}
+layer diagonalChecksBottomLeftTopRight ${clay_h} clay2
+layer diagonalOutlineChecksTopLeftBottomRight ${clay_h} clay3
+layer diagonalOutlineChecksTopLeftBottomRight ${clay_s} clay4
+stack block/clay
+
+# Ground covers
+
+layer vees $grass_s grass $grass
+stack block/grass_block_top
 
 layer topPart $grass grass_side_ol1
 layer veesTop $grass_s grass_side_ol2
@@ -251,33 +278,56 @@ layer topPart $grass_item grass_side_ol1
 layer veesTop $grass_item_s grass_side_ol2
 stack block/grass_block_side
 
+layer zigzagBroken ${podzol_s} podzol1 ${podzol}
+layer borderDotted ${podzol_h} podzol2
+stack block/podzol_top
+
+copy block/dirt podzol_side1
+layer topPart $podzol podzol_side2
+layer zigzagBrokenTopPart ${podzol_h} podzol3
+stack block/podzol_side
+
+layer diagonalChecksTopLeftBottomRight ${mycelium_s} mycelium1 ${mycelium}
+layer diagonalChecksBottomLeftTopRight ${mycelium_h} mycelium2
+layer diagonalOutlineChecksTopLeftBottomRight ${mycelium_h} mycelium3
+layer diagonalOutlineChecksTopLeftBottomRight ${mycelium_s} mycelium4
+stack block/mycelium_top
+
+copy block/dirt mycelium_side1
+magick "$OUTDIR"/block/mycelium_top -crop 100%x34.375% "$TMPDIR"/mycelium_side2.png
+stack block/mycelium_side
+
+# todo: moss, farmland, snow
+
+# S2. PICKAXE BLOCKS
+
+# Rock
+
 layer checksLarge $stone_h stone $stone_s
 stack block/stone
 
 layer borderSolid $stone_ss stone2 $stone
 stack block/smooth_stone
 
-copy block/smooth_stone furnace1
-layer furnaceFront $black furnace2
-stack block/furnace_front
+layer checksLarge $stone_s cobblestone1 $stone_h
+layer checksSmall $stone cobblestone2
+layer borderSolid $stone_hh cobblestone3
+layer borderShortDashes $stone_ss cobblestone6
+stack block/cobblestone
 
-copy block/smooth_stone furnace1
-layer furnaceFrontLit $black furnace2
-stack block/furnace_front_on
+layer checksLarge $deepslate_h deepslate1 $deepslate_s
+layer checksSmall $deepslate deepslate2
+stack block/cobbled_deepslate
 
 layer checksLarge $deepslate deep1 $deepslate_h
 layer strokeTopLeftBottomRight $deepslate_s deep2
 stack block/deepslate
 
-layer borderSolid $bedrock_s bedrock1 $bedrock
-layer borderLongDashes $bedrock_h bedrock2
-layer strokeTopLeftBottomRight2 $bedrock_s bedrock3
-layer strokeBottomLeftTopRight2 $bedrock_h bedrock4
-stack block/bedrock
-
-layer diagonalChecksTopLeftBottomRight $netherrack_s nether1 $netherrack
-layer diagonalChecksBottomLeftTopRight $netherrack_h nether2
+layer diagonalOutlineChecksTopLeftBottomRight $netherrack_s nether1 $netherrack
+layer diagonalOutlineChecksBottomLeftTopRight $netherrack_h nether2
 stack block/netherrack
+
+# Bricks
 
 layer checksSmall $stone_h sb1 $stone
 layer bricks $stone_ss sb2
@@ -289,85 +339,7 @@ layer borderDotted $mortar bricks2
 semitrans bricks2 0.5
 stack block/bricks
 
-for wood in ${WOODS[@]}; do
-  highlight="wood_${wood}_h"
-  shadow="wood_${wood}_s"
-  midtone="wood_${wood}"
-
-  layer planksTop ${!midtone} planks1 ${!shadow}
-  layer borderShortDashes ${!highlight} planks2
-  stack "block/${wood}_planks"
-done
-
-for wood in ${OVERWORLD_WOODS[@]}; do
-  highlight="wood_${wood}_h"
-  shadow="wood_${wood}_s"
-  midtone="wood_${wood}"
-  bark_h="bark_${wood}_h"
-  bark_s="bark_${wood}_s"
-  bark="bark_${wood}"
-
-  layer borderSolid ${!bark_s} logSide3 ${!bark}
-  layer borderDotted ${!bark_h} logSide4
-  layer zigzagSolid ${!bark_s} logSide5
-  layer zigzagSolid2 ${!bark_h} logSide6
-  stack "block/${wood}_log"
-
-  layer borderSolid ${!shadow} strippedLogSide1 ${!midtone}
-  layer borderShortDashes ${!highlight} strippedLogSide2
-  stack "block/stripped_${wood}_log"
-
-  copy "block/stripped_${wood}_log" strippedLog0
-  layer rings ${!shadow} strippedLog1
-  stack "block/stripped_${wood}_log_top"
-
-  copy "block/stripped_${wood}_log_top" logTop1
-  layer borderSolid ${!bark} logTop2
-  layer borderDotted ${!bark_s} logTop3
-  stack "block/${wood}_log_top"
-done
-
-layer craftingGrid ${wood_oak_s} table1 ${wood_oak}
-layer borderSolid ${wood_dark_oak} table2
-layer cornersTri ${wood_oak_h} table3
-stack "block/crafting_table_top"
-
-layer planksTop ${wood_oak} table_side_1 ${wood_oak_s}
-layer borderSolid ${wood_oak_h} table_side_2
-layer craftingSide ${wood_dark_oak} table_side_3
-stack "block/crafting_table_side"
-
-copy block/crafting_table_side table_front_1
-stack "block/crafting_table_front"
-
-layer bookShelves ${black} shelf1 ${wood_oak}
-stack "block/bookshelf"
-
-for wood in ${FUNGI[@]}; do
-  highlight="wood_${wood}_h"
-  shadow="wood_${wood}_s"
-  midtone="wood_${wood}"
-  bark_h="bark_${wood}_h"
-  bark_s="bark_${wood}_s"
-  bark="bark_${wood}"
-
-  layer borderSolid ${!bark_s} stemSide1 ${!bark}
-  layer waves ${!bark_h} stemSide2
-  stack "block/${wood}_stem"
-
-  layer borderSolid ${!shadow} strippedLogSide1 ${!midtone}
-  layer borderDotted ${!highlight} strippedLogSide2
-  stack "block/stripped_${wood}_stem"
-
-  copy "block/stripped_${wood}_stem" strippedLog0
-  layer rings ${!highlight} strippedLog1
-  stack "block/stripped_${wood}_stem_top"
-
-  copy "block/stripped_${wood}_stem_top" logTop1
-  layer borderSolid ${!bark} logTop2
-  layer borderDotted ${!bark_s} logTop3
-  stack "block/${wood}_stem_top"
-done
+# Ores
 
 layer diamond1 ${diamond_hh} diamond1
 layer diamond2 ${diamond_s} diamond2
@@ -403,11 +375,6 @@ for ore in ${SIMPLE_ORES[@]}; do
   layer $ore ${!shadow} ${ore}_ingot4
   stack "item/${ore}_ingot"
 done
-
-layer borderSolid $white glass1
-layer borderSolidBottomRight $gray glass2
-layer streaks $white glass3
-stack "block/glass"
 
 for ore in ${ORES[@]}; do
   copy block/stone ${ore}1
@@ -471,6 +438,8 @@ move item/raw_redstone item/redstone
 copy block/quartz_block_top quartz_side
 stack block/quartz_block_side
 
+# Carved ores
+
 layer rings ${quartz_h} quartz1 ${quartz}
 layer borderSolid ${quartz_s} quartz2
 layer borderDotted ${quartz_h} quartz3
@@ -485,29 +454,22 @@ layer borderSolid ${quartz_s} qp2
 layer borderLongDashes ${quartz_h} qp3
 stack block/quartz_pillar
 
-layer tntSticksSide ${red} tnt10 ${black}
-layer borderDotted ${black} tnt15
-layer tntStripe ${white} tnt20
-layer tntSign ${black} tnt30
-stack block/tnt_side
+# Glass
 
-layer tntSticksEnd ${red} tnt1 ${black}
-stack block/tnt_bottom
+layer borderSolid $white glass1
+layer borderSolidBottomRight $gray glass2
+layer streaks $white glass3
+stack "block/glass"
 
-copy block/tnt_bottom tnt1
-layer tntFuzes ${black} tnt2
-stack block/tnt_top
+for dye in ${DYES[@]}; do
+  layer empty ${black} glass1 ${!dye}
+  semitrans glass1 0.25
+  layer borderSolid ${!dye} glass2
+  layer streaks ${!dye} glass3
+  stack block/${dye}_stained_glass
+done
 
-layer mushroomStem $mushroom_stem mush1
-layer mushroomCapRed $mushroom_red_cap mush2
-stack block/red_mushroom
-
-layer mushroomStem $mushroom_stem mush1
-layer mushroomCapBrown $mushroom_brown_cap mush2
-stack block/brown_mushroom
-
-layer mushroomSpots ${white} mush1 $mushroom_red_cap
-stack block/red_mushroom_block
+# Rails
 
 layer railTies $wood_oak rail1
 layer rail $stone_h rail2
@@ -515,6 +477,120 @@ stack block/rail
 
 layer railCorner $stone_h rail1
 stack block/rail_corner
+
+# Functional pickaxe blocks
+
+copy block/smooth_stone furnace1
+layer furnaceFront $black furnace2
+stack block/furnace_front
+
+copy block/smooth_stone furnace1
+layer furnaceFrontLit $black furnace2
+stack block/furnace_front_on
+
+# S3. AXE BLOCKS
+
+# Planks
+
+for wood in ${WOODS[@]}; do
+  highlight="wood_${wood}_h"
+  shadow="wood_${wood}_s"
+  midtone="wood_${wood}"
+
+  layer planksTop ${!midtone} planks1 ${!shadow}
+  layer borderShortDashes ${!highlight} planks2
+  stack "block/${wood}_planks"
+done
+
+# Logs, wood & hyphae
+
+for wood in ${OVERWORLD_WOODS[@]}; do
+  highlight="wood_${wood}_h"
+  shadow="wood_${wood}_s"
+  midtone="wood_${wood}"
+  bark_h="bark_${wood}_h"
+  bark_s="bark_${wood}_s"
+  bark="bark_${wood}"
+
+  layer borderSolid ${!bark_s} logSide3 ${!bark}
+  layer borderDotted ${!bark_h} logSide4
+  layer zigzagSolid ${!bark_s} logSide5
+  layer zigzagSolid2 ${!bark_h} logSide6
+  stack "block/${wood}_log"
+
+  layer borderSolid ${!shadow} strippedLogSide1 ${!midtone}
+  layer borderShortDashes ${!highlight} strippedLogSide2
+  stack "block/stripped_${wood}_log"
+
+  copy "block/stripped_${wood}_log" strippedLog0
+  layer rings ${!shadow} strippedLog1
+  stack "block/stripped_${wood}_log_top"
+
+  copy "block/stripped_${wood}_log_top" logTop1
+  layer borderSolid ${!bark} logTop2
+  layer borderDotted ${!bark_s} logTop3
+  stack "block/${wood}_log_top"
+done
+
+for wood in ${FUNGI[@]}; do
+  highlight="wood_${wood}_h"
+  shadow="wood_${wood}_s"
+  midtone="wood_${wood}"
+  bark_h="bark_${wood}_h"
+  bark_s="bark_${wood}_s"
+  bark="bark_${wood}"
+
+  layer borderSolid ${!bark_s} stemSide1 ${!bark}
+  layer waves ${!bark_h} stemSide2
+  stack "block/${wood}_stem"
+
+  layer borderSolid ${!shadow} strippedLogSide1 ${!midtone}
+  layer borderDotted ${!highlight} strippedLogSide2
+  stack "block/stripped_${wood}_stem"
+
+  copy "block/stripped_${wood}_stem" strippedLog0
+  layer rings ${!highlight} strippedLog1
+  stack "block/stripped_${wood}_stem_top"
+
+  copy "block/stripped_${wood}_stem_top" logTop1
+  layer borderSolid ${!bark} logTop2
+  layer borderDotted ${!bark_s} logTop3
+  stack "block/${wood}_stem_top"
+done
+
+# Giant mushrooms
+
+layer mushroomSpots ${white} mush1 $mushroom_red_cap
+layer borderRoundDotsVaryingSize ${white} mush2
+stack block/red_mushroom_block
+
+# Functional wooden blocks
+
+layer craftingGrid ${wood_oak_s} table1 ${wood_oak}
+layer borderSolid ${wood_dark_oak} table2
+layer cornersTri ${wood_oak_h} table3
+stack "block/crafting_table_top"
+
+layer planksTop ${wood_oak} table_side_1 ${wood_oak_s}
+layer borderSolid ${wood_oak_h} table_side_2
+layer craftingSide ${wood_dark_oak} table_side_3
+stack "block/crafting_table_side"
+
+copy block/crafting_table_side table_front_1
+stack "block/crafting_table_front"
+
+layer bookShelves ${black} shelf1 ${wood_oak}
+stack "block/bookshelf"
+
+# S4. BLOCKS BROKEN WITH SHEARS
+
+# todo: cobweb, glow moss
+
+# S7. LIQUIDS
+
+# S8. BLOCKS BROKEN WITHOUT TOOLS
+
+# Wool
 
 for dye in ${DYES[@]}; do
   layer empty ${!dye} wool1 ${!dye}
@@ -527,10 +603,37 @@ for dye in ${DYES[@]}; do
   layer borderDotted ${light_gray} wool5
   semitrans wool5 0.5
   stack block/${dye}_wool
-
-  layer empty ${black} glass1 ${!dye}
-  semitrans glass1 0.25
-  layer borderSolid ${!dye} glass2
-  layer streaks ${!dye} glass3
-  stack block/${dye}_stained_glass
 done
+
+# Tnt
+
+layer tntSticksSide ${tnt} tnt10 ${tnt_s}
+layer borderDotted ${tnt_h} tnt15
+layer tntStripe ${white} tnt20
+layer tntSign ${black} tnt30
+stack block/tnt_side
+
+layer tntSticksEnd ${red} tnt1 ${black}
+stack block/tnt_bottom
+
+copy block/tnt_bottom tnt1
+layer tntFuzes ${black} tnt2
+stack block/tnt_top
+
+# Mushrooms
+
+layer mushroomStem $mushroom_stem mush1
+layer mushroomCapRed $mushroom_red_cap mush2
+stack block/red_mushroom
+
+layer mushroomStem $mushroom_stem mush1
+layer mushroomCapBrown $mushroom_brown_cap mush2
+stack block/brown_mushroom
+
+# S9. UNBREAKABLE BLOCKS
+
+layer borderSolid $bedrock_s bedrock1 $bedrock
+layer borderLongDashes $bedrock_h bedrock2
+layer strokeTopLeftBottomRight2 $bedrock_s bedrock3
+layer strokeBottomLeftTopRight2 $bedrock_h bedrock4
+stack block/bedrock
