@@ -347,15 +347,18 @@ stack block/clay
 
 # Nether
 
-layer checksSmall ${soul_sand_h} ssand1 ${soul_sand}
-layer checksSmallOutline ${soul_sand_s} ssand2
+layer borderSolid ${soul_sand_s} ssand1 ${soul_sand}
+layer checksSmall ${soul_sand_h} ssand2
 layer soulHeads ${soul_sand_h} ssand3
-layer soulFaces ${soul_sand_s} ssand4
+layer soulTopLeftFace ${soul_sand_s} ssand4
+layer soulBottomRightFace ${soul_sand_s} ssand5
 stack block/soul_sand
 
 layer strokeBottomLeftTopRight4 ${soul_soil_h} ssoil1 ${soul_soil_s}
 layer borderDotted ${soul_soil} ssoil2
-layer soulFaces ${soul_soil} ssoil3
+layer soulHeads ${soul_soil} ssoil3
+layer soulTopLeftFace ${soul_soil_h} ssoil4
+layer soulBottomRightFace ${soul_soil_s} ssoil5
 stack block/soul_soil
 
 # Ground covers
@@ -766,7 +769,7 @@ done
 # Giant mushrooms
 
 layer mushroomSpots ${white} rmush1 $mushroom_red_cap
-layer borderRoundDotsVaryingSize ${white} rmush2
+layer borderRoundDots ${white} rmush2
 stack block/red_mushroom_block
 
 layer rings ${mushroom_brown_cap_h} bmush1 ${mushroom_brown_cap_s}
@@ -872,7 +875,7 @@ stack block/tnt_top
 # Plants
 
 layer bambooThick ${sugarcane_s} sugarcane1
-layer bambooThinMinusBorder ${sugarcane_h} sugarcane2
+layer bambooThin ${sugarcane_h} sugarcane2
 layer bambooThinMinusBorder ${sugarcane} sugarcane3
 stack block/sugar_cane
 
