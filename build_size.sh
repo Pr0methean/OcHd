@@ -220,6 +220,12 @@ lava_s='#cc4108'
 netherrack_h='#854242'
 netherrack='#723232'
 netherrack_s='#411616'
+soul_soil_h='#6a5244'
+soul_soil='#49372c'
+soul_soil_s='#352922'
+soul_sand_h='#796152'
+soul_sand='#5b4538'
+soul_sand_s='#352922'
 
 # Misc
 tnt_h='#ff4300'
@@ -338,6 +344,19 @@ layer diagonalChecksBottomLeftTopRight ${clay_h} clay2
 layer diagonalOutlineChecksTopLeftBottomRight ${clay_h} clay3
 layer diagonalOutlineChecksBottomLeftTopRight ${clay_s} clay4
 stack block/clay
+
+# Nether
+
+layer checksSmall ${soul_sand_h} ssand1 ${soul_sand}
+layer checksSmallOutline ${soul_sand_s} ssand2
+layer soulHeads ${soul_sand_h} ssand3
+layer soulFaces ${soul_sand_s} ssand4
+stack block/soul_sand
+
+layer strokeBottomLeftTopRight4 ${soul_soil_h} ssoil1 ${soul_soil_s}
+layer borderDotted ${soul_soil} ssoil2
+layer soulFaces ${soul_soil} ssoil3
+stack block/soul_soil
 
 # Ground covers
 
