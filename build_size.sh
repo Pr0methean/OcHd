@@ -7,8 +7,10 @@ OVERWORLD_WOODS=('acacia' 'birch' 'dark_oak' 'jungle' 'mangrove' 'oak' 'spruce')
 FUNGI=('crimson' 'warped')
 SIMPLE_ORES=('coal' 'copper' 'iron' 'redstone' 'gold' 'quartz')
 ORES=('coal' 'copper' 'iron' 'redstone' 'lapis' 'gold' 'quartz' 'diamond' 'emerald')
-DYES=('black' 'red' 'green' 'brown' 'blue' 'purple' 'cyan' 'light_gray' 'pink' 'lime' 'yellow' 'light_blue' 'magenta' 'orange' 'white')
+DYES=('black' 'red' 'green' 'brown' 'blue' 'purple' 'cyan' 'gray' 'light_gray' 'pink' 'lime' 'yellow' 'light_blue' 'magenta' 'orange' 'white')
 CMD_BLOCK_TYPES=('command_block' 'repeating_command_block' 'chain_command_block')
+NORMAL_MUSIC_DISCS=('far' 'wait' 'strad' 'mall' 'cat' 'pigstep' 'mellohi' '13' 'blocks' 'stal' 'ward' '5' 'otherside' 'chirp')
+DISC_LABELS=('red' 'green' 'brown' 'blue' 'purple' 'cyan' 'light_gray' 'pink' 'lime' 'yellow' 'light_blue' 'magenta' 'orange' 'white')
 
 # S01. COLOR CONSTANTS
 # H = highlight, S = shadow
@@ -83,7 +85,7 @@ bark_oak_s='#4c3d26'
 bark_spruce_h='#553a1f'
 bark_spruce='#3b2700'
 bark_spruce_s='#2e1c00'
-bark_warped_h='#14956f'
+bark_warped_h='#00956f'
 bark_warped='#562c3e'
 bark_warped_s='#442131'
 
@@ -138,6 +140,11 @@ bedrock_h='#979797'
 bedrock='#575757'
 bedrock_s='#222222'
 
+# plants
+sugarcane_h='#91ff32'
+sugarcane='#aadb74'
+sugarcane_s='#82a859'
+
 # mushrooms
 mushroom_brown_cap_h='#9c795a'
 mushroom_brown_cap='#977251'
@@ -146,6 +153,24 @@ mushroom_red_cap='#ff0000'
 mushroom_stem_h='#d3ccc4'
 mushroom_stem='#c7c1b4'
 mushroom_stem_s='#c2bcac'
+mushroom_inside_h='#d7b680'
+mushroom_inside='#c7a877'
+mushroom_inside_s='#ab9066'
+
+# nether fungi
+crimson_nylium_h='#bd3031'
+crimson_nylium='#854242'
+crimson_nylium_s='#7b0000'
+crimson_wart_h='#ac2020'
+crimson_wart='#7b0000'
+crimson_wart_s='#5a0000'
+warped_nylium_h='#00b485'
+warped_nylium='#568353'
+warped_nylium_s='#456b52'
+warped_wart_h='#00b485'
+warped_wart='#008282'
+warped_wart_s='#006367'
+fungus_spot='#ff6500'
 
 # Ores
 gold_h='#ffffb5'
@@ -200,6 +225,9 @@ netherrack_s='#411616'
 tnt_h='#ff4300'
 tnt='#db2f00'
 tnt_s='#912d00'
+bone_block_h='#e9e6d4'
+bone_block='#e1ddca'
+bone_block_s='#c3bfa1'
 
 # Technical blocks
 repeating_command_block_h='#9b8bcf'
@@ -214,6 +242,11 @@ command_block_s='#a66030'
 command_block_dot='#c2873e'
 structure_block_bg='#26002a'
 structure_block_fg='#d7c2d7'
+
+# Items
+music_disc_h='#515151'
+music_disc='#404040'
+music_disc_s='#212121'
 
 layer () {
   sed -e "s/#000000/$2/g" "svg/$1.svg" > "$TMPDIR/recolor.svg"
@@ -273,7 +306,17 @@ rm -rf "$DEBUGDIR" || true
 mkdir -p "$DEBUGDIR"
 cp -r metadata/*.* $OUTDIR
 
-# S1. SHOVEL BLOCKS
+# S09. ITEMS USED IN MULTIPLE CATEGORIES
+
+# Bones and bone meal
+
+layer bonemeal $bone_block_h bonemeal1
+stack item/bone_meal
+
+layer boneBottomLeftTopRight $bone_block_h bone1
+stack item/bone
+
+# S10. SHOVEL BLOCKS
 
 # Soft earth
 
@@ -364,7 +407,7 @@ done
 
 # todo: farmland
 
-# S2. PICKAXE BLOCKS
+# S20. PICKAXE BLOCKS
 
 # Rock
 
@@ -398,6 +441,8 @@ stack block/deepslate
 layer diagonalOutlineChecksTopLeftBottomRight $netherrack_s nether1 $netherrack
 layer diagonalOutlineChecksBottomLeftTopRight $netherrack_h nether2
 stack block/netherrack
+
+# TODO: Nylium
 
 # Bricks
 
@@ -583,6 +628,18 @@ for dye in "${DYES[@]}"; do
   stack "block/${dye}_concrete"
 done
 
+# Bone block
+
+layer borderSolid $bone_block_h boneblock1 $bone_block_s
+layer bonemealSmall ${bone_block_h} boneblock2
+stack block/bone_block_top
+
+layer borderSolid $bone_block_s boneblockside1 $bone_block
+layer borderDotted $bone_block_h boneblockside2
+layer boneBottomLeftTopRight $bone_block_s boneblockside3
+layer boneTopLeftBottomRight $bone_block_h boneblockside4
+stack block/bone_block_side
+
 # Rails
 
 layer railTies $wood_oak rail1
@@ -688,11 +745,19 @@ done
 
 # Giant mushrooms
 
-layer mushroomSpots ${white} mush1 $mushroom_red_cap
-layer borderRoundDotsVaryingSize ${white} mush2
+layer mushroomSpots ${white} rmush1 $mushroom_red_cap
+layer borderRoundDotsVaryingSize ${white} rmush2
 stack block/red_mushroom_block
 
-# todo: stem and brown cap
+layer rings ${mushroom_brown_cap_h} bmush1 ${mushroom_brown_cap_s}
+stack block/brown_mushroom_block
+
+layer borderRoundDotsVaryingSize ${mushroom_inside_s} mushin1 ${mushroom_inside}
+stack block/mushroom_block_inside
+
+layer stripesThick ${mushroom_stem_s} mushstem1 ${mushroom_stem_h}
+layer borderShortDashes ${mushroom_stem} mushstem2
+stack block/mushroom_stem
 
 # Functional wooden blocks
 
@@ -712,13 +777,47 @@ stack "block/crafting_table_front"
 layer bookShelves ${black} shelf1 ${wood_oak}
 stack "block/bookshelf"
 
+copy block/podzol_top compost0
+stack "block/composter_compost"
+
+copy block/composter_compost compost1
+layer bonemealSmall ${bone_block_h} compost2
+stack "block/composter_ready"
+
+layer borderSolidThick ${wood_oak} compostframe0
+stack "block/composter_top"
+
+layer stripesThick ${wood_oak_s} compostSide0 ${wood_oak}
+layer borderDotted ${wood_oak_h} compostSide1
+stack "block/composter_side"
+
+layer planksTopVertical ${wood_oak} compostBottom0 ${wood_oak_s}
+layer borderSolidThick ${wood_oak_s} compostBottom1
+layer borderSolid ${wood_oak} compostBottom2
+stack "block/composter_bottom"
+
+layer strokeTopLeftBottomRight4 ${wood_oak} jukeboxSide0 ${wood_oak_s}
+layer strokeBottomLeftTopRight4 ${wood_oak_h} jukeboxSide1
+layer borderSolidThick ${wood_oak_h} jukeboxSide2
+layer borderDotted ${wood_oak_s} jukeboxSide3
+stack "block/jukebox_side"
+
+layer borderSolidThick ${wood_oak_h} jukeboxTop0 ${wood_oak}
+layer borderDotted ${wood_oak_s} jukeboxTop1
+layer thirdRail ${black} jukeboxTop2
+stack "block/jukebox_top"
+
+copy block/jukebox_side noteblock1
+layer note ${wood_oak_s} noteblock2
+stack "block/note_block"
+
 # S4. BLOCKS BROKEN WITH SHEARS
 
 # todo: cobweb, glow moss
 
 # S7. LIQUIDS
 
-# S8. BLOCKS BROKEN WITHOUT TOOLS
+# S80. BLOCKS BROKEN WITHOUT TOOLS
 
 # Wool
 
@@ -752,11 +851,59 @@ stack block/tnt_top
 
 # Plants
 
-# Lily pads are biome-colored starting from gray, like grass blocks
+layer bambooThick ${sugarcane_s} sugarcane1
+layer bambooThinMinusBorder ${sugarcane_h} sugarcane2
+layer bambooThinMinusBorder ${sugarcane} sugarcane3
+stack block/sugar_cane
+
+# Lily pads and leaves are biome-colored starting from gray, like grass blocks
 
 layer lilyPad ${grass_s} pad1
 layer lilyPadInterior ${grass_h} pad2
 stack block/lily_pad
+
+layer leaves1 ${grass_s} leavesa1
+layer leaves1a ${grass_h} leavesa2
+stack block/acacia_leaves
+
+layer leaves2 ${grass_h} leavesb1
+layer leaves2a ${grass_s} leavesb2
+stack block/birch_leaves
+
+layer leaves3 ${grass_s} leavesd1
+layer leaves3a ${grass_h} leavesd2
+stack block/dark_oak_leaves
+
+layer leaves4 ${grass_s} leaveso1
+layer leaves4a ${grass_h} leaveso2
+stack block/oak_leaves
+
+layer leaves5 ${grass_h} leavesm1
+layer leaves5a ${grass} leavesm2
+layer leaves5b ${grass_s} leavesm3
+stack block/mangrove_leaves
+
+layer leaves6 ${grass_h} leavesj1
+layer leaves6a ${grass_s} leavesj2
+stack block/jungle_leaves
+
+layer leaves3 ${grass_h} leavess1
+layer leaves3b ${grass_s} leavess2
+stack block/spruce_leaves
+
+# Nether fungus wart blocks
+
+layer leaves6 ${crimson_wart_s} cwart1 ${crimson_wart}
+layer leaves6a ${crimson_wart_h} cwart2
+layer borderRoundDots ${crimson_wart_h} cwart3
+stack block/nether_wart_block
+
+layer leaves3 ${warped_wart_s} wwart1 ${warped_wart}
+layer leaves3a ${warped_wart_h} wwart2
+layer leaves3b ${warped_wart_h} wwart3
+layer borderSolid ${warped_wart_s} wwart4
+layer borderShortDashes ${warped_wart_h} wwart5
+stack block/warped_wart_block
 
 # Mushrooms
 
@@ -764,11 +911,21 @@ layer mushroomStem $mushroom_stem mush1
 layer mushroomCapRed $mushroom_red_cap mush2
 stack block/red_mushroom
 
-layer mushroomStem $mushroom_stem mush1
-layer mushroomCapBrown $mushroom_brown_cap mush2
+layer mushroomStem $mushroom_stem bmush1
+layer mushroomCapBrown $mushroom_brown_cap bmush2
 stack block/brown_mushroom
 
-# S9. UNBREAKABLE BLOCKS
+layer mushroomStem $bark_crimson_s cfungus1
+layer mushroomCapRed $crimson_wart cfungus2
+layer crimsonFungusSpots $fungus_spot cfungus3
+stack block/crimson_fungus
+
+layer mushroomStem $bark_warped_s cfungus1
+layer warpedFungusCap $warped_wart cfungus2
+layer warpedFungusSpots $fungus_spot cfungus3
+stack block/warped_fungus
+
+# S90. UNBREAKABLE BLOCKS
 
 layer borderSolid $bedrock_s bedrock1 $bedrock
 layer borderLongDashes $bedrock_h bedrock2
@@ -893,3 +1050,24 @@ copy block/jigsaw_bottom jbl1
 layer jigsawLock $structure_block_fg jbl2
 stack block/jigsaw_lock
 
+# S100. Items
+
+# Music discs
+
+i=0
+for disc in "${NORMAL_MUSIC_DISCS[@]}"; do
+  layer musicDisc ${music_disc} "disc_${disc}_1"
+  layer musicDiscGroove ${music_disc_s} "disc_${disc}_2"
+  layer musicDiscLabel "${!MUSIC_DISC_LABELS[i]}" "disc_${disc}_3"
+  stack "item/music_disc_${disc}"
+  i=$((i+1))
+done
+
+layer musicDiscBroken ${music_disc_s} disc_11_1
+layer musicDiscGrooveBroken ${music_disc_h} disc_11_2
+stack "item/music_disc_11"
+
+# S200. Particles
+
+layer note ${grass} note_1
+stack "particle/note"
