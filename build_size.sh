@@ -144,6 +144,9 @@ bedrock_s='#222222'
 sugarcane_h='#91ff32'
 sugarcane='#aadb74'
 sugarcane_s='#82a859'
+flower_stem_h='#55ab2d'
+flower_stem='#4a8f28'
+flower_stem_s='#266325'
 
 # mushrooms
 mushroom_brown_cap_h='#9c795a'
@@ -447,8 +450,8 @@ layer borderShortDashes $stone_ss cobblestone6
 stack block/cobblestone
 
 copy block/cobblestone mcs1
-layer strokeBottomLeftTopRight2 ${moss} mcs4
-layer strokeBottomLeftTopRight ${moss_s} mcs5
+layer strokeTopLeftBottomRight2 ${moss} mcs4
+layer strokeTopLeftBottomRight ${moss_s} mcs5
 layer borderSolid ${moss_h} mcs6
 layer borderShortDashes $stone_ss mcs7
 stack block/mossy_cobblestone
@@ -465,7 +468,28 @@ layer diagonalOutlineChecksTopLeftBottomRight $netherrack_s nether1 $netherrack
 layer diagonalOutlineChecksBottomLeftTopRight $netherrack_h nether2
 stack block/netherrack
 
-# TODO: Nylium
+layer dots3 ${warped_nylium_h} wnylium1 ${warped_nylium}
+layer borderRoundDotsVaryingSize ${warped_nylium_s} wnylium2
+stack block/warped_nylium
+
+copy block/netherrack wnyliums1
+layer topPart ${warped_nylium} wnyliums2
+layer dots3TopPart ${warped_nylium_h} wnyliums3
+stack block/warped_nylium_side
+
+layer dots3 ${crimson_nylium_s} cnylium1 ${crimson_nylium}
+layer borderRoundDots ${crimson_nylium_h} cnylium2
+stack block/crimson_nylium
+
+copy block/netherrack cnyliums1
+layer topPart ${crimson_nylium} cnyliums2
+layer dots3TopPart ${crimson_nylium_s} cnyliums3
+stack block/crimson_nylium_side
+
+copy block/netherrack wnyliums1
+layer topPart ${warped_nylium} wnyliums2
+layer dots3TopPart ${warped_nylium_h} wnyliums3
+stack block/warped_nylium_side
 
 # Bricks
 
@@ -486,8 +510,8 @@ layer borderShortDashes $stone_s sb3
 stack block/stone_bricks
 
 copy block/stone_bricks msb1
-layer strokeBottomLeftTopRight2 ${moss_s} msb3
-layer strokeBottomLeftTopRight ${moss_h} msb4
+layer strokeTopLeftBottomRight2 ${moss_s} msb3
+layer strokeTopLeftBottomRight ${moss_h} msb4
 layer borderShortDashes ${moss} msb5
 stack block/mossy_stone_bricks
 
@@ -872,7 +896,26 @@ copy block/tnt_bottom tnt1
 layer tntFuzes ${black} tnt2
 stack block/tnt_top
 
-# Plants
+# Flowers
+
+layer flowerStemTall ${flower_stem} tallstem1
+layer flowerStemTallBorder ${flower_stem_h} tallstem2
+layer flowerStemBottomBorder ${flower_stem_s} tallstem3
+stack block/sunflower_bottom
+
+layer flowerStemShort ${flower_stem} shortstem1
+layer flowerStemShortBorder ${flower_stem_h} shortstem2
+layer flowerStemBottomBorder ${flower_stem_s} shortstem3
+stack block/sunflower_top
+
+layer sunflowerPetals ${yellow} sunflower1
+layer sunflowerPistil ${black} sunflower2
+stack block/sunflower_front
+
+layer sunflowerPetals ${flower_stem} sunflowerBack1
+stack block/sunflower_back
+
+# Crops
 
 layer bambooThick ${sugarcane_s} sugarcane1
 layer bambooThin ${sugarcane_h} sugarcane2
@@ -923,6 +966,18 @@ stack block/jungle_leaves
 layer leaves3 ${grass_h} leavess1
 layer leaves3b ${grass_s} leavess2
 stack block/spruce_leaves
+
+# Other plants
+
+layer bottomPart ${grass_s} tallgrassb0
+layer grassTall ${grass} tallgrassb1
+stack block/tall_grass_bottom
+
+layer grassVeryShort ${grass} tallgrasst0
+stack block/tall_grass_top
+
+layer grassShort ${grass} grass0
+stack block/grass
 
 # Nether fungus wart blocks
 
