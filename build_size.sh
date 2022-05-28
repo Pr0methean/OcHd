@@ -300,6 +300,7 @@ rm -rf $OUTDIR || true
 mkdir -p $OUTDIR
 mkdir $OUTDIR/block
 mkdir $OUTDIR/item
+mkdir $OUTDIR/particle
 rm -rf "$TMPDIR" || true
 mkdir -p "$TMPDIR"
 rm -rf "$DEBUGDIR" || true
@@ -855,6 +856,16 @@ layer bambooThick ${sugarcane_s} sugarcane1
 layer bambooThinMinusBorder ${sugarcane_h} sugarcane2
 layer bambooThinMinusBorder ${sugarcane} sugarcane3
 stack block/sugar_cane
+
+layer wart0 ${crimson_wart_s} wart0
+stack block/nether_wart_stage_0
+
+layer wart1 ${crimson_wart_s} wart1
+stack block/nether_wart_stage_1
+
+layer wart2 ${crimson_wart_s} wart2
+layer wart2a ${crimson_wart_h} wart2a
+stack block/nether_wart_stage_2
 
 # Lily pads and leaves are biome-colored starting from gray, like grass blocks
 
