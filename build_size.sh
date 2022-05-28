@@ -317,7 +317,7 @@ cp -r metadata/*.* $OUTDIR
 
 # Bones and bone meal
 
-layer bonemeal $bone_block_h bonemeal1
+layer bonemealSmall $bone_block_h bonemeal1
 stack item/bone_meal
 
 layer boneBottomLeftTopRight $bone_block_h bone1
@@ -697,7 +697,7 @@ stack block/furnace_front_on
 
 # Planks
 
-for wood in ${WOODS[@]}; do
+for wood in "${WOODS[@]}"; do
   highlight="wood_${wood}_h"
   shadow="wood_${wood}_s"
   midtone="wood_${wood}"
@@ -709,7 +709,7 @@ done
 
 # Logs, wood & hyphae
 
-for wood in ${OVERWORLD_WOODS[@]}; do
+for wood in "${OVERWORLD_WOODS[@]}"; do
   highlight="wood_${wood}_h"
   shadow="wood_${wood}_s"
   midtone="wood_${wood}"
@@ -737,7 +737,7 @@ for wood in ${OVERWORLD_WOODS[@]}; do
   stack "block/${wood}_log_top"
 done
 
-for wood in ${FUNGI[@]}; do
+for wood in "${FUNGI[@]}"; do
   highlight="wood_${wood}_h"
   shadow="wood_${wood}_s"
   midtone="wood_${wood}"
@@ -841,7 +841,7 @@ stack "block/note_block"
 
 # Wool
 
-for dye in ${DYES[@]}; do
+for dye in "${DYES[@]}"; do
   layer empty ${!dye} wool1 ${!dye}
   layer zigzagBroken ${gray} wool2
   semitrans wool2 0.25
@@ -935,7 +935,7 @@ layer borderSolid ${warped_wart_s} wwart4
 layer borderShortDashes ${warped_wart_h} wwart5
 stack block/warped_wart_block
 
-# Mushrooms
+# Mushrooms & fungi
 
 layer mushroomStem $mushroom_stem mush1
 layer mushroomCapRed $mushroom_red_cap mush2
@@ -955,6 +955,17 @@ layer warpedFungusCap $warped_wart cfungus2
 layer warpedFungusSpots $fungus_spot cfungus3
 stack block/warped_fungus
 
+# Redstone dust
+
+layer redstoneDot $white redstoneDot1
+stack block/redstone_dust_dot
+
+layer redstoneLine $white redstoneLine1
+stack block/redstone_dust_line0
+
+copy block/redstone_dust_line0 redstoneLine2
+stack block/redstone_dust_line1
+
 # S90. UNBREAKABLE BLOCKS
 
 layer borderSolid $bedrock_s bedrock1 $bedrock
@@ -965,7 +976,7 @@ stack block/bedrock
 
 # Command blocks
 
-for type in ${CMD_BLOCK_TYPES[@]}; do
+for type in "${CMD_BLOCK_TYPES[@]}"; do
   shadow=${type}_s
   highlight=${type}_h
 
@@ -988,7 +999,7 @@ layer loopArrow $black rcb2
 stack block/repeating_command_block_base
 donewith block/repeating_command_block_basebase
 
-for type in ${CMD_BLOCK_TYPES[@]}; do
+for type in "${CMD_BLOCK_TYPES[@]}"; do
   shadow=${type}_s
   highlight=${type}_h
 
@@ -1080,7 +1091,7 @@ copy block/jigsaw_bottom jbl1
 layer jigsawLock $structure_block_fg jbl2
 stack block/jigsaw_lock
 
-# S100. Items
+# S100. ITEMS NOT USED IN BLOCK TEXTURES
 
 # Music discs
 
@@ -1088,7 +1099,7 @@ i=0
 for disc in "${NORMAL_MUSIC_DISCS[@]}"; do
   layer musicDisc ${music_disc} "disc_${disc}_1"
   layer musicDiscGroove ${music_disc_s} "disc_${disc}_2"
-  layer musicDiscLabel "${!MUSIC_DISC_LABELS[i]}" "disc_${disc}_3"
+  layer musicDiscLabel "${!MUSIC_DISC_LABELS[$i]}" "disc_${disc}_3"
   stack "item/music_disc_${disc}"
   i=$((i+1))
 done
@@ -1097,7 +1108,7 @@ layer musicDiscBroken ${music_disc_s} disc_11_1
 layer musicDiscGrooveBroken ${music_disc_h} disc_11_2
 stack "item/music_disc_11"
 
-# S200. Particles
+# S200. PARTICLES
 
 layer note ${grass} note_1
 stack "particle/note"
