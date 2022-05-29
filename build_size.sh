@@ -790,7 +790,8 @@ for wood in "${OVERWORLD_WOODS[@]}"; do
   stack "block/stripped_${wood}_log"
 
   copy "block/stripped_${wood}_log" strippedLog0
-  layer rings ${!shadow} strippedLog1
+  layer ringsCentralBullseye ${!highlight} strippedLog1
+  layer rings ${!shadow} strippedLog2
   stack "block/stripped_${wood}_log_top"
 
   copy "block/stripped_${wood}_log_top" logTop1
@@ -816,7 +817,8 @@ for wood in "${FUNGI[@]}"; do
   stack "block/stripped_${wood}_stem"
 
   copy "block/stripped_${wood}_stem" strippedLog0
-  layer rings ${!highlight} strippedLog1
+  layer ringsCentralBullseye ${!shadow} strippedLog1
+  layer rings ${!highlight} strippedLog2
   stack "block/stripped_${wood}_stem_top"
 
   copy "block/stripped_${wood}_stem_top" logTop1
