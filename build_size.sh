@@ -478,9 +478,9 @@ layer borderShortDashes $stone_ss cobblestone6
 stack block/cobblestone
 
 copy block/cobblestone mcs1
-layer dots3 ${moss} mcs4
-layer dots2 ${moss_h} mcs5
-layer dots1 ${moss_s} mcs6
+layer dots3 ${moss_h} mcs4
+layer dots2 ${moss_s} mcs5
+layer dots1 ${moss} mcs6
 layer borderSolid ${moss_h} mcs10
 layer borderShortDashes ${moss_s} mcs11
 stack block/mossy_cobblestone
@@ -541,9 +541,9 @@ layer borderShortDashes $stone_s sb3
 stack block/stone_bricks
 
 copy block/stone_bricks msb1
-layer dots3 ${moss_h} msb2
-layer dots2 ${moss} msb3
-layer dots1 ${moss_s} msb4
+layer dots3 ${moss_s} msb2
+layer dots2 ${moss_h} msb3
+layer dots1 ${moss} msb4
 layer borderSolid ${moss_h} msb5
 layer borderShortDashes ${moss_s} msb6
 stack block/mossy_stone_bricks
