@@ -350,8 +350,8 @@ stack item/bone
 
 # Soft earth
 
-layer dots3 $dirt_h dirt1 $dirt
-layer dots2 $dirt_s dirt2
+layer dots3 $dirt_s dirt1 $dirt
+layer dots2 $dirt_h dirt2
 stack block/dirt
 
 layer checksLarge ${gravel_s} gravel1 ${gravel}
@@ -500,7 +500,7 @@ layer diagonalOutlineChecksTopLeftBottomRight $netherrack_s nether1 $netherrack
 layer diagonalOutlineChecksBottomLeftTopRight $netherrack_h nether2
 stack block/netherrack
 
-layer dots3 ${warped_nylium_h} wnylium1 ${warped_nylium}
+layer dots2 ${warped_nylium_h} wnylium1 ${warped_nylium}
 layer dots1 ${warped_nylium_s} wnylium2
 layer borderRoundDotsVaryingSize ${warped_nylium_s} wnylium3
 stack block/warped_nylium
@@ -510,7 +510,7 @@ layer topPart ${warped_nylium} wnyliums2
 layer dots3TopPart ${warped_nylium_h} wnyliums3
 stack block/warped_nylium_side
 
-layer dots3 ${crimson_nylium_s} cnylium1 ${crimson_nylium}
+layer dots2 ${crimson_nylium_s} cnylium1 ${crimson_nylium}
 layer dots1 ${crimson_nylium_h} cnylium2
 layer borderRoundDots ${crimson_nylium_h} cnylium3
 stack block/crimson_nylium
