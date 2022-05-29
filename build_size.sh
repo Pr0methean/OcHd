@@ -150,6 +150,12 @@ sugarcane_s='#82a859'
 flower_stem_h='#55ab2d'
 flower_stem='#4a8f28'
 flower_stem_s='#266325'
+veg_leaves_h='#55ab2d'
+veg_leaves='#4a8f28'
+veg_leaves_s='#266325'
+carrot='#ff8a00'
+beetroot='#bf2727'
+potato='#d97b30'
 
 # mushrooms
 mushroom_brown_cap_h='#9c795a'
@@ -826,7 +832,8 @@ layer trapdoorHingesBig ${!stone_s} trapdoor5
 layer trapdoorHinges ${!stone_h} trapdoor6
 stack "block/warped_trapdoor"
 
-layer waves ${wood_crimson} trapdoorw1
+layer zigzagSolid2 ${wood_crimson_h} trapdoorw0
+layer zigzagSolid ${wood_crimson_s} trapdoorw1
 layer borderSolidThick ${wood_crimson} trapdoorw2
 layer borderSolid ${wood_crimson_s} trapdoorw3
 layer borderShortDashes ${wood_crimson_h} trapdoorw4
@@ -984,6 +991,45 @@ stack block/nether_wart_stage_1
 layer wart2 ${crimson_wart_s} wart2
 layer wart2a ${crimson_wart_h} wart2a
 stack block/nether_wart_stage_2
+
+layer carrots0 ${veg_leaves_s} carrots0
+stack block/carrots_stage0
+
+layer carrots1 ${veg_leaves_s} carrots1
+stack block/carrots_stage1
+
+layer carrots2 ${veg_leaves_s} carrots2
+stack block/carrots_stage2
+
+layer carrots3Stems ${veg_leaves_h} carrots3a
+layer rootVeg ${carrot} carrots3b
+stack block/carrots_stage3
+
+layer beets0 ${veg_leaves_s} beets0
+stack block/beets_stage0
+
+layer beets1 ${veg_leaves_s} beets1
+stack block/beets_stage1
+
+layer beets2 ${veg_leaves_s} beets2
+stack block/beets_stage2
+
+layer beets3Stems ${veg_leaves_h} beets3a
+layer rootVeg ${beetroot} beets3b
+stack block/beets_stage3
+
+layer potato0 ${veg_leaves_s} potato0
+stack block/potatoes_stage0
+
+layer potato1 ${veg_leaves_s} potato1
+stack block/potatoes_stage1
+
+layer flowerStemShort ${veg_leaves_s} potato2
+stack block/potatoes_stage2
+
+layer flowerStemTall ${veg_leaves_h} potato3
+layer potato ${potato} potato3a
+stack block/potatoes_stage3
 
 # Lily pads and leaves are biome-colored starting from gray, like grass blocks
 
