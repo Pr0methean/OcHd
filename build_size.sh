@@ -1061,10 +1061,10 @@ stack block/potatoes_stage0
 layer potato1 ${veg_leaves_s} potato1
 stack block/potatoes_stage1
 
-layer flowerStemShort ${veg_leaves_s} potato2
+layer potato2 ${veg_leaves_s} potato2
 stack block/potatoes_stage2
 
-layer flowerStemTall ${veg_leaves_h} potato3
+layer flowerStemShort ${veg_leaves_h} potato3
 layer potato ${potato} potato3a
 stack block/potatoes_stage3
 
