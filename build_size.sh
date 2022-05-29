@@ -237,6 +237,8 @@ tnt_s='#912d00'
 bone_block_h='#e9e6d4'
 bone_block='#e1ddca'
 bone_block_s='#c3bfa1'
+target_h='#ffffff'
+target_s='#ffd7ba'
 
 # Technical blocks
 repeating_command_block_h='#9b8bcf'
@@ -1028,6 +1030,16 @@ stack block/redstone_dust_line0
 
 copy block/redstone_dust_line0 redstoneLine2
 stack block/redstone_dust_line1
+
+# Target
+
+layer grassTall $target_h targetSide1 $target_s
+layer ringsCentralBullseye $redstone_s targetSide2
+stack block/target_side
+
+layer checksSmall $target_h targetTop1 $target_s
+layer ringsCentralBullseye $redstone_s targetTop2
+stack block/target_top
 
 # S90. UNBREAKABLE BLOCKS
 
