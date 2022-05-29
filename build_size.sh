@@ -1185,5 +1185,5 @@ stack "item/music_disc_11"
 
 # S200. PARTICLES
 
-layer note ${grass} note_1
+layer note ${grass_h} note_1
 stack "particle/note"
