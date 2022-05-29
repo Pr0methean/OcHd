@@ -687,7 +687,7 @@ done
 # Bone block
 
 layer borderSolid $bone_block_h boneblock1 $bone_block_s
-layer bonemealSmall ${bone_block_h} boneblock2
+layer bonesXor ${bone_block_h} boneblock2
 semitrans boneblock2 0.5
 stack block/bone_block_top
 
@@ -873,7 +873,7 @@ copy block/podzol_top compost0
 stack "block/composter_compost"
 
 copy block/composter_compost compost1
-layer bonemealSmall ${bone_block_h} compost2
+layer bonemealSmallNoBorder ${bone_block_h} compost2
 stack "block/composter_ready"
 
 layer borderSolidThick ${wood_oak} compostframe0
@@ -899,8 +899,11 @@ layer borderDotted ${wood_oak_s} jukeboxTop1
 layer thirdRail ${black} jukeboxTop2
 stack "block/jukebox_top"
 
-copy block/jukebox_side noteblock1
-layer note ${wood_oak_s} noteblock2
+layer strokeTopLeftBottomRight4 ${wood_oak} noteblock ${wood_oak_s}
+layer strokeBottomLeftTopRight4 ${wood_oak} noteblock
+layer borderSolidThick ${wood_oak} noteblock2
+layer borderDotted ${wood_oak_h} noteblock3
+layer note ${wood_oak_h} noteblock4
 stack "block/note_block"
 
 # S4. BLOCKS BROKEN WITH SHEARS
@@ -1217,7 +1220,7 @@ i=0
 for disc in "${NORMAL_MUSIC_DISCS[@]}"; do
   layer musicDisc ${music_disc} "disc_${disc}_1"
   layer musicDiscGroove ${music_disc_s} "disc_${disc}_2"
-  layer musicDiscLabel "${!${DISC_LABELS[$i]}}" "disc_${disc}_3"
+  layer musicDiscLabel "${!DISC_LABELS[$i]}" "disc_${disc}_3"
   stack "item/music_disc_${disc}"
   i=$((i+1))
 done
