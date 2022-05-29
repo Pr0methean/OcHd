@@ -480,8 +480,9 @@ stack block/cobblestone
 copy block/cobblestone mcs1
 layer dots3 ${moss} mcs4
 layer dots2 ${moss_h} mcs5
-layer borderSolid ${moss_h} mcs6
-layer borderShortDashes $stone_ss mcs7
+layer dots1 ${moss_s} mcs6
+layer borderSolid ${moss_h} mcs10
+layer borderShortDashes ${moss_s} mcs11
 stack block/mossy_cobblestone
 
 layer checksLarge $deepslate_h deepslate1 $deepslate_s
@@ -497,7 +498,8 @@ layer diagonalOutlineChecksBottomLeftTopRight $netherrack_h nether2
 stack block/netherrack
 
 layer dots3 ${warped_nylium_h} wnylium1 ${warped_nylium}
-layer borderRoundDotsVaryingSize ${warped_nylium_s} wnylium2
+layer dots1 ${warped_nylium_s} wnylium2
+layer borderRoundDotsVaryingSize ${warped_nylium_s} wnylium3
 stack block/warped_nylium
 
 copy block/netherrack wnyliums1
@@ -506,7 +508,8 @@ layer dots3TopPart ${warped_nylium_h} wnyliums3
 stack block/warped_nylium_side
 
 layer dots3 ${crimson_nylium_s} cnylium1 ${crimson_nylium}
-layer borderRoundDots ${crimson_nylium_h} cnylium2
+layer dots1 ${crimson_nylium_h} cnylium2
+layer borderRoundDots ${crimson_nylium_h} cnylium3
 stack block/crimson_nylium
 
 copy block/netherrack cnyliums1
@@ -540,7 +543,9 @@ stack block/stone_bricks
 copy block/stone_bricks msb1
 layer dots3 ${moss_h} msb2
 layer dots2 ${moss} msb3
-layer borderShortDashes ${moss_s} msb5
+layer dots1 ${moss_s} msb4
+layer borderSolid ${moss_h} msb5
+layer borderShortDashes ${moss_s} msb6
 stack block/mossy_stone_bricks
 
 layer bricks $mortar bricks1 $terracotta
@@ -625,10 +630,10 @@ layer borderSolid ${diamond_s} diamond_block4
 layer borderSolidTopLeft ${diamond_hh} diamond_block5
 stack block/diamond_block
 
-layer streaks ${emerald_h} emerald_block1 ${emerald}
+layer streaks ${emerald_hh} emerald_block1 ${emerald_h}
 layer emeraldTopLeft ${emerald_hh} emerald_block2
 layer emeraldBottomRight ${emerald_s} emerald_block3
-layer borderSolid ${emerald_s} emerald_block4
+layer borderSolid ${emerald} emerald_block4
 layer borderSolidTopLeft ${emerald_h} emerald_block5
 stack block/emerald_block
 
@@ -1020,17 +1025,17 @@ layer rootVeg ${carrot} carrots3b
 stack block/carrots_stage3
 
 layer beets0 ${veg_leaves_s} beets0
-stack block/beets_stage0
+stack block/beetroots_stage0
 
 layer beets1 ${veg_leaves_s} beets1
-stack block/beets_stage1
+stack block/beetroots_stage1
 
 layer beets2 ${veg_leaves_s} beets2
-stack block/beets_stage2
+stack block/beetroots_stage2
 
 layer beets3Stems ${veg_leaves_h} beets3a
 layer rootVeg ${beetroot} beets3b
-stack block/beets_stage3
+stack block/beetroots_stage3
 
 layer potato0 ${veg_leaves_s} potato0
 stack block/potatoes_stage0
