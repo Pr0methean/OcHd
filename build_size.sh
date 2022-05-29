@@ -98,6 +98,9 @@ stone_ss='#525252'
 sand_h='#edebcb'
 sand='#dfd5aa' # compromise between dacfa3 & e3dbb0
 sand_s='#d1ba8a'
+red_sand_h='#d97b30'
+red_sand='#bf6721'
+red_sand_s='#ac5700'
 gravel_h='#aeaeae'
 gravel='#7f7f7f'
 gravel_s='#5f5f5f'
@@ -344,6 +347,10 @@ layer checksSmall ${sand_s} sand1 ${sand}
 layer checksSmallOutline ${sand_h} sand2
 stack block/sand
 
+layer checksSmall ${red_sand_h} rsand1 ${red_sand}
+layer checksSmallOutline ${red_sand_s} rsand2
+stack block/red_sand
+
 layer diagonalChecksTopLeftBottomRight ${clay_s} clay1 ${clay}
 layer diagonalChecksBottomLeftTopRight ${clay_h} clay2
 layer diagonalOutlineChecksTopLeftBottomRight ${clay_h} clay3
@@ -359,8 +366,8 @@ layer soulTopLeftFace ${soul_sand_s} ssand4
 layer soulBottomRightFace ${soul_sand_s} ssand5
 stack block/soul_sand
 
-layer strokeBottomLeftTopRight4 ${soul_soil_h} ssoil1 ${soul_soil_s}
-layer borderDotted ${soul_soil} ssoil2
+layer borderSolid ${soul_soil} ssoil0 ${soul_soil_s}
+layer strokeBottomLeftTopRight4 ${soul_soil_h} ssoil1
 layer soulHeads ${soul_soil} ssoil3
 layer soulTopLeftFace ${soul_soil_h} ssoil4
 layer soulBottomRightFace ${soul_soil_s} ssoil5
@@ -681,6 +688,7 @@ done
 
 layer borderSolid $bone_block_h boneblock1 $bone_block_s
 layer bonemealSmall ${bone_block_h} boneblock2
+semitrans boneblock2 0.5
 stack block/bone_block_top
 
 layer borderSolid $bone_block_s boneblockside1 $bone_block
@@ -807,6 +815,41 @@ stack block/mushroom_block_inside
 layer stripesThick ${mushroom_stem_s} mushstem1 ${mushroom_stem_h}
 layer borderShortDashes ${mushroom_stem} mushstem2
 stack block/mushroom_stem
+
+# Trapdoors
+
+layer waves ${wood_warped} trapdoorw1
+layer borderSolidThick ${wood_warped} trapdoorw2
+layer borderSolid ${wood_warped_h} trapdoorw3
+layer borderShortDashes ${wood_warped_s} trapdoorw4
+layer trapdoorHingesBig ${!stone_s} trapdoor5
+layer trapdoorHinges ${!stone_h} trapdoor6
+stack "block/warped_trapdoor"
+
+layer waves ${wood_crimson} trapdoorw1
+layer borderSolidThick ${wood_crimson} trapdoorw2
+layer borderSolid ${wood_crimson_s} trapdoorw3
+layer borderShortDashes ${wood_crimson_h} trapdoorw4
+layer trapdoorHingesBig ${!stone_h} trapdoor5
+layer trapdoorHinges ${!stone_s} trapdoor6
+stack "block/crimson_trapdoor"
+
+layer cross ${wood_oak} trapdooro1
+layer borderSolidThick ${wood_oak} trapdooro2
+layer borderSolid ${wood_oak_s} trapdooro3
+layer borderLongDashes ${wood_oak_h} trapdooro4
+layer trapdoorHingesBig ${stone} trapdooro5
+layer trapdoorHinges ${stone_h} trapdooro6
+stack "block/oak_trapdoor"
+
+layer planksTopVertical ${wood_spruce} trapdoors1 ${wood_spruce_s}
+layer borderSolidThick ${wood_spruce_s} trapdoors2
+layer borderLongDashes ${wood_spruce_h} trapdoors3
+layer trapdoorHingesBig ${stone} trapdoors5
+layer trapdoorHinges ${stone_s} trapdoors6
+stack "block/spruce_trapdoor"
+
+# TODO: Trapdoors based on other woods
 
 # Functional wooden blocks
 
@@ -1174,7 +1217,7 @@ i=0
 for disc in "${NORMAL_MUSIC_DISCS[@]}"; do
   layer musicDisc ${music_disc} "disc_${disc}_1"
   layer musicDiscGroove ${music_disc_s} "disc_${disc}_2"
-  layer musicDiscLabel "${!MUSIC_DISC_LABELS[$i]}" "disc_${disc}_3"
+  layer musicDiscLabel "${!${DISC_LABELS[$i]}}" "disc_${disc}_3"
   stack "item/music_disc_${disc}"
   i=$((i+1))
 done
