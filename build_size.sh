@@ -492,8 +492,8 @@ layer checksLarge $deepslate_h deepslate1 $deepslate_s
 layer checksSmall $deepslate deepslate2
 stack block/cobbled_deepslate
 
-layer checksLarge $deepslate deep1 $deepslate_h
-layer strokeTopLeftBottomRight $deepslate_s deep2
+layer diagonalChecksBottomLeftTopRight $deepslate_h deep1 $deepslate
+layer diagonalChecksTopLeftBottomRight $deepslate_s deep2
 stack block/deepslate
 
 layer diagonalOutlineChecksTopLeftBottomRight $netherrack_s nether1 $netherrack
