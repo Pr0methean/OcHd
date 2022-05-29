@@ -500,24 +500,26 @@ layer diagonalOutlineChecksTopLeftBottomRight $netherrack_s nether1 $netherrack
 layer diagonalOutlineChecksBottomLeftTopRight $netherrack_h nether2
 stack block/netherrack
 
-layer dots2 ${warped_nylium_h} wnylium1 ${warped_nylium}
-layer dots1 ${warped_nylium_s} wnylium2
-layer borderRoundDotsVaryingSize ${warped_nylium_s} wnylium3
+layer strokeTopLeftBottomRight2 ${warped_nylium_h} wnylium1 ${warped_nylium}
+layer strokeBottomLeftTopRight2 ${warped_nylium_s} wnylium2
+layer borderShortDashes ${warped_nylium_s} wnylium3
 stack block/warped_nylium
 
 copy block/netherrack wnyliums1
 layer topPart ${warped_nylium} wnyliums2
-layer dots3TopPart ${warped_nylium_h} wnyliums3
+layer strokeTopLeftBottomRight2TopPart ${warped_nylium_h} wnyliums3
+layer strokeBottomLeftTopRight2TopPart ${warped_nylium_s} wnyliums4
 stack block/warped_nylium_side
 
-layer dots2 ${crimson_nylium_s} cnylium1 ${crimson_nylium}
-layer dots1 ${crimson_nylium_h} cnylium2
-layer borderRoundDots ${crimson_nylium_h} cnylium3
+layer strokeTopLeftBottomRight2 ${crimson_nylium_s} cnylium1 ${crimson_nylium}
+layer strokeBottomLeftTopRight2 ${crimson_nylium_h} cnylium2
+layer borderLongDashes ${crimson_nylium_h} cnylium3
 stack block/crimson_nylium
 
 copy block/netherrack cnyliums1
 layer topPart ${crimson_nylium} cnyliums2
-layer dots3TopPart ${crimson_nylium_s} cnyliums3
+layer strokeTopLeftBottomRight2TopPart ${crimson_nylium_s} cnyliums3
+layer strokeBottomLeftTopRight2TopPart ${crimson_nylium_h} cnyliums4
 stack block/crimson_nylium_side
 
 copy block/netherrack wnyliums1
