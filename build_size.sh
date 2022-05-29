@@ -361,9 +361,9 @@ stack block/clay
 
 layer borderSolid ${soul_sand_s} ssand1 ${soul_sand}
 layer checksSmall ${soul_sand_h} ssand2
-layer soulHeads ${soul_sand_h} ssand3
-layer soulTopLeftFace ${soul_sand_s} ssand4
-layer soulBottomRightFace ${soul_sand_s} ssand5
+layer soulHeads ${soul_sand_s} ssand3
+layer soulTopLeftFace ${soul_sand_h} ssand4
+layer soulBottomRightFace ${soul_sand_h} ssand5
 stack block/soul_sand
 
 layer borderSolid ${soul_soil} ssoil0 ${soul_soil_s}
