@@ -844,7 +844,7 @@ layer borderSolid ${wood_oak} compostBottom2
 stack "block/composter_bottom"
 
 layer strokeTopLeftBottomRight4 ${wood_oak} jukeboxSide0 ${wood_oak_s}
-layer strokeBottomLeftTopRight4 ${wood_oak_h} jukeboxSide1
+layer strokeBottomLeftTopRight4 ${wood_oak} jukeboxSide1
 layer borderSolidThick ${wood_oak_h} jukeboxSide2
 layer borderDotted ${wood_oak_s} jukeboxSide3
 stack "block/jukebox_side"
