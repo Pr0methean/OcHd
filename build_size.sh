@@ -347,8 +347,8 @@ stack item/bone
 
 # Soft earth
 
-layer dots2 $dirt_h dirt1 $dirt
-layer dots1 $dirt_s dirt2
+layer dots3 $dirt_h dirt1 $dirt
+layer dots2 $dirt_s dirt2
 stack block/dirt
 
 layer checksLarge ${gravel_s} gravel1 ${gravel}
@@ -478,8 +478,8 @@ layer borderShortDashes $stone_ss cobblestone6
 stack block/cobblestone
 
 copy block/cobblestone mcs1
-layer strokeTopLeftBottomRight2 ${moss} mcs4
-layer strokeTopLeftBottomRight ${moss_s} mcs5
+layer dots3 ${moss} mcs4
+layer dots2 ${moss_h} mcs5
 layer borderSolid ${moss_h} mcs6
 layer borderShortDashes $stone_ss mcs7
 stack block/mossy_cobblestone
@@ -538,9 +538,9 @@ layer borderShortDashes $stone_s sb3
 stack block/stone_bricks
 
 copy block/stone_bricks msb1
-layer strokeTopLeftBottomRight2 ${moss_s} msb3
-layer strokeTopLeftBottomRight ${moss_h} msb4
-layer borderShortDashes ${moss} msb5
+layer dots3 ${moss_h} msb2
+layer dots2 ${moss} msb3
+layer borderShortDashes ${moss_s} msb5
 stack block/mossy_stone_bricks
 
 layer bricks $mortar bricks1 $terracotta
@@ -758,8 +758,9 @@ for wood in "${WOODS[@]}"; do
   shadow="wood_${wood}_s"
   midtone="wood_${wood}"
 
-  layer planksTop ${!midtone} planks1 ${!shadow}
-  layer borderShortDashes ${!highlight} planks2
+  layer waves ${!highlight} "${wood}_planks0" ${!midtone}
+  layer planksTopBorder ${!shadow} "${wood}_planks1"
+  layer borderShortDashes ${!highlight} "${wood}_planks2"
   stack "block/${wood}_planks"
 done
 
@@ -841,17 +842,17 @@ layer waves ${wood_warped} trapdoorw1
 layer borderSolidThick ${wood_warped} trapdoorw2
 layer borderSolid ${wood_warped_h} trapdoorw3
 layer borderShortDashes ${wood_warped_s} trapdoorw4
-layer trapdoorHingesBig ${!stone_s} trapdoor5
-layer trapdoorHinges ${!stone_h} trapdoor6
+layer trapdoorHingesBig ${!stone_s} trapdoorw5
+layer trapdoorHinges ${!stone_h} trapdoorw6
 stack "block/warped_trapdoor"
 
-layer zigzagSolid2 ${wood_crimson_h} trapdoorw0
-layer zigzagSolid ${wood_crimson_s} trapdoorw1
-layer borderSolidThick ${wood_crimson} trapdoorw2
-layer borderSolid ${wood_crimson_s} trapdoorw3
-layer borderShortDashes ${wood_crimson_h} trapdoorw4
-layer trapdoorHingesBig ${!stone_h} trapdoor5
-layer trapdoorHinges ${!stone_s} trapdoor6
+layer zigzagSolid2 ${wood_crimson_h} trapdoorc0
+layer zigzagSolid ${wood_crimson_s} trapdoorc1
+layer borderSolidThick ${wood_crimson} trapdoorc2
+layer borderSolid ${wood_crimson_s} trapdoorc3
+layer borderShortDashes ${wood_crimson_h} trapdoorc4
+layer trapdoorHingesBig ${!stone_h} trapdoorc5
+layer trapdoorHinges ${!stone_s} trapdoorc6
 stack "block/crimson_trapdoor"
 
 layer cross ${wood_oak} trapdooro1
