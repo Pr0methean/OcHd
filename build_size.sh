@@ -919,8 +919,8 @@ layer borderDotted ${wood_oak_s} jukeboxTop1
 layer thirdRail ${black} jukeboxTop2
 stack "block/jukebox_top"
 
-layer strokeTopLeftBottomRight4 ${wood_oak} noteblock ${wood_oak_s}
-layer strokeBottomLeftTopRight4 ${wood_oak} noteblock
+layer strokeTopLeftBottomRight4 ${wood_oak} noteblock0 ${wood_oak_s}
+layer strokeBottomLeftTopRight4 ${wood_oak} noteblock1
 layer borderSolidThick ${wood_oak} noteblock2
 layer borderDotted ${wood_oak_h} noteblock3
 layer note ${wood_oak_h} noteblock4
@@ -928,7 +928,7 @@ stack "block/note_block"
 
 # S4. BLOCKS BROKEN WITH SHEARS
 
-layer rings ${white} cobweb1
+layer ringsCentralBullseye ${white} cobweb1
 layer x ${white} cobweb2
 layer cross ${white} cobweb3
 stack block/cobweb
@@ -945,7 +945,7 @@ for dye in "${DYES[@]}"; do
   layer empty ${!dye} wool1 ${!dye}
   layer zigzagBroken ${gray} wool2
   semitrans wool2 0.25
-  layer zigzagBroken ${light_gray} wool3
+  layer zigzagBroken2 ${light_gray} wool3
   semitrans wool3 0.25
   layer borderSolid ${gray} wool4
   semitrans wool4 0.5
