@@ -860,7 +860,12 @@ stack "block/note_block"
 
 # S4. BLOCKS BROKEN WITH SHEARS
 
-# todo: cobweb, glow moss
+layer rings ${white} cobweb1
+layer x ${white} cobweb2
+layer cross ${white} cobweb3
+stack block/cobweb
+
+# todo: glow moss
 
 # S7. LIQUIDS
 
