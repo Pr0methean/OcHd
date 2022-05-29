@@ -162,6 +162,9 @@ veg_leaves_s='#266325'
 carrot='#ff8a00'
 beetroot='#bf2727'
 potato='#d97b30'
+wheat_h='#dcbb65'
+wheat='#888836'
+wheat_s='#5b6b0f'
 
 # mushrooms
 mushroom_brown_cap_h='#9c795a'
@@ -843,7 +846,7 @@ layer stripesThick ${mushroom_stem_s} mushstem1 ${mushroom_stem_h}
 layer borderShortDashes ${mushroom_stem} mushstem2
 stack block/mushroom_stem
 
-# Trapdoors
+# Wooden trapdoors
 
 layer waves ${wood_warped} trapdoorw1
 layer borderSolidThick ${wood_warped} trapdoorw2
@@ -877,7 +880,18 @@ layer trapdoorHingesBig ${stone} trapdoors5
 layer trapdoorHinges ${stone_s} trapdoors6
 stack "block/spruce_trapdoor"
 
-# TODO: Trapdoors based on other woods
+layer trapdoor1 ${wood_birch} trapdoorb1
+layer trapdoorHinges ${stone} trapdoorb2
+stack "block/birch_trapdoor"
+
+layer trapdoor2 ${wood_jungle} trapdoorj1
+layer borderSolid ${wood_jungle_s} trapdoorj2
+layer borderShortDashes ${wood_jungle_h} trapdoorj3
+layer trapdoorHingesBig ${stone_s} trapdoorj5
+layer trapdoorHinges ${stone} trapdoorj6
+stack "block/jungle_trapdoor"
+
+# TODO: Dark oak, mangrove, acacia
 
 # Functional wooden blocks
 
@@ -1051,6 +1065,16 @@ stack block/potatoes_stage2
 layer flowerStemTall ${veg_leaves_h} potato3
 layer potato ${potato} potato3a
 stack block/potatoes_stage3
+
+for wheatStage in $(seq 0 6); do
+  layer "wheat${wheatStage}" ${wheat_s} "wheat${wheatStage}layer1"
+  layer "wheatTexture${wheatStage}" ${wheat} "wheat${wheatStage}layer2"
+  stack "block/wheat_stage${wheatStage}"
+done
+
+layer "wheatFull" ${wheat_h} "wheatfull1"
+layer "wheatTextureFull" ${wheat_s} "wheatfull2"
+stack "block/wheat_stage7"
 
 # Lily pads and leaves are biome-colored starting from gray, like grass blocks
 
