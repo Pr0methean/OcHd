@@ -139,6 +139,12 @@ mortar='#a2867d'
 moss_h='#70922d'
 moss='#647233'
 moss_s='#42552d'
+farmland_moist_h='#6e3c15'
+farmland_moist='#552e00'
+farmland_moist_s='#341900'
+farmland_h='#b9855c'
+farmland='#966c4a'
+farmland_s='#593d29'
 bedrock_h='#979797'
 bedrock='#575757'
 bedrock_s='#222222'
@@ -446,7 +452,14 @@ for dye in "${DYES[@]}"; do
   stack "block/${dye}_concrete_powder"
 done
 
-# todo: farmland
+layer bambooThick ${farmland} farmland1 ${farmland_h}
+layer bambooThinMinusBorder ${farmland_s} farmland2
+stack "block/farmland"
+
+layer bambooThick ${farmland_moist} mfarmland1 ${farmland_moist_h}
+layer bambooThinMinusBorder ${farmland_moist_s} mfarmland2
+layer dots0 ${stone_s} mfarmland3
+stack "block/farmland_moist"
 
 # S20. PICKAXE BLOCKS
 

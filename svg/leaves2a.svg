@@ -7,7 +7,7 @@
    viewBox="0 0 8.4666666 8.4666668"
    version="1.1"
    id="svg5"
-   inkscape:version="1.1.2 (b8e25be8, 2022-02-05)"
+   inkscape:version="1.2 (dc2aeda, 2022-05-15)"
    sodipodi:docname="leaves2a.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -32,14 +32,16 @@
      inkscape:snap-perpendicular="true"
      inkscape:snap-tangential="true"
      inkscape:zoom="34.90625"
-     inkscape:cx="8.6374217"
-     inkscape:cy="16.229185"
+     inkscape:cx="8.6517457"
+     inkscape:cy="16.257833"
      inkscape:window-width="2560"
      inkscape:window-height="1301"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer1">
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="0"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
        id="grid9"
@@ -62,22 +64,22 @@
     <path
        id="path6107"
        style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       d="M 0,2.6458329 V 2.1166667 H 2.1166667 V 0 L 2.6458333,-3.3666667e-7 V 2.6458329 Z"
+       d="M 0.52916667,2.6458333 V 2.1166667 l 1.58750003,0 0,-1.58750003 h 0.5291666 l 0,2.11666623 z"
        sodipodi:nodetypes="ccccccc" />
     <path
-       id="path6339"
+       id="path1286"
        style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       d="M 8.466667,2.6458329 V 2.1166667 H 6.3500003 V 0 L 5.8208336,-3.3666667e-7 V 2.6458329 Z"
+       d="M 7.9374993,2.6458333 V 2.1166667 h -1.5875 V 0.52916667 H 5.8208327 V 2.6458329 Z"
        sodipodi:nodetypes="ccccccc" />
     <path
-       id="path6350"
+       id="path1288"
        style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       d="m 0,5.8208333 v 0.5291662 h 2.1166667 v 2.1166668 l 0.5291666,3e-7 V 5.8208333 Z"
+       d="M 0.52916667,5.8208327 V 6.3499993 H 2.1166667 v 1.5875 H 2.6458333 V 5.8208331 Z"
        sodipodi:nodetypes="ccccccc" />
     <path
-       id="path6352"
+       id="path1290"
        style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       d="M 8.466667,5.8208333 V 6.3499995 H 6.3500003 v 2.1166668 l -0.5291667,3e-7 V 5.8208333 Z"
+       d="m 7.9374993,5.8208327 v 0.5291666 h -1.5875 v 1.5875 H 5.8208327 V 5.8208331 Z"
        sodipodi:nodetypes="ccccccc" />
   </g>
   <metadata
