@@ -992,8 +992,8 @@ stack block/rail_corner
 # Functional pickaxe blocks
 
 layer bigDiamond ${redstone_s} rloff0 ${redstone}
-layer lamp ${redstone_h} rloff2 ${redstone_s}
-layer borderSolidBottomRight ${black} rloff4
+layer lamp ${redstone_h} rloff2
+layer borderSolidBottomRight ${redstone_s} rloff4
 layer borderSolidTopLeft ${redstone_h} rloff6
 stack block/redstone_lamp
 
