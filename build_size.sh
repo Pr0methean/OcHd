@@ -634,15 +634,19 @@ layer topPart ${warped_nylium} wnyliums2
 layer dots3TopPart ${warped_nylium_h} wnyliums3
 stack block/warped_nylium_side
 
-layer bigDotsBottomLeftTopRight ${blackstone_h} bst1 ${blackstone}
-layer bigDotsTopLeftBottomRight ${blackstone_s} bst2
-stack block/blackstone_top
-
 layer bigDotsBottomLeftTopRight ${blackstone_h} bss1 ${blackstone_s}
 layer bigDotsTopLeftBottomRight ${blackstone_h} bss2
 stack block/blackstone
 
-copy block/blackstone_top pbs1
+layer bigRingsBottomLeftTopRight ${blackstone_h} bst1 ${blackstone}
+layer bigRingsTopLeftBottomRight ${blackstone_s} bst2
+stack block/blackstone_top
+
+copy block/blackstone gbs0
+layer bigRingsBottomLeftTopRight ${gold} gbs1
+stack block/gilded_blackstone
+
+copy block/blackstone pbs1
 layer borderSolidBottomRight ${blackstone_s} pbs2
 layer borderSolidTopLeft ${blackstone_h} pbs3
 stack block/polished_blackstone
