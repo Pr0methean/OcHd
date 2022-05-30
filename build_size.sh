@@ -535,14 +535,15 @@ layer checksLarge ${sand_s} sandstone1 ${sand}
 layer borderLongDashes ${sand_h} sandstone2
 stack block/sandstone_bottom
 
-copy block/sand sandstonetop1
+copy block/sandstone_bottom sandstonetop1
 layer borderSolidThick ${sand_s} sandstonetop2
 layer borderSolid ${sand_h} sandstonetop3
 stack block/sandstone_top
 
-copy block/sandstone_bottom sandstoneside1
-layer topPart ${sand_s} sandstoneside2
+layer topPart ${sand_s} sandstoneside1 ${sand}
+layer borderSolid ${sand_s} sandstoneside2
 layer topStripeThick ${sand_h} sandstoneside3
+layer borderShortDashes ${sand_h} sandstoneside4
 stack block/sandstone
 
 layer checksLarge ${sand_h} csandstone1 ${sand}
@@ -558,14 +559,15 @@ layer checksLarge ${red_sand_h} rsandstone1 ${red_sand}
 layer borderLongDashes ${red_sand_s} rsandstone2
 stack block/red_sandstone_bottom
 
-copy block/red_sand rsandstonetop1
+copy block/red_sandstone_bottom rsandstonetop1
 layer borderSolidThick ${red_sand_h} rsandstonetop2
 layer borderSolid ${red_sand_s} rsandstonetop3
 stack block/red_sandstone_top
 
-copy block/red_sandstone_bottom rsandstoneside1
-layer topPart ${red_sand_s} rsandstoneside2
+layer topPart ${red_sand_s} rsandstoneside1 ${red_sand}
+layer borderSolid ${red_sand_h} rsandstoneside2
 layer topStripeThick ${red_sand_h} rsandstoneside3
+layer borderShortDashes ${red_sand_s} rsandstoneside4
 stack block/red_sandstone
 
 layer checksLarge ${red_sand_h} rcsandstone1 ${sand}

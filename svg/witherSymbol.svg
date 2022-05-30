@@ -33,7 +33,7 @@
      inkscape:snap-tangential="true"
      inkscape:zoom="34.90625"
      inkscape:cx="11.487914"
-     inkscape:cy="13.794091"
+     inkscape:cy="22.961504"
      inkscape:window-width="2560"
      inkscape:window-height="1301"
      inkscape:window-x="0"
@@ -77,10 +77,9 @@
        cy="3.9687502"
        r="0.52916664" />
     <path
-       style="fill:#000000;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 3.7041666,6.0854166 V 7.4083332 L 4.2333333,7.9374999 4.7624999,7.4083332 4.7625,5.0270833 H 3.7041667"
        id="path748"
-       sodipodi:nodetypes="cccccc" />
+       style="fill:#000000;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 3.7041667 5.0270833 L 3.7041667 6.0854167 L 3.7041667 7.4083333 A 0.52916664 0.52916664 0 0 1 4.2333333 7.9375 A 0.52916664 0.52916664 0 0 1 4.7625 7.4083333 L 4.7625 5.0270833 L 3.7041667 5.0270833 z " />
   </g>
   <metadata
      id="metadata33">
