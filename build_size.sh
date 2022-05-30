@@ -202,6 +202,9 @@ warped_wart_h='#00b485'
 warped_wart='#008282'
 warped_wart_s='#006367'
 fungus_spot='#ff6500'
+shroomlight_h='#ffffb4'
+shroomlight='#ffac6d'
+shroomlight_s='#d75100'
 
 # Ores
 gold_h='#ffffb5'
@@ -272,6 +275,10 @@ blackstone_s='#000000'
 basalt_h='#747474'
 basalt='#4e4e4e'
 basalt_s='#002632'
+glowstone_h='#fffff'
+glowstone='#ffda74'
+glowstone_s='#cc8654'
+glowstone_ss='#6f4522'
 
 # End
 end_stone_h='#ffffb4'
@@ -287,6 +294,9 @@ bone_block='#e1ddca'
 bone_block_s='#c3bfa1'
 target_h='#ffffff'
 target_s='#ffd7ba'
+redstone_lamp_h='#ffdab4'
+redstone_lamp_s='#e6994a'
+
 
 # Technical blocks
 repeating_command_block_h='#9b8bcf'
@@ -681,6 +691,11 @@ layer borderSolidBottomRight ${basalt_s} baspt20
 layer borderSolidTopLeft ${basalt_h} baspt21
 stack block/polished_basalt_top
 
+layer borderSolid ${glowstone_ss} gs0 ${glowstone_s}
+layer checksSmall ${glowstone} gs1
+layer lampOn ${glowstone_h} gs2
+stack block/glowstone
+
 # Rock - End
 
 layer checksLargeOutline ${end_stone_s} endstone1 ${end_stone}
@@ -954,6 +969,16 @@ layer railCorner $stone_h rail1
 stack block/rail_corner
 
 # Functional pickaxe blocks
+
+layer lamp ${redstone_h} rloff0 ${redstone_s}
+layer borderSolidBottomRight ${black} rloff1
+layer borderSolidTopLeft ${redstone_h} rloff2
+stack block/redstone_lamp
+
+layer lampOn ${redstone_lamp_h} rl0 ${redstone_lamp_s}
+layer borderSolidBottomRight ${redstone_s} rl1
+layer borderSolidTopLeft ${redstone_lamp_h} rl2
+stack block/redstone_lamp_on
 
 layer bottomHalf $stone_h furnaceside1 $stone
 layer borderSolid $stone_ss stone2
@@ -1386,6 +1411,11 @@ layer mushroomStem $bark_warped_s cfungus1
 layer warpedFungusCap $warped_wart cfungus2
 layer warpedFungusSpots $fungus_spot cfungus3
 stack block/warped_fungus
+
+layer borderSolid ${shroomlight_h} sl0 ${shroomlight}
+layer checksSmall ${shroomlight_s} sl1
+layer shroomlightOn ${shroomlight_h} sl2
+stack block/shroomlight
 
 # Redstone dust
 
