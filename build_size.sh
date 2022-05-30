@@ -684,12 +684,12 @@ layer borderSolidBottomRight ${basalt_s} basps2
 layer borderSolidTopLeft ${basalt_h} basps3
 stack block/polished_basalt_side
 
-layer cutInQuarters1 ${basalt_s} baspt00 ${basalt}
-layer cutInQuarters2 ${basalt_h} baspt01
 layer ringsCentralBullseye ${basalt_s} baspt11 ${basalt}
 layer rings ${basalt_h} baspt12
-layer borderSolidBottomRight ${basalt_s} baspt20
-layer borderSolidTopLeft ${basalt_h} baspt21
+layer cutInQuarters1 ${basalt_s} baspt20 ${basalt}
+layer cutInQuarters2 ${basalt_h} baspt21
+layer borderSolidBottomRight ${basalt_s} baspt30
+layer borderSolidTopLeft ${basalt_h} baspt31
 stack block/polished_basalt_top
 
 layer borderSolid ${glowstone_ss} gs0 ${glowstone_s}
@@ -868,9 +868,10 @@ layer borderShortDashes ${moss_s} msb6
 stack block/mossy_stone_bricks
 
 copy block/stone csb1
-layer rings ${stone_ss} csb2
-layer borderSolid ${stone_ss} csb3
-layer borderSolidTopLeft ${stone_hh} csb4
+layer ringsCentralBullseye ${stone_hh} csb2
+layer rings ${stone_ss} csb3
+layer borderSolid ${stone_ss} csb10
+layer borderSolidTopLeft ${stone_hh} csb11
 stack block/chiseled_stone_bricks
 
 layer bricks $mortar bricks1 $terracotta
@@ -966,7 +967,26 @@ layer thirdRail $redstone_h rail2
 layer rail $gold rail3
 stack block/powered_rail_on
 
-layer railCorner $stone_h rail1
+copy block/rail arail1
+layer thirdRail $black arail2
+stack block/activator_rail
+
+copy block/rail aarail1
+layer thirdRail $redstone_h aarail2
+stack block/activator_rail_on
+
+copy block/rail drail1
+layer railDetector $black drail2
+layer railDetectorPlate ${stone} drail3
+stack block/detector_rail
+
+copy block/rail adrail1
+layer railDetector $redstone_h adrail2
+layer railDetectorPlate ${stone} adrail3
+stack block/detector_rail_on
+
+layer railTieCorner $oak_wood railc0
+layer railCorner $stone_h railc1
 stack block/rail_corner
 
 # Functional pickaxe blocks
@@ -979,7 +999,7 @@ stack block/redstone_lamp
 
 layer bigDiamond ${redstone_lamp_s} rl0 ${redstone_lamp}
 layer lampOn ${redstone_lamp_h} rl1
-layer borderSolidBottomRight ${redstone_s} rl2
+layer borderSolidBottomRight ${redstone_lamp_s} rl2
 layer borderSolidTopLeft ${redstone_lamp_h} rl3
 stack block/redstone_lamp_on
 
@@ -1151,6 +1171,10 @@ layer trapdoorHinges ${stone_s} trapdoord6
 stack "block/dark_oak_trapdoor"
 
 # Functional wooden blocks
+
+layer rail $wood_oak ladder1
+layer railTies $wood_oak_h ladder2
+stack block/ladder
 
 layer waves ${wood_oak_h} table0 ${wood_oak}
 layer craftingGrid ${wood_oak_s} table1
