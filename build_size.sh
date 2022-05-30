@@ -811,7 +811,7 @@ for oxidation_state in "${OXIDATION_STATES[@]}"; do
   shadow="${oxidation_state}_copper_s"
   highlight="${oxidation_state}_copper_h"
 
-  layer streaks "${!highlight}" "${oxidation_state}_copper_block0" ""${!color}""
+  layer streaks "${!highlight}" "${oxidation_state}_copper_block0" "${!color}"
   layer borderSolidTopLeft ${!highlight} "${oxidation_state}_copper_block2"
   layer borderSolidBottomRight ${!shadow} "${oxidation_state}_copper_block3"
   layer copper2oxide "${!shadow}" "${oxidation_state}_copper_block4"
