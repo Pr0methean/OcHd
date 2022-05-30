@@ -146,6 +146,15 @@ farmland_moist_s='#341900'
 farmland_h='#b9855c'
 farmland='#966c4a'
 farmland_s='#593d29'
+andesite_h='#a9a99a'
+andesite='#8b8b8b'
+andesite_s='#686868'
+diorite_h='#ffffff'
+diorite='#bfbfbf'
+diorite_s='#7b7b7b'
+granite_h='#e3c0af'
+granite='#9f6b58'
+granite_s='#5f4034'
 bedrock_h='#979797'
 bedrock='#575757'
 bedrock_s='#222222'
@@ -247,7 +256,7 @@ lava_h='#faeb72'
 lava='#e69836'
 lava_s='#cc4108'
 
-# Nether
+# Nether earth
 netherrack_h='#854242'
 netherrack='#723232'
 netherrack_s='#411616'
@@ -257,6 +266,12 @@ soul_soil_s='#352922'
 soul_sand_h='#796152'
 soul_sand='#5b4538'
 soul_sand_s='#352922'
+blackstone_h='#4e4b54'
+blackstone='#312c36'
+blackstone_s='#000000'
+basalt_h='#747474'
+basalt='#4e4e4e'
+basalt_s='#002632'
 
 # Misc
 tnt_h='#ff4300'
@@ -476,7 +491,7 @@ stack "block/farmland_moist"
 
 # S20. PICKAXE BLOCKS
 
-# Rock
+# Rock - Overworld
 
 layer checksLarge $stone_h stone $stone_s
 stack block/stone
@@ -505,37 +520,6 @@ stack block/cobbled_deepslate
 layer diagonalChecksBottomLeftTopRight $deepslate_h deep1 $deepslate
 layer diagonalChecksTopLeftBottomRight $deepslate_s deep2
 stack block/deepslate
-
-layer diagonalOutlineChecksTopLeftBottomRight $netherrack_s nether1 $netherrack
-layer diagonalOutlineChecksBottomLeftTopRight $netherrack_h nether2
-stack block/netherrack
-
-layer strokeTopLeftBottomRight2 ${warped_nylium_h} wnylium1 ${warped_nylium}
-layer strokeBottomLeftTopRight2 ${warped_nylium_s} wnylium2
-layer borderShortDashes ${warped_nylium_s} wnylium3
-stack block/warped_nylium
-
-copy block/netherrack wnyliums1
-layer topPart ${warped_nylium} wnyliums2
-layer strokeTopLeftBottomRight2TopPart ${warped_nylium_h} wnyliums3
-layer strokeBottomLeftTopRight2TopPart ${warped_nylium_s} wnyliums4
-stack block/warped_nylium_side
-
-layer strokeTopLeftBottomRight2 ${crimson_nylium_s} cnylium1 ${crimson_nylium}
-layer strokeBottomLeftTopRight2 ${crimson_nylium_h} cnylium2
-layer borderLongDashes ${crimson_nylium_h} cnylium3
-stack block/crimson_nylium
-
-copy block/netherrack cnyliums1
-layer topPart ${crimson_nylium} cnyliums2
-layer strokeTopLeftBottomRight2TopPart ${crimson_nylium_s} cnyliums3
-layer strokeBottomLeftTopRight2TopPart ${crimson_nylium_h} cnyliums4
-stack block/crimson_nylium_side
-
-copy block/netherrack wnyliums1
-layer topPart ${warped_nylium} wnyliums2
-layer dots3TopPart ${warped_nylium_h} wnyliums3
-stack block/warped_nylium_side
 
 layer checksLarge ${sand_s} sandstone1 ${sand}
 layer borderLongDashes ${sand_h} sandstone2
@@ -582,6 +566,102 @@ stack block/cut_red_sandstone
 copy block/cut_red_sandstone chrsandstone1
 layer witherSymbol ${red_sand_s} chrsandstone2
 stack block/chiseled_red_sandstone
+
+layer bigRingsBottomLeftTopRight ${andesite_h} a1 ${andesite}
+layer bigRingsTopLeftBottomRight ${andesite_s} a2
+stack block/andesite
+
+copy block/andesite ap1
+layer borderSolidBottomRight ${andesite_s} ap2
+layer borderSolidTopLeft ${andesite_h} ap3
+stack block/polished_andesite
+
+layer bigRingsBottomLeftTopRight ${diorite_s} d1 ${diorite}
+layer bigRingsTopLeftBottomRight ${diorite_h} d2
+stack block/diorite
+
+copy block/diorite dp1
+layer borderSolidBottomRight ${diorite_s} dp2
+layer borderSolidTopLeft ${diorite_h} dp3
+stack block/polished_diorite
+
+layer bigDotsBottomLeftTopRight ${granite_s} g11 ${granite}
+layer bigDotsTopLeftBottomRight ${granite_h} g12
+layer bigRingsBottomLeftTopRight ${granite_h} g21
+layer bigRingsTopLeftBottomRight ${granite_s} g22
+stack block/granite
+
+copy block/granite gp1
+layer borderSolidBottomRight ${granite_s} gp2
+layer borderSolidTopLeft ${granite_h} gp3
+stack block/polished_granite
+
+# Rock - Nether
+
+layer diagonalOutlineChecksTopLeftBottomRight $netherrack_s nether1 $netherrack
+layer diagonalOutlineChecksBottomLeftTopRight $netherrack_h nether2
+stack block/netherrack
+
+layer strokeTopLeftBottomRight2 ${warped_nylium_h} wnylium1 ${warped_nylium}
+layer strokeBottomLeftTopRight2 ${warped_nylium_s} wnylium2
+layer borderShortDashes ${warped_nylium_s} wnylium3
+stack block/warped_nylium
+
+copy block/netherrack wnyliums1
+layer topPart ${warped_nylium} wnyliums2
+layer strokeTopLeftBottomRight2TopPart ${warped_nylium_h} wnyliums3
+layer strokeBottomLeftTopRight2TopPart ${warped_nylium_s} wnyliums4
+stack block/warped_nylium_side
+
+layer strokeTopLeftBottomRight2 ${crimson_nylium_s} cnylium1 ${crimson_nylium}
+layer strokeBottomLeftTopRight2 ${crimson_nylium_h} cnylium2
+layer borderLongDashes ${crimson_nylium_h} cnylium3
+stack block/crimson_nylium
+
+copy block/netherrack cnyliums1
+layer topPart ${crimson_nylium} cnyliums2
+layer strokeTopLeftBottomRight2TopPart ${crimson_nylium_s} cnyliums3
+layer strokeBottomLeftTopRight2TopPart ${crimson_nylium_h} cnyliums4
+stack block/crimson_nylium_side
+
+copy block/netherrack wnyliums1
+layer topPart ${warped_nylium} wnyliums2
+layer dots3TopPart ${warped_nylium_h} wnyliums3
+stack block/warped_nylium_side
+
+layer bigDotsBottomLeftTopRight ${blackstone_h} bst1 ${blackstone}
+layer bigDotsTopLeftBottomRight ${blackstone_s} bst2
+stack block/blackstone_top
+
+layer bigDotsBottomLeftTopRight ${blackstone_h} bss1 ${blackstone_s}
+layer bigDotsTopLeftBottomRight ${blackstone_h} bss2
+stack block/blackstone
+
+copy block/blackstone_top pbs1
+layer borderSolidBottomRight ${blackstone_s} pbs2
+layer borderSolidTopLeft ${blackstone_h} pbs3
+stack block/polished_blackstone
+
+layer bigRingsBottomLeftTopRight ${basalt_h} bas1 ${basalt}
+layer bigRingsTopLeftBottomRight ${basalt_s} bas2
+stack block/basalt_top
+
+layer stripesVerticalThick ${basalt} bass1 ${basalt_s}
+layer borderLongDashes ${basalt_h} bass2
+stack block/basalt_side
+
+layer stripesVerticalThick ${basalt_h} basps1 ${basalt}
+layer borderSolidBottomRight ${basalt_s} basps2
+layer borderSolidTopLeft ${basalt_h} basps3
+stack block/polished_basalt_side
+
+layer cutInQuarters1 ${basalt_s} baspt00 ${basalt}
+layer cutInQuarters2 ${basalt_h} baspt01
+layer ringsCentralBullseye ${basalt_s} baspt11 ${basalt}
+layer rings ${basalt_h} baspt12
+layer borderSolidBottomRight ${basalt_s} baspt20
+layer borderSolidTopLeft ${basalt_h} baspt21
+stack block/polished_basalt_top
 
 # Ores
 
@@ -762,6 +842,10 @@ layer streaks ${quartz_h} qb0 ${quartz}
 layer bricks ${quartz_s} qb1
 layer borderDotted ${quartz_h} qb2
 stack block/quartz_bricks
+
+layer bricks ${blackstone_s} pbs1 ${blackstone}
+layer borderDotted ${blackstone_h} pbs3
+stack block/polished_blackstone_bricks
 
 # todo: end stone bricks, nether bricks
 # Glass

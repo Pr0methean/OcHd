@@ -8,7 +8,7 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.2 (dc2aeda, 2022-05-15)"
-   sodipodi:docname="stripesThick.svg"
+   sodipodi:docname="bigDotsTopLeftBottomRight.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -31,22 +31,23 @@
      guidetolerance="10000"
      inkscape:snap-perpendicular="true"
      inkscape:snap-tangential="true"
-     inkscape:zoom="37.9375"
-     inkscape:cx="10.833608"
-     inkscape:cy="9.7133443"
+     inkscape:zoom="34.90625"
+     inkscape:cx="16.014324"
+     inkscape:cy="16.028648"
      inkscape:window-width="2560"
      inkscape:window-height="1301"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="0"
      inkscape:current-layer="layer1"
+     gridtolerance="10000"
      inkscape:showpageshadow="0"
      inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
        id="grid9"
        units="px"
-       empspacing="4" />
+       empspacing="2" />
   </sodipodi:namedview>
   <defs
      id="defs2" />
@@ -54,34 +55,44 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <rect
+    <circle
        style="fill:#000000;stroke-width:0"
-       id="rect18206"
-       width="7.4083333"
-       height="1.0583333"
-       x="0.52916664"
-       y="0.52916664" />
-    <rect
+       id="path1315"
+       cx="-6.0854173"
+       cy="6.0854168"
+       r="1.8520833"
+       transform="scale(-1,1)" />
+    <circle
        style="fill:#000000;stroke-width:0"
-       id="rect18208"
-       width="7.4083333"
-       height="1.0583333"
-       x="0.52916664"
-       y="2.6458333" />
-    <rect
+       id="circle1317"
+       cx="-2.3812523"
+       cy="2.3812516"
+       r="1.8520833"
+       transform="scale(-1,1)" />
+    <path
+       id="path1333"
        style="fill:#000000;stroke-width:0"
-       id="rect18210"
-       width="7.4083333"
-       height="1.0583333"
-       x="0.52916664"
-       y="4.7624998" />
-    <rect
+       d="M 2.3812506,7.9375 A 0.52916664,0.52916664 0 0 1 2.9104173,8.4666667 H 1.852084 A 0.52916664,0.52916664 0 0 1 2.3812506,7.9375 Z" />
+    <path
+       id="path1338"
        style="fill:#000000;stroke-width:0"
-       id="rect18212"
-       width="7.4083333"
-       height="1.0583333"
-       x="0.52916664"
-       y="6.8791666" />
+       d="M 6.0854168,0.52916764 A 0.52916664,0.52916664 0 0 0 6.6145835,8.7666667e-7 H 5.5562502 A 0.52916664,0.52916664 0 0 0 6.0854168,0.52916764 Z" />
+    <path
+       id="path1354"
+       style="fill:#000000;stroke-width:0"
+       d="M 7.9374999,2.3812507 A 0.52916664,0.52916664 0 0 0 8.4666667,2.9104173 V 1.8520842 A 0.52916664,0.52916664 0 0 0 7.9374999,2.3812507 Z" />
+    <path
+       id="path1356"
+       style="fill:#000000;stroke-width:0"
+       d="M 0.52916758,6.0854169 A 0.52916664,0.52916664 0 0 1 8.7666667e-7,6.6145835 V 5.5562504 A 0.52916664,0.52916664 0 0 1 0.52916758,6.0854169 Z" />
+    <path
+       id="path1372"
+       style="fill:#000000;stroke-width:0"
+       d="M 8.4666664,7.9375 A 0.52916664,0.52916664 0 0 0 7.9374996,8.4666667 h 0.5291668 z" />
+    <path
+       id="path1391"
+       style="fill:#000000;stroke-width:0"
+       d="M 5.7666667e-7,0.52916764 A 0.52916664,0.52916664 0 0 0 0.52916728,8.7666666e-7 H 5.7666667e-7 Z" />
   </g>
   <metadata
      id="metadata33">
