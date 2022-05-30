@@ -886,7 +886,7 @@ layer bricks ${blackstone_s} pbs1 ${blackstone}
 layer borderDotted ${blackstone_h} pbs3
 stack block/polished_blackstone_bricks
 
-copy block/cobbled_deepslate db0
+copy block/deepslate db0
 layer bricks ${deepslate_s} db1
 layer borderDotted ${deepslate_h} db2
 layer borderDottedBottomRight ${deepslate_s} db3
