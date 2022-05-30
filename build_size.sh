@@ -521,8 +521,7 @@ layer diagonalChecksBottomLeftTopRight $deepslate_h deep1 $deepslate
 layer diagonalChecksTopLeftBottomRight $deepslate_s deep2
 stack block/deepslate
 
-layer cutInQuarters1 ${deepslate_s} deeptop01 ${deepslate}
-layer cutInQuarters2 ${deepslate_h} deeptop02
+copy block/deepslate deeptop0
 layer borderSolid ${deepslate_s} deeptop11
 layer borderDotted ${deepslate_h} deeptop12
 stack block/deepslate_top
