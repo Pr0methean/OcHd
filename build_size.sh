@@ -1124,12 +1124,13 @@ stack "block/dark_oak_trapdoor"
 
 # Functional wooden blocks
 
-layer craftingGrid ${wood_oak_s} table1 ${wood_oak}
+layer waves ${wood_oak_h} table0 ${wood_oak}
+layer craftingGrid ${wood_oak_s} table1
 layer borderSolid ${wood_dark_oak} table2
 layer cornersTri ${wood_oak_h} table3
 stack "block/crafting_table_top"
 
-layer planksTop ${wood_oak} table_side_1 ${wood_oak_s}
+copy block/oak_planks table_side_1
 layer borderSolid ${wood_oak_h} table_side_2
 layer craftingSide ${wood_dark_oak} table_side_3
 stack "block/crafting_table_side"
