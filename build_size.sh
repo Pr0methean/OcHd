@@ -985,11 +985,31 @@ layer railDetector $redstone_h adrail2
 layer railDetectorPlate ${stone} adrail3
 stack block/detector_rail_on
 
-layer railTieCorner $oak_wood railc0
+layer railTieCorner $wood_oak railc0
 layer railCorner $stone_h railc1
 stack block/rail_corner
 
-# Functional pickaxe blocks
+# Redstone components
+
+copy block/smooth_stone repeater1
+layer repeaterSideInputs ${stone_s} repeater2
+layer repeater ${black} repeater3
+stack block/repeater
+
+copy block/smooth_stone repeatero1
+layer repeaterSideInputs ${stone_s} repeatero2
+layer repeater ${redstone_h} repeatero3
+stack block/repeater
+
+copy block/smooth_stone comparator1
+layer repeaterSideInputs ${stone_ss} comparator2
+layer comparator ${black} comparator3
+stack block/comparator
+
+copy block/smooth_stone comparatoro1
+layer repeaterSideInputs ${stone_ss} comparatoro2
+layer comparator ${redstone_h} comparatoro3
+stack block/comparator_on
 
 layer bigDiamond ${redstone_s} rloff0 ${redstone}
 layer lamp ${redstone_h} rloff2
@@ -1003,8 +1023,10 @@ layer borderSolidBottomRight ${redstone_lamp_s} rl2
 layer borderSolidTopLeft ${redstone_lamp_h} rl3
 stack block/redstone_lamp_on
 
+# Job-site and misc pickaxe blocks
+
 layer bottomHalf $stone_h furnaceside1 $stone
-layer borderSolid $stone_ss stone2
+layer borderSolid $stone_ss furnaceside2
 stack block/furnace_side
 
 copy block/furnace_side furnace1
@@ -1212,7 +1234,7 @@ layer borderSolidThick ${wood_oak_s} compostBottom1
 layer borderSolid ${wood_oak} compostBottom2
 stack "block/composter_bottom"
 
-layer strokeTopLeftBottomRight4 ${wood_oak} jukeboxSide0 ${wood_oak_s}
+layer strokeTopLeftBottomRight4 ${wood_oak} jukeboxSide0 ${wood_dark_oak}
 layer strokeBottomLeftTopRight4 ${wood_oak} jukeboxSide1
 layer borderSolidThick ${wood_oak_h} jukeboxSide2
 layer borderDotted ${wood_oak_s} jukeboxSide3
