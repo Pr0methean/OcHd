@@ -583,51 +583,6 @@ copy block/cut_red_sandstone chrsandstone1
 layer witherSymbol ${red_sand_s} chrsandstone2
 stack block/chiseled_red_sandstone
 
-# Bricks
-
-layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
-layer strokeBottomLeftTopRight2 ${mud_brick_s} mb2
-layer borderDotted ${mud_h} mb4
-stack block/packed_mud
-
-layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
-layer strokeBottomLeftTopRight2 ${mud_brick_s} mb2
-layer bricks ${mud_s} mb3
-layer borderDotted ${mud_h} mb4
-stack block/mud_bricks
-
-layer checksLarge $stone_h sb1 $stone
-layer bricks $stone_ss sb2
-layer borderShortDashes $stone_s sb3
-stack block/stone_bricks
-
-layer checksLarge $stone_h crsb1 $stone
-layer bricks $stone_ss crsb2
-layer streaks $stone_ss crsb3
-layer borderShortDashes $stone_s crsb5
-stack block/cracked_stone_bricks
-
-copy block/stone_bricks msb1
-layer dots3 ${moss_s} msb2
-layer dots2 ${moss_h} msb3
-layer dots1 ${moss} msb4
-layer borderSolid ${moss_h} msb5
-layer borderShortDashes ${moss_s} msb6
-stack block/mossy_stone_bricks
-
-copy block/stone csb1
-layer rings ${stone_ss} csb2
-layer borderSolid ${stone_ss} csb3
-layer borderSolidTopLeft ${stone_hh} csb4
-stack block/chiseled_stone_bricks
-
-layer bricks $mortar bricks1 $terracotta
-layer borderDotted $mortar bricks2
-semitrans bricks2 0.5
-stack block/bricks
-
-# todo: end stone bricks, nether bricks
-
 # Ores
 
 layer diamond1 ${diamond_hh} diamond1
@@ -711,14 +666,16 @@ layer borderSolidTopLeft ${emerald_h} emerald_block5
 stack block/emerald_block
 
 move item/quartz_ingot item/quartz
-move block/raw_quartz_block block/quartz_block_top
-move block/quartz_block block/quartz_block_bottom
+move block/raw_quartz_block block/quartz_block_bottom
+move block/quartz_block block/quartz_block_side
 
 move item/lapis item/lapis_lazuli
 move item/raw_redstone item/redstone
 
-copy block/quartz_block_top quartz_side
-stack block/quartz_block_side
+layer streaks ${quartz_h} quartz_top0 ${quartz}
+layer borderSolidTopLeft ${quartz_h} quartz_top1
+layer borderSolidBottomRight ${quartz_s} $quartz_top2
+stack block/quartz_block_top
 
 # Carved and/or oxidized ores
 
@@ -753,15 +710,60 @@ layer borderSolid ${quartz_s} quartz2
 layer borderDotted ${quartz_h} quartz3
 stack block/quartz_pillar_top
 
-layer borderDotted ${quartz_h} qb0 ${quartz}
-layer bricks ${quartz_s} qb1
-stack block/quartz_bricks
-
 layer tntSticksSide ${quartz} qp1 ${quartz_s}
 layer borderSolid ${quartz_s} qp2
 layer borderLongDashes ${quartz_h} qp3
 stack block/quartz_pillar
 
+# Bricks
+
+layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
+layer strokeBottomLeftTopRight2 ${mud_brick_s} mb2
+layer borderDotted ${mud_h} mb4
+stack block/packed_mud
+
+layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
+layer strokeBottomLeftTopRight2 ${mud_brick_s} mb2
+layer bricks ${mud_s} mb3
+layer borderDotted ${mud_h} mb4
+stack block/mud_bricks
+
+layer checksLarge $stone_h sb1 $stone
+layer bricks $stone_ss sb2
+layer borderShortDashes $stone_s sb3
+stack block/stone_bricks
+
+layer checksLarge $stone_h crsb1 $stone
+layer bricks $stone_ss crsb2
+layer streaks $stone_ss crsb3
+layer borderShortDashes $stone_s crsb5
+stack block/cracked_stone_bricks
+
+copy block/stone_bricks msb1
+layer dots3 ${moss_s} msb2
+layer dots2 ${moss_h} msb3
+layer dots1 ${moss} msb4
+layer borderSolid ${moss_h} msb5
+layer borderShortDashes ${moss_s} msb6
+stack block/mossy_stone_bricks
+
+copy block/stone csb1
+layer rings ${stone_ss} csb2
+layer borderSolid ${stone_ss} csb3
+layer borderSolidTopLeft ${stone_hh} csb4
+stack block/chiseled_stone_bricks
+
+layer bricks $mortar bricks1 $terracotta
+layer borderDotted $mortar bricks2
+semitrans bricks2 0.5
+stack block/bricks
+
+layer streaks ${quartz_h} qb0 ${quartz}
+layer bricks ${quartz_s} qb1
+layer borderDotted ${quartz_h} qb2
+stack block/quartz_bricks
+
+# todo: end stone bricks, nether bricks
 # Glass
 
 layer borderSolid $white glass1
