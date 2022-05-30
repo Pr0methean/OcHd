@@ -273,6 +273,11 @@ basalt_h='#747474'
 basalt='#4e4e4e'
 basalt_s='#002632'
 
+# End
+end_stone_h='#ffffb4'
+end_stone='#deffa4'
+end_stone_s='#c5be8b'
+
 # Misc
 tnt_h='#ff4300'
 tnt='#db2f00'
@@ -653,6 +658,8 @@ stack block/polished_blackstone
 
 layer bigRingsBottomLeftTopRight ${basalt_h} bas1 ${basalt}
 layer bigRingsTopLeftBottomRight ${basalt_s} bas2
+layer borderSolid ${basalt_s} bas3
+layer borderLongDashes ${basalt_h} bas4
 stack block/basalt_top
 
 layer stripesVerticalThick ${basalt} bass1 ${basalt_s}
@@ -671,6 +678,12 @@ layer rings ${basalt_h} baspt12
 layer borderSolidBottomRight ${basalt_s} baspt20
 layer borderSolidTopLeft ${basalt_h} baspt21
 stack block/polished_basalt_top
+
+# Rock - End
+
+layer checksLargeOutline ${end_stone_s} endstone1 ${end_stone}
+layer bigRingsTopLeftBottomRight ${end_stone_h} endstone2
+stack block/end_stone
 
 # Ores
 
@@ -856,7 +869,18 @@ layer bricks ${blackstone_s} pbs1 ${blackstone}
 layer borderDotted ${blackstone_h} pbs3
 stack block/polished_blackstone_bricks
 
-# todo: end stone bricks, nether bricks
+copy block/cobbled_deepslate db0
+layer bricks ${deepslate_s} db1
+layer borderDotted ${deepslate_h} db2
+layer borderDottedBottomRight ${deepslate_s} db3
+stack block/deepslate_bricks
+
+copy block/end_stone esb0
+layer bricks ${end_stone_s} esb1
+layer borderShortDashes ${end_stone_h} esb2
+stack block/end_stone_bricks
+
+# todo: nether bricks
 # Glass
 
 layer borderSolid $white glass1
@@ -1075,7 +1099,14 @@ layer trapdoorHingesBig ${stone_s} trapdoorj5
 layer trapdoorHinges ${stone} trapdoorj6
 stack "block/jungle_trapdoor"
 
-# TODO: Dark oak, mangrove, acacia
+layer ringsHole ${wood_mangrove} trapdoorm0
+layer rings2 ${wood_mangrove_s} trapdoorm2
+layer borderDotted ${wood_mangrove_h} trapdoorm3
+layer trapdoorHingesBig ${stone_h} trapdoorm5
+layer trapdoorHinges ${stone_s} trapdoorm6
+stack "block/mangrove_trapdoor"
+
+# TODO: Dark oak, acacia
 
 # Functional wooden blocks
 
