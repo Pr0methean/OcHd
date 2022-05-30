@@ -581,7 +581,7 @@ layer topStripeThick ${red_sand_h} rsandstoneside3
 layer borderShortDashes ${red_sand_s} rsandstoneside4
 stack block/red_sandstone
 
-layer checksLarge ${red_sand_h} rcsandstone1 ${sand}
+layer checksLarge ${red_sand_h} rcsandstone1 ${red_sand}
 layer borderSolid ${red_sand_s} rcsandstone2
 layer borderSolidTopLeft ${red_sand_h} rcsandstone3
 stack block/cut_red_sandstone
