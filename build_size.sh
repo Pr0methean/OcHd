@@ -1091,7 +1091,8 @@ layer trapdoorHinges ${stone_s} trapdoors6
 stack "block/spruce_trapdoor"
 
 layer trapdoor1 ${wood_birch} trapdoorb1
-layer trapdoorHinges ${stone} trapdoorb2
+layer borderSolid ${wood_birch_s} trapdoorb2
+layer trapdoorHinges ${stone} trapdoorb3
 stack "block/birch_trapdoor"
 
 layer trapdoor2 ${wood_jungle} trapdoorj1
@@ -1108,7 +1109,18 @@ layer trapdoorHingesBig ${stone_h} trapdoorm5
 layer trapdoorHinges ${stone_s} trapdoorm6
 stack "block/mangrove_trapdoor"
 
-# TODO: Dark oak, acacia
+layer bigDiamond ${wood_acacia} trapdoora0
+layer borderSolidThick ${wood_acacia} trapdoora1
+layer borderSolid ${wood_acacia_h} trapdoora2
+layer trapdoorHingesBig ${stone_s} trapdoora5
+layer trapdoorHinges ${stone_h} trapdoora6
+stack "block/acacia_trapdoor"
+
+layer 2x2BottomRight ${wood_dark_oak_h} trapdoord0 ${wood_dark_oak}
+layer 2x2TopLeft ${wood_dark_oak_s} trapdoord1
+layer borderShortDashes ${wood_dark_oak} trapdoord2
+layer trapdoorHinges ${stone_s} trapdoord6
+stack "block/dark_oak_trapdoor"
 
 # Functional wooden blocks
 
