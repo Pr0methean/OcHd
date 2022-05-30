@@ -1140,7 +1140,7 @@ stack "block/spruce_trapdoor"
 
 layer trapdoor1 ${wood_birch} trapdoorb1
 layer borderSolid ${wood_birch_s} trapdoorb2
-layer trapdoorHinges ${stone} trapdoorb3
+layer trapdoorHingesBig ${stone_s} trapdoorb3
 stack "block/birch_trapdoor"
 
 layer trapdoor2 ${wood_jungle} trapdoorj1
@@ -1167,7 +1167,7 @@ stack "block/acacia_trapdoor"
 layer 2x2BottomRight ${wood_dark_oak_h} trapdoord0 ${wood_dark_oak}
 layer 2x2TopLeft ${wood_dark_oak_s} trapdoord1
 layer borderShortDashes ${wood_dark_oak} trapdoord2
-layer trapdoorHinges ${stone_s} trapdoord6
+layer trapdoorHingesBig ${stone_h} trapdoord6
 stack "block/dark_oak_trapdoor"
 
 # Functional wooden blocks
