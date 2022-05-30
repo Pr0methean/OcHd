@@ -33,7 +33,7 @@
      inkscape:snap-tangential="true"
      inkscape:zoom="34.90625"
      inkscape:cx="3.2085944"
-     inkscape:cy="15.942704"
+     inkscape:cy="15.971352"
      inkscape:window-width="2560"
      inkscape:window-height="1301"
      inkscape:window-x="0"
@@ -56,12 +56,14 @@
      id="layer1">
     <path
        style="fill:#000000;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 0,3.96875 H 2.9104166 L 3.175,4.2333333 2.9104166,4.4979166 H 0 Z"
-       id="path3326" />
+       d="M 0,3.96875 H 2.3812499 L 2.6458333,4.2333333 2.3812499,4.4979166 H 0 Z"
+       id="path3326"
+       sodipodi:nodetypes="cccccc" />
     <path
        style="fill:#000000;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 8.4666667,3.9687501 H 5.5562501 L 5.2916667,4.2333334 5.5562501,4.4979167 h 2.9104166 z"
-       id="path3328" />
+       d="M 8.4666667,3.9687501 H 6.0854168 L 5.8208334,4.2333334 6.0854168,4.4979167 h 2.3812499 z"
+       id="path3328"
+       sodipodi:nodetypes="cccccc" />
   </g>
   <metadata
      id="metadata33">

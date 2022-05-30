@@ -976,13 +976,11 @@ layer thirdRail $redstone_h aarail2
 stack block/activator_rail_on
 
 copy block/rail drail1
-layer railDetector $black drail2
-layer railDetectorPlate ${stone} drail3
+layer railDetectorPlate $black drail2
 stack block/detector_rail
 
 copy block/rail adrail1
-layer railDetector $redstone_h adrail2
-layer railDetectorPlate ${stone} adrail3
+layer railDetectorPlate $redstone_h adrail2
 stack block/detector_rail_on
 
 layer railTieCorner $wood_oak railc0
@@ -1002,12 +1000,12 @@ layer repeater ${redstone_h} repeatero3
 stack block/repeater
 
 copy block/smooth_stone comparator1
-layer repeaterSideInputs ${stone_ss} comparator2
+layer repeaterSideInputs ${stone_s} comparator2
 layer comparator ${black} comparator3
 stack block/comparator
 
 copy block/smooth_stone comparatoro1
-layer repeaterSideInputs ${stone_ss} comparatoro2
+layer repeaterSideInputs ${stone_s} comparatoro2
 layer comparator ${redstone_h} comparatoro3
 stack block/comparator_on
 
@@ -1245,11 +1243,8 @@ layer borderDotted ${wood_oak_s} jukeboxTop1
 layer thirdRail ${black} jukeboxTop2
 stack "block/jukebox_top"
 
-layer strokeTopLeftBottomRight4 ${wood_oak} noteblock0 ${wood_oak_s}
-layer strokeBottomLeftTopRight4 ${wood_oak} noteblock1
-layer borderSolidThick ${wood_oak} noteblock2
-layer borderDotted ${wood_oak_h} noteblock3
-layer note ${wood_oak_h} noteblock4
+copy block/jukebox_side noteblock1
+layer note ${wood_oak_s} noteblock4
 stack "block/note_block"
 
 # S4. BLOCKS BROKEN WITH SHEARS
