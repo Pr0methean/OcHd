@@ -1004,9 +1004,9 @@ for wood in "${WOODS[@]}"; do
   shadow="wood_${wood}_s"
   midtone="wood_${wood}"
 
-  layer waves ${!highlight} "${wood}_planks0" ${!midtone}
-  layer planksTopBorder ${!shadow} "${wood}_planks1"
-  layer borderShortDashes ${!highlight} "${wood}_planks2"
+  layer waves "${!highlight}" "${wood}_planks0" "${!midtone}"
+  layer planksTopBorder "${!shadow}" "${wood}_planks1"
+  layer borderShortDashes "${!highlight}" "${wood}_planks2"
   stack "block/${wood}_planks"
 done
 
@@ -1020,24 +1020,24 @@ for wood in "${OVERWORLD_WOODS[@]}"; do
   bark_s="bark_${wood}_s"
   bark="bark_${wood}"
 
-  layer borderSolid ${!bark_s} logSide3 ${!bark}
-  layer borderDotted ${!bark_h} logSide4
-  layer zigzagSolid ${!bark_s} logSide5
-  layer zigzagSolid2 ${!bark_h} logSide6
+  layer borderSolid "${!bark_s}" logSide3 "${!bark}"
+  layer borderDotted "${!bark_h}" logSide4
+  layer zigzagSolid "${!bark_s}" logSide5
+  layer zigzagSolid2 "${!bark_h}" logSide6
   stack "block/${wood}_log"
 
-  layer borderSolid ${!shadow} strippedLogSide1 ${!midtone}
-  layer borderShortDashes ${!highlight} strippedLogSide2
+  layer borderSolid "${!shadow}" strippedLogSide1 "${!midtone}"
+  layer borderShortDashes "${!highlight}" strippedLogSide2
   stack "block/stripped_${wood}_log"
 
   copy "block/stripped_${wood}_log" strippedLog0
-  layer ringsCentralBullseye ${!highlight} strippedLog1
-  layer rings ${!shadow} strippedLog2
+  layer ringsCentralBullseye "${!highlight}" strippedLog1
+  layer rings "${!shadow}" strippedLog2
   stack "block/stripped_${wood}_log_top"
 
   copy "block/stripped_${wood}_log_top" logTop1
-  layer borderSolid ${!bark} logTop2
-  layer borderDotted ${!bark_s} logTop3
+  layer borderSolid "${!bark}" logTop2
+  layer borderDotted "${!bark_s}" logTop3
   stack "block/${wood}_log_top"
 done
 
@@ -1049,22 +1049,22 @@ for wood in "${FUNGI[@]}"; do
   bark_s="bark_${wood}_s"
   bark="bark_${wood}"
 
-  layer borderSolid ${!bark_s} stemSide1 ${!bark}
-  layer waves ${!bark_h} stemSide2
+  layer borderSolid "${!bark_s}" stemSide1 "${!bark}"
+  layer waves "${!bark_h}" stemSide2
   stack "block/${wood}_stem"
 
-  layer borderSolid ${!shadow} strippedLogSide1 ${!midtone}
-  layer borderDotted ${!highlight} strippedLogSide2
+  layer borderSolid "${!shadow}" strippedLogSide1 "${!midtone}"
+  layer borderDotted "${!highlight}" strippedLogSide2
   stack "block/stripped_${wood}_stem"
 
   copy "block/stripped_${wood}_stem" strippedLog0
-  layer ringsCentralBullseye ${!shadow} strippedLog1
-  layer rings ${!highlight} strippedLog2
+  layer ringsCentralBullseye "${!shadow}" strippedLog1
+  layer rings "${!highlight}" strippedLog2
   stack "block/stripped_${wood}_stem_top"
 
   copy "block/stripped_${wood}_stem_top" logTop1
-  layer borderSolid ${!bark} logTop2
-  layer borderDotted ${!bark_s} logTop3
+  layer borderSolid "${!bark}" logTop2
+  layer borderDotted "${!bark_s}" logTop3
   stack "block/${wood}_stem_top"
 done
 
@@ -1222,7 +1222,7 @@ stack block/cobweb
 # Wool
 
 for dye in "${DYES[@]}"; do
-  layer empty ${!dye} wool1 ${!dye}
+  layer empty "${!dye}" wool1 "${!dye}"
   layer zigzagBroken ${gray} wool2
   semitrans wool2 0.25
   layer zigzagBroken2 ${light_gray} wool3
