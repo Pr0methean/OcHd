@@ -295,7 +295,8 @@ bone_block_s='#c3bfa1'
 target_h='#ffffff'
 target_s='#ffd7ba'
 redstone_lamp_h='#ffdab4'
-redstone_lamp_s='#e6994a'
+redstone_lamp='#e6994a'
+redstone_lamp_s='#946931'
 
 
 # Technical blocks
@@ -970,14 +971,16 @@ stack block/rail_corner
 
 # Functional pickaxe blocks
 
-layer lamp ${redstone_h} rloff0 ${redstone_s}
-layer borderSolidBottomRight ${black} rloff1
-layer borderSolidTopLeft ${redstone_h} rloff2
+layer bigDiamond ${redstone_s} rloff0 ${redstone}
+layer lamp ${redstone_h} rloff2 ${redstone_s}
+layer borderSolidBottomRight ${black} rloff4
+layer borderSolidTopLeft ${redstone_h} rloff6
 stack block/redstone_lamp
 
-layer lampOn ${redstone_lamp_h} rl0 ${redstone_lamp_s}
-layer borderSolidBottomRight ${redstone_s} rl1
-layer borderSolidTopLeft ${redstone_lamp_h} rl2
+layer bigDiamond ${redstone_lamp_s} rl0 ${redstone_lamp}
+layer lampOn ${redstone_lamp_h} rl1
+layer borderSolidBottomRight ${redstone_s} rl2
+layer borderSolidTopLeft ${redstone_lamp_h} rl3
 stack block/redstone_lamp_on
 
 layer bottomHalf $stone_h furnaceside1 $stone
