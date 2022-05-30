@@ -11,6 +11,7 @@ DYES=('black' 'red' 'green' 'brown' 'blue' 'purple' 'cyan' 'gray' 'light_gray' '
 CMD_BLOCK_TYPES=('command_block' 'repeating_command_block' 'chain_command_block')
 NORMAL_MUSIC_DISCS=('far' 'wait' 'strad' 'mall' 'cat' 'pigstep' 'mellohi' '13' 'blocks' 'stal' 'ward' '5' 'otherside' 'chirp')
 DISC_LABELS=('red' 'green' 'brown' 'blue' 'purple' 'cyan' 'light_gray' 'pink' 'lime' 'yellow' 'light_blue' 'magenta' 'orange' 'white')
+OXIDATION_STATES=('exposed' 'weathered' 'oxidized')
 
 # S01. COLOR CONSTANTS
 # H = highlight, S = shadow
@@ -205,7 +206,7 @@ redstone='#ff0000'
 redstone_s='#ca0000'
 copper_h='#ff8268'
 copper='#e0734d'
-copper_s='#c16746'
+copper_s='#904931'
 coal_h='#494949'
 coal='#2f2f2f'
 coal_s='#000000'
@@ -223,6 +224,15 @@ diamond_s='#239698'
 quartz_h='#ffffff'
 quartz='#eae5de'
 quartz_s='#b6a48e'
+exposed_copper_h='#ce8d83'
+exposed_copper='#a87762'
+exposed_copper_s='#796454'
+weathered_copper_h='#7ab799'
+weathered_copper='#64a077'
+weathered_copper_s='#6a7147'
+oxidized_copper_h='#6ec59f'
+oxidized_copper='#4fab90'
+oxidized_copper_s='#3b5c5c'
 
 # Water
 # Ice is partly transparent unless it's packed/blue ice
@@ -527,6 +537,52 @@ layer topPart ${warped_nylium} wnyliums2
 layer dots3TopPart ${warped_nylium_h} wnyliums3
 stack block/warped_nylium_side
 
+layer checksLarge ${sand_s} sandstone1 ${sand}
+layer borderLongDashes ${sand_h} sandstone2
+stack block/sandstone_bottom
+
+copy block/sand sandstonetop1
+layer borderSolidThick ${sand_s} sandstonetop2
+layer borderSolid ${sand_h} sandstonetop3
+stack block/sandstone_top
+
+copy block/sandstone_bottom sandstoneside1
+layer topPart ${sand_s} sandstoneside2
+layer topStripeThick ${sand_h} sandstoneside3
+stack block/sandstone
+
+layer checksLarge ${sand_h} csandstone1 ${sand}
+layer borderSolid ${sand_s} csandstone2
+layer borderSolidTopLeft ${sand_h} csandstone3
+stack block/cut_sandstone
+
+copy block/cut_sandstone chsandstone1
+layer creeperFaceSmall ${sand_s} chsandstone4
+stack block/chiseled_sandstone
+
+layer checksLarge ${red_sand_h} rsandstone1 ${red_sand}
+layer borderLongDashes ${red_sand_s} rsandstone2
+stack block/red_sandstone_bottom
+
+copy block/red_sand rsandstonetop1
+layer borderSolidThick ${red_sand_h} rsandstonetop2
+layer borderSolid ${red_sand_s} rsandstonetop3
+stack block/red_sandstone_top
+
+copy block/red_sandstone_bottom rsandstoneside1
+layer topPart ${red_sand_s} rsandstoneside2
+layer topStripeThick ${red_sand_h} rsandstoneside3
+stack block/red_sandstone
+
+layer checksLarge ${red_sand_h} rcsandstone1 ${sand}
+layer borderSolid ${red_sand_s} rcsandstone2
+layer borderSolidTopLeft ${red_sand_h} rcsandstone3
+stack block/cut_red_sandstone
+
+copy block/cut_red_sandstone chrsandstone1
+layer witherSymbol ${red_sand_s} chrsandstone2
+stack block/chiseled_red_sandstone
+
 # Bricks
 
 layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
@@ -545,6 +601,12 @@ layer bricks $stone_ss sb2
 layer borderShortDashes $stone_s sb3
 stack block/stone_bricks
 
+layer checksLarge $stone_h crsb1 $stone
+layer bricks $stone_ss crsb2
+layer streaks $stone_ss crsb3
+layer borderShortDashes $stone_s crsb5
+stack block/cracked_stone_bricks
+
 copy block/stone_bricks msb1
 layer dots3 ${moss_s} msb2
 layer dots2 ${moss_h} msb3
@@ -553,12 +615,18 @@ layer borderSolid ${moss_h} msb5
 layer borderShortDashes ${moss_s} msb6
 stack block/mossy_stone_bricks
 
+copy block/stone csb1
+layer rings ${stone_ss} csb2
+layer borderSolid ${stone_ss} csb3
+layer borderSolidTopLeft ${stone_hh} csb4
+stack block/chiseled_stone_bricks
+
 layer bricks $mortar bricks1 $terracotta
 layer borderDotted $mortar bricks2
 semitrans bricks2 0.5
 stack block/bricks
 
-# todo: cracked stone bricks, end stone bricks, nether bricks
+# todo: end stone bricks, nether bricks
 
 # Ores
 
@@ -642,13 +710,6 @@ layer borderSolid ${emerald} emerald_block4
 layer borderSolidTopLeft ${emerald_h} emerald_block5
 stack block/emerald_block
 
-layer streaks ${copper_h} cutcopper10 ${copper}
-layer borderSolid ${copper_s} cutcopper11
-layer borderSolidTopLeft ${copper_h} cutcopper12
-layer cutInQuarters1 ${copper_s} cutcopper20
-layer cutInQuarters2 ${copper_h} cutcopper30
-stack block/cut_copper
-
 move item/quartz_ingot item/quartz
 move block/raw_quartz_block block/quartz_block_top
 move block/quartz_block block/quartz_block_bottom
@@ -659,7 +720,33 @@ move item/raw_redstone item/redstone
 copy block/quartz_block_top quartz_side
 stack block/quartz_block_side
 
-# Carved ores
+# Carved and/or oxidized ores
+
+layer streaks ${copper_h} cutcopper10 ${copper}
+layer borderSolid ${copper_s} cutcopper11
+layer borderSolidTopLeft ${copper_h} cutcopper12
+layer cutInQuarters1 ${copper_s} cutcopper20
+layer cutInQuarters2 ${copper_h} cutcopper30
+stack block/cut_copper
+
+for oxidation_state in "${OXIDATION_STATES[@]}"; do
+  color="${oxidation_state}_copper"
+  shadow="${oxidation_state}_copper_s"
+  highlight="${oxidation_state}_copper_h"
+
+  layer streaks "${!highlight}" "${oxidation_state}_copper_block0" ""${!color}""
+  layer borderSolidTopLeft ${!highlight} "${oxidation_state}_copper_block2"
+  layer borderSolidBottomRight ${!shadow} "${oxidation_state}_copper_block3"
+  layer copperOxide "${!shadow}" "${oxidation_state}_copper_block4"
+  stack "block/${oxidation_state}_copper"
+
+  layer streaks "${!highlight}" cutcopper10 "${!color}"
+  layer borderSolid "${!shadow}" cutcopper11
+  layer borderSolidTopLeft "${!highlight}" cutcopper12
+  layer cutInQuarters1 "${!shadow}" cutcopper20
+  layer cutInQuarters2 "${!highlight}" cutcopper30
+  stack "block/cut_${oxidation_state}_copper"
+done
 
 layer rings ${quartz_h} quartz1 ${quartz}
 layer borderSolid ${quartz_s} quartz2
