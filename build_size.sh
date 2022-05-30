@@ -737,7 +737,7 @@ for oxidation_state in "${OXIDATION_STATES[@]}"; do
   layer streaks "${!highlight}" "${oxidation_state}_copper_block0" ""${!color}""
   layer borderSolidTopLeft ${!highlight} "${oxidation_state}_copper_block2"
   layer borderSolidBottomRight ${!shadow} "${oxidation_state}_copper_block3"
-  layer copperOxide "${!shadow}" "${oxidation_state}_copper_block4"
+  layer copper2oxide "${!shadow}" "${oxidation_state}_copper_block4"
   stack "block/${oxidation_state}_copper"
 
   layer streaks "${!highlight}" cutcopper10 "${!color}"
