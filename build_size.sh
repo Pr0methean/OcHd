@@ -700,7 +700,7 @@ stack block/glowstone
 # Rock - End
 
 layer checksLargeOutline ${end_stone_s} endstone1 ${end_stone}
-layer bigRingsTopLeftBottomRight ${end_stone_h} endstone2
+layer bigDotsTopLeftBottomRight ${end_stone_h} endstone2
 stack block/end_stone
 
 # Ores
