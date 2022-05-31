@@ -997,7 +997,7 @@ stack block/repeater
 copy block/smooth_stone repeatero1
 layer repeaterSideInputs ${stone_s} repeatero2
 layer repeater ${redstone_h} repeatero3
-stack block/repeater
+stack block/repeater_on
 
 copy block/smooth_stone comparator1
 layer repeaterSideInputs ${stone_s} comparator2
