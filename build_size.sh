@@ -957,29 +957,33 @@ layer railTies $wood_oak rail1
 layer rail $stone_h rail2
 stack block/rail
 
-layer railTies $wood_oak rail1
+layer railTies $wood_oak_s rail1
 layer thirdRail $black rail2
 layer rail $gold rail3
 stack block/powered_rail
 
-layer railTies $wood_oak rail1
+layer railTies $wood_oak_s rail1
 layer thirdRail $redstone_h rail2
 layer rail $gold rail3
 stack block/powered_rail_on
 
-copy block/rail arail1
+layer railTies $wood_oak_s arail0
+layer rail $stone_h arail1
 layer thirdRail $black arail2
 stack block/activator_rail
 
-copy block/rail aarail1
+layer railTies $wood_oak_s aarail0
+layer rail $stone_h aarail1
 layer thirdRail $redstone_h aarail2
 stack block/activator_rail_on
 
-copy block/rail drail1
+layer railTies $wood_oak_s drail0
+layer rail $stone_h drail1
 layer railDetectorPlate $black drail2
 stack block/detector_rail
 
-copy block/rail adrail1
+layer railTies $wood_oak_s adrail0
+layer rail $stone_h adrail1
 layer railDetectorPlate $redstone_h adrail2
 stack block/detector_rail_on
 
@@ -1481,6 +1485,28 @@ stack block/target_side
 layer checksSmall $target_h targetTop1 $target_s
 layer ringsCentralBullseye $redstone_s targetTop2
 stack block/target_top
+
+# Torches
+
+layer torchBase $wood_oak torch1
+layer torchShadow $wood_oak_s torch2
+layer torchFlame $black torch3
+stack block/torch
+
+layer torchBase $wood_oak storch1
+layer torchShadow $wood_oak_s storch2
+layer soulTorchFlame $black storch3
+stack block/soul_torch
+
+layer torchBase $wood_oak rtorch1
+layer torchShadow $wood_oak_s rtorch2
+layer torchRedstoneHead $black rtorch3
+stack block/redstone_torch
+
+layer torchBase $wood_oak artorch1
+layer torchShadow $wood_oak_s artorch2
+layer torchRedstoneHead ${redstone_h} artorch3
+stack block/redstone_torch_on
 
 # S90. UNBREAKABLE BLOCKS
 
