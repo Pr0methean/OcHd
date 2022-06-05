@@ -50,6 +50,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
   # This workflow contains a single job called "build"
   build:
+    needs: build-container
     container: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
     strategy:
       matrix:
