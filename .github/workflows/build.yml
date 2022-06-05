@@ -51,7 +51,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     needs: build-container
-    container: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+    container: ghcr.io/${{ github.repository }}:${{ job.build-container.steps.meta.outputs.tags }}
     strategy:
       matrix:
         size: [ 32, 64, 128, 256, 512, 1024, 2048, 4096 ]
