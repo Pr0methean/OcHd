@@ -1663,5 +1663,5 @@ stack "particle/note"
 ZIPFILE="OcHD-${SIZE}x${SIZE}.zip"
 cd "$OUTROOT" || exit 1
 rm "$ZIPFILE" 2>/dev/null || true
-zip "$ZIPFILE" ./*
+zip -r "$ZIPFILE" ./* pack.mcmeta
 mv "$ZIPFILE" ..
