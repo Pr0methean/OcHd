@@ -1659,7 +1659,8 @@ layer note ${grass_h} note_1
 stack "particle/note"
 
 # S900. PACKAGING
-
-cd out || exit 1
-rm "OcHD-${SIZE}x${SIZE}.zip" || true
-zip "OcHD-${SIZE}x${SIZE}.zip" "${SIZE}x${SIZE}"
+ZIPFILE="OcHD-${SIZE}x${SIZE}.zip"
+cd "$OUTDIR" || exit 1
+rm "$ZIPFILE" || true
+zip $ZIPFILE .
+mv $ZIPFILE ..
