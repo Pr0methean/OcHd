@@ -1655,3 +1655,9 @@ stack "item/music_disc_11"
 
 layer note ${grass_h} note_1
 stack "particle/note"
+
+# S900. PACKAGING
+
+cd out || exit 1
+rm "OcHD-${SIZE}x${SIZE}.zip"
+zip "OcHD-${SIZE}x${SIZE}.zip" "${SIZE}x${SIZE}"

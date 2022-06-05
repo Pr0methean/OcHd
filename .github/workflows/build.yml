@@ -30,8 +30,15 @@ jobs:
         run: |
           sudo add-apt-repository ppa:inkscape.dev/stable
           sudo apt update
-          sudo apt install inkscape
+          sudo apt install inkscape imagemagick
+          xhost +
 
       - name: Build Texture Pack
         run: |
           ./build.sh
+
+      - name: Publish
+        uses: actions/upload-artifact@v3
+        with:
+          name: OcHD
+          path: out/*.zip
