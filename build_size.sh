@@ -321,9 +321,9 @@ music_disc_s='#212121'
 layer () {
   sed -e "s/#000000/$2/g" "svg/$1.svg" > "$TMPDIR/recolor.svg"
   if [ -z ${4+x} ]; then
-    inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" -y 0.0
+    inkscape --without-gui -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" -y 0.0
   else
-    inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" -b "$4" -y 1.0
+    inkscape --without-gui -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" -b "$4" -y 1.0
   fi
   rm "$TMPDIR/recolor.svg"
 }

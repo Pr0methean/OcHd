@@ -17,6 +17,9 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+    strategy:
+      matrix:
+        size: [ 32, 64, 128, 256, 512, 1024, 2048, 4096 ]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -31,11 +34,10 @@ jobs:
           sudo add-apt-repository ppa:inkscape.dev/stable
           sudo apt update
           sudo apt install inkscape imagemagick
-          xhost +
 
       - name: Build Texture Pack
         run: |
-          ./build.sh
+          ./build_size.sh ${{ matrix.version }}
 
       - name: Publish
         uses: actions/upload-artifact@v3
