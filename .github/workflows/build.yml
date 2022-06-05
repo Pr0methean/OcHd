@@ -17,7 +17,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    container: 'dpokidov/imagemagick:latest'
+    container: 'dpokidov/imagemagick:latest-ubuntu'
     strategy:
       matrix:
         size: [ 32, 64, 128, 256, 512, 1024, 2048, 4096 ]
@@ -32,9 +32,9 @@ jobs:
       # Runs a single command using the runners shell
       - name: Install Inkscape
         run: |
-          add-apt-repository ppa:inkscape.dev/stable
-          apt update
-          apt install inkscape
+          sudo add-apt-repository ppa:inkscape.dev/stable
+          sudo apt update
+          sudo apt install inkscape
 
       - name: Build Texture Pack
         run: |
