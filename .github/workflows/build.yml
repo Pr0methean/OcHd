@@ -24,7 +24,7 @@ jobs:
 
   # This workflow contains a single job called "build"
   build:
-    container: 'dpokidov/imagemagick'
+    container: 'dpokidov/imagemagick:latest'
     strategy:
       matrix:
         size: [ 32, 64, 128, 256, 512, 1024, 2048, 4096 ]
