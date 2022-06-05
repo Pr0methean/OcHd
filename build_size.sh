@@ -1661,6 +1661,8 @@ stack "particle/note"
 # S900. PACKAGING
 ZIPFILE="OcHD-${SIZE}x${SIZE}.zip"
 cd "$OUTDIR" || exit 1
-rm "$ZIPFILE" || true
-zip $ZIPFILE .
+rm "$ZIPFILE" 2>/dev/null || true
+echo "Files to be added to $(pwd)/$ZIPFILE:"
+ls -l
+zip $ZIPFILE ./*
 mv $ZIPFILE ..
