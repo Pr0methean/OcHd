@@ -38,6 +38,7 @@ jobs:
           run: ./build_size.sh ${{ matrix.size }}
 
       - name: Publish
+        if: always() # Work around bug in xvfb cleanup step
         uses: actions/upload-artifact@v3
         with:
           name: OcHD

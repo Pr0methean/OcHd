@@ -1664,5 +1664,5 @@ cd "$OUTDIR" || exit 1
 rm "$ZIPFILE" 2>/dev/null || true
 echo "Files to be added to $(pwd)/$ZIPFILE:"
 ls -l
-zip $ZIPFILE ./*
-mv $ZIPFILE ..
+zip "$ZIPFILE" ./*
+mv "$ZIPFILE" ..
