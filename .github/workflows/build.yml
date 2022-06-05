@@ -20,7 +20,9 @@ env:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    container: ghcr.io/pr0methean/inkscapeandimagemagick:main@sha256:963a12cb677238dfe876ccf353d1b3114cbaac511e478881020d263aae55422c
+    container:
+      image: ghcr.io/pr0methean/inkscapeandimagemagick:main@sha256:16b8b9449c02389a5e805e04c903d03a66c440dfbb89154783f8c3f510920474
+      options: --user root
     strategy:
       matrix:
         size: [ 32, 64, 128, 256, 512, 1024, 2048, 4096 ]
@@ -31,7 +33,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
+      - name: Start X11
+        run: xinit
       - name: Build Texture Pack
         run: |
           ./build_size.sh ${{ matrix.size }}
