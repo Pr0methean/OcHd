@@ -37,7 +37,7 @@ jobs:
 
       - name: Build Texture Pack
         run: |
-          ./build_size.sh ${{ matrix.version }}
+          ./build_size.sh ${{ matrix.size }}
 
       - name: Publish
         uses: actions/upload-artifact@v3
