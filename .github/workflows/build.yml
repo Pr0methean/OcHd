@@ -15,8 +15,16 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  build-container:
+    runs-on: ubuntu-latest
+    name: 'Build Docker Container'
+    steps:
+    - uses: 'docker'
+      with:
+
   # This workflow contains a single job called "build"
   build:
+    container: 'dpokidov/imagemagick'
     strategy:
       matrix:
         size: [ 32, 64, 128, 256, 512, 1024, 2048, 4096 ]
@@ -33,7 +41,7 @@ jobs:
         run: |
           sudo add-apt-repository ppa:inkscape.dev/stable
           sudo apt update
-          sudo apt install inkscape imagemagick
+          sudo apt install inkscape
 
       - name: Build Texture Pack
         run: |
