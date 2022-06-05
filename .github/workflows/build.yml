@@ -21,7 +21,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     container:
-      image: ghcr.io/pr0methean/inkscapeandimagemagick:main@sha256:16b8b9449c02389a5e805e04c903d03a66c440dfbb89154783f8c3f510920474
+      image: ghcr.io/pr0methean/inkscapeandimagemagick:main@sha256:c054d8978e56e31534dba124f2d61db93f4019f0fdeb894b89669071b0727297
       options: --user root
     strategy:
       matrix:
