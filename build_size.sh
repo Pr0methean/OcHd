@@ -367,7 +367,8 @@ animate4 () {
 SIZE=$1
 TMPDIR="tmp/${SIZE}x${SIZE}"
 DEBUGDIR="debug/${SIZE}x${SIZE}"
-OUTDIR="out/${SIZE}x${SIZE}/assets/minecraft/textures"
+OUTROOT="out/${SIZE}x${SIZE}"
+OUTDIR="${OUTROOT}/assets/minecraft/textures"
 rm -rf $OUTDIR || true
 mkdir -p $OUTDIR
 mkdir $OUTDIR/block
@@ -1660,9 +1661,7 @@ stack "particle/note"
 
 # S900. PACKAGING
 ZIPFILE="OcHD-${SIZE}x${SIZE}.zip"
-cd "$OUTDIR" || exit 1
+cd "$OUTROOT" || exit 1
 rm "$ZIPFILE" 2>/dev/null || true
-echo "Files to be added to $(pwd)/$ZIPFILE:"
-ls -l
 zip "$ZIPFILE" ./*
 mv "$ZIPFILE" ..
