@@ -334,11 +334,13 @@ semitrans () {
 
 stack () {
   NUMFILES=$(ls | wc -l)
+  OUTFILE="${OUTDIR}/$1.png"
   if [ $NUMFILES -eq 1 ]; then
-    cp "$TMPDIR"/*.png "$OUTDIR/$1.png"
+    cp "$TMPDIR"/*.png "${OUTFILE}"
   else
-    magick "$TMPDIR"/*.png -colorspace sRGB -background none -layers flatten -set colorspace RGBA "$OUTDIR/$1.png"
+    magick "$TMPDIR"/*.png -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
   fi
+  echo "Wrote image ${OUTFILE}"
   mv "$TMPDIR"/*.png "$DEBUGDIR"
 }
 
@@ -1134,8 +1136,8 @@ layer waves ${wood_warped} trapdoorw1
 layer borderSolidThick ${wood_warped} trapdoorw2
 layer borderSolid ${wood_warped_h} trapdoorw3
 layer borderShortDashes ${wood_warped_s} trapdoorw4
-layer trapdoorHingesBig ${!stone_s} trapdoorw5
-layer trapdoorHinges ${!stone_h} trapdoorw6
+layer trapdoorHingesBig ${stone_s} trapdoorw5
+layer trapdoorHinges ${stone_h} trapdoorw6
 stack "block/warped_trapdoor"
 
 layer zigzagSolid2 ${wood_crimson_h} trapdoorc0
@@ -1143,8 +1145,8 @@ layer zigzagSolid ${wood_crimson_s} trapdoorc1
 layer borderSolidThick ${wood_crimson} trapdoorc2
 layer borderSolid ${wood_crimson_s} trapdoorc3
 layer borderShortDashes ${wood_crimson_h} trapdoorc4
-layer trapdoorHingesBig ${!stone_h} trapdoorc5
-layer trapdoorHinges ${!stone_s} trapdoorc6
+layer trapdoorHingesBig ${stone_h} trapdoorc5
+layer trapdoorHinges ${stone_s} trapdoorc6
 stack "block/crimson_trapdoor"
 
 layer cross ${wood_oak} trapdooro1
@@ -1659,5 +1661,5 @@ stack "particle/note"
 # S900. PACKAGING
 
 cd out || exit 1
-rm "OcHD-${SIZE}x${SIZE}.zip"
+rm "OcHD-${SIZE}x${SIZE}.zip" || true
 zip "OcHD-${SIZE}x${SIZE}.zip" "${SIZE}x${SIZE}"
