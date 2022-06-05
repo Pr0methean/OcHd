@@ -20,7 +20,6 @@ env:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    needs: build-container
     container: ghcr.io/pr0methean/inkscapeandimagemagick:main@sha256:08d35bc29724fead1dcfdab7bbbbacb3ef8eab48e14d30f214c96f9f48677310
     strategy:
       matrix:
