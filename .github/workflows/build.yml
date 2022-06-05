@@ -21,8 +21,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     container:
-      image: ghcr.io/pr0methean/inkscapeandimagemagick:main@sha256:c054d8978e56e31534dba124f2d61db93f4019f0fdeb894b89669071b0727297
-      options: --user root
+      image: ghcr.io/pr0methean/inkscapeandimagemagick:main@sha256:1ecfb43aee9d1999538416667dcc2a63b439500de78d5d0d5afcde25e5918616
     strategy:
       matrix:
         size: [ 32, 64, 128, 256, 512, 1024, 2048, 4096 ]
