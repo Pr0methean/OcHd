@@ -1588,8 +1588,8 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
   stack "block/${type}_front_base"
 
   for frame in $(seq 1 4); do
-    copy "block/${type}_front_base" "${type}_front1"
-    layer "dotsInCross${frame}" $command_block_dot "${type}_front2"
+    copy "block/${type}_front_base" "${type}_${frame}_front1"
+    layer "dotsInCross${frame}" $command_block_dot "${type}_${frame}_front2"
     stack "block/${type}_front_${frame}"
   done
   donewith "block/${type}_front_base"
@@ -1601,8 +1601,8 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
   stack "block/${type}_back_base"
 
   for frame in $(seq 1 4); do
-    copy "block/${type}_back_base" "${type}_back1"
-    layer "glider${frame}" $command_block_dot "${type}_back2"
+    copy "block/${type}_back_base" "${type}_${frame}_back1"
+    layer "glider${frame}" $command_block_dot "${type}_${frame}_back2"
     stack "block/${type}_back_${frame}"
   done
   donewith "block/${type}_back_base"
@@ -1614,22 +1614,22 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
   stack "block/${type}_side_base"
 
   for frame in $(seq 1 4); do
-    copy "block/${type}_side_base" "${type}_side1"
-    layer "glider${frame}" $command_block_dot "${type}_side2"
+    copy "block/${type}_side_base" "${type}_${frame}_side1"
+    layer "glider${frame}" $command_block_dot "${type}_${frame}_side2"
     stack "block/${type}_side_${frame}"
   done
   donewith "block/${type}_side_base"
   animate4 "block/${type}_side"
 
-  copy "block/${type}_base" condbase1
-  layer commandBlockArrow $black condbase2
-  layer craftingGridSpaces $white condbase3
+  copy "block/${type}_base" "${type}_condbase1"
+  layer commandBlockArrow $black "${type}_condbase2"
+  layer craftingGridSpaces $white "${type}_condbase3"
   stack "block/${type}_conditional_base"
   donewith "block/${type}_base"
 
   for frame in $(seq 1 4); do
-    copy "block/${type}_conditional_base" "${type}_cond1"
-    layer "glider${frame}" $command_block_dot "${type}_cond2"
+    copy "block/${type}_conditional_base" "${type}_${frame}_cond1"
+    layer "glider${frame}" $command_block_dot "${type}_${frame}_cond2"
     stack "block/${type}_conditional_${frame}"
   done
   donewith "block/${type}_conditional_base"
