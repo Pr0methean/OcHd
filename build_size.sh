@@ -333,14 +333,17 @@ layer () {
 }
 
 semitrans () {
-  convert "$TMPDIR/$1.png" -alpha set -background none -channel A -evaluate multiply "$2" +channel "$TMPDIR/$1.png"
+  convert "$TMPDIR/$1.png" -alpha set -background none -channel A -evaluate multiply "$2" +channel "$TMPDIR/$1.png" &
 }
 
-stack () {
+join_all () {
   for job in $(jobs -p); do
     wait "$job" || exit 1
   done
+}
 
+stack () {
+  join_all
   NUMFILES=$(ls | wc -l)
   OUTFILE="${OUTDIR}/$1.png"
   if [ $NUMFILES -eq 1 ]; then
@@ -510,10 +513,11 @@ stack block/grass_block_snow
 # Concrete powder
 
 for dye in "${DYES[@]}"; do
-  layer empty "${!dye}" conc1 "${!dye}"
+  layer empty "${!dye}" "conc1" "${!dye}"
   layer checksSmall ${gray} conc2
-  semitrans conc2 0.25
   layer checksSmall ${light_gray} conc3
+  join_all
+  semitrans conc2 0.25
   semitrans conc3 0.25
   stack "block/${dye}_concrete_powder"
 done
@@ -898,6 +902,7 @@ stack block/chiseled_stone_bricks
 
 layer bricks $mortar bricks1 $terracotta
 layer borderDotted $mortar bricks2
+join_all
 semitrans bricks2 0.5
 stack block/bricks
 
@@ -930,16 +935,18 @@ layer streaks $white glass3
 stack "block/glass"
 
 layer borderSolid $white tglass1
-semitrans tglass1 0.5
 layer streaks $white tglass3
+join_all
+semitrans tglass1 0.5
 semitrans tglass3 0.25
 stack "block/tinted_glass"
 
 for dye in "${DYES[@]}"; do
   layer empty ${black} glass1 "${!dye}"
-  semitrans glass1 0.25
   layer borderSolid "${!dye}" glass2
   layer streaks "${!dye}" glass3
+  join_all
+  semitrans glass1 0.25
   stack "block/${dye}_stained_glass"
 
   layer paneTop "${!dye}" glass_top1
@@ -954,8 +961,9 @@ stack block/glass_pane_top
 for dye in "${DYES[@]}"; do
   layer empty "${!dye}" conc1 "${!dye}"
   layer x ${gray} conc2
-  semitrans conc2 0.25
   layer borderLongDashes ${light_gray} conc3
+  join_all
+  semitrans conc2 0.25
   semitrans conc3 0.25
   stack "block/${dye}_concrete"
 done
@@ -964,6 +972,7 @@ done
 
 layer borderSolid $bone_block_h boneblock1 $bone_block_s
 layer bonesXor ${bone_block_h} boneblock2
+join_all
 semitrans boneblock2 0.5
 stack block/bone_block_top
 
@@ -1291,12 +1300,13 @@ stack block/cobweb
 for dye in "${DYES[@]}"; do
   layer empty "${!dye}" wool1 "${!dye}"
   layer zigzagBroken ${gray} wool2
-  semitrans wool2 0.25
   layer zigzagBroken2 ${light_gray} wool3
-  semitrans wool3 0.25
   layer borderSolid ${gray} wool4
-  semitrans wool4 0.5
   layer borderDotted ${light_gray} wool5
+  join_all
+  semitrans wool4 0.5
+  semitrans wool3 0.25
+  semitrans wool2 0.25
   semitrans wool5 0.5
   stack block/${dye}_wool
 done
@@ -1635,6 +1645,7 @@ done
 
 layer empty $structure_block_fg sb1 $structure_block_bg
 layer borderDotted $structure_block_fg sb2
+join_all
 semitrans sb2 0.25
 stack block/jigsaw_bottom
 
