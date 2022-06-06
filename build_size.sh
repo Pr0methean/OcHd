@@ -321,18 +321,15 @@ music_disc='#404040'
 music_disc_s='#212121'
 
 layer () {
-  sed -e "s/#000000/$2/g" "svg/$1.svg" > "$TMPDIR/recolor.svg"
   if [ -z ${4+x} ]; then
     convert "$PNG_DIRECTORY/$1.png" -alpha off \
               -fill $2 -colorize 100% \
-              -alpha on "$TMPDIR/$3.png"
+              -alpha on "$TMPDIR/$3.png" &
   else
     convert "$PNG_DIRECTORY/$1.png" -alpha off \
                   -fill "$2" -colorize 100% \
-                  -alpha on -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png"
-    inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" -b "$4" -y 1.0
+                  -alpha on -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png" &
   fi
-  rm "$TMPDIR/recolor.svg"
 }
 
 semitrans () {
@@ -340,6 +337,10 @@ semitrans () {
 }
 
 stack () {
+  for job in $(jobs -p); do
+    wait "$job" || exit 1
+  done
+
   NUMFILES=$(ls | wc -l)
   OUTFILE="${OUTDIR}/$1.png"
   if [ $NUMFILES -eq 1 ]; then
