@@ -513,9 +513,9 @@ stack block/grass_block_snow
 # Concrete powder
 
 for dye in "${DYES[@]}"; do
-  layer empty "${!dye}" "conc1" "${!dye}"
-  layer checksSmall ${gray} conc2
-  layer checksSmall ${light_gray} conc3
+  layer empty "${!dye}" "${dye}_conc1" "${!dye}"
+  layer checksSmall ${gray} "${dye}_conc2"
+  layer checksSmall ${light_gray} "${dye}_conc3"
   join_all
   semitrans conc2 0.25
   semitrans conc3 0.25
@@ -750,7 +750,7 @@ for ore in "${SIMPLE_ORES[@]}"; do
   layer "$ore" "${!highlight}" "${ore}_rawitem3"
   stack "item/raw_${ore}"
 
-  layer checksSmall "${!highlight}" "${ore}_rawblock1" ${!ore}
+  layer checksSmall "${!highlight}" "${ore}_rawblock1" "${!ore}"
   layer "$ore" "${!shadow}" "${ore}_rawblock2"
   stack "block/raw_${ore}_block"
 
@@ -779,10 +779,10 @@ for ore in "${SIMPLE_ORES[@]}"; do
   highlight="${ore}_h"
   shadow="${ore}_s"
 
-  layer streaks ${!highlight} ${ore}_block0 ${!ore}
-  layer $ore ${!shadow} ${ore}_block1
-  layer borderSolidTopLeft ${!highlight} ${ore}_block3
-  layer borderSolidBottomRight ${!shadow} ${ore}_block4
+  layer streaks "${!highlight}" "${ore}_block0" "${!ore}"
+  layer "$ore" "${!shadow}" "${ore}_block1"
+  layer borderSolidTopLeft "${!highlight}" "${ore}_block3"
+  layer borderSolidBottomRight "${!shadow}" "${ore}_block4"
   stack "block/${ore}_block"
 done
 
@@ -838,11 +838,11 @@ for oxidation_state in "${OXIDATION_STATES[@]}"; do
   layer copper2oxide "${!shadow}" "${oxidation_state}_copper_block4"
   stack "block/${oxidation_state}_copper"
 
-  layer streaks "${!highlight}" cutcopper10 "${!color}"
-  layer borderSolid "${!shadow}" cutcopper11
-  layer borderSolidTopLeft "${!highlight}" cutcopper12
-  layer cutInQuarters1 "${!shadow}" cutcopper20
-  layer cutInQuarters2 "${!highlight}" cutcopper30
+  layer streaks "${!highlight}" "${oxidation_state}_cutcopper10" "${!color}"
+  layer borderSolid "${!shadow}" "${oxidation_state}_cutcopper11"
+  layer borderSolidTopLeft "${!highlight}" "${oxidation_state}_cutcopper12"
+  layer cutInQuarters1 "${!shadow}" "${oxidation_state}_cutcopper20"
+  layer cutInQuarters2 "${!highlight}" "${oxidation_state}_cutcopper30"
   stack "block/cut_${oxidation_state}_copper"
 done
 
@@ -937,11 +937,11 @@ semitrans tglass3 0.25
 stack "block/tinted_glass"
 
 for dye in "${DYES[@]}"; do
-  layer empty ${black} glass1 "${!dye}"
-  layer borderSolid "${!dye}" glass2
-  layer streaks "${!dye}" glass3
+  layer empty ${black} "${dye}_glass1" "${!dye}"
+  layer borderSolid "${!dye}" "${dye}_glass2"
+  layer streaks "${!dye}" "${dye}_glass3"
   join_all
-  semitrans glass1 0.25
+  semitrans "${dye}_glass1" 0.25
   stack "block/${dye}_stained_glass"
 
   layer paneTop "${!dye}" glass_top1
@@ -954,9 +954,9 @@ stack block/glass_pane_top
 # Concrete
 
 for dye in "${DYES[@]}"; do
-  layer empty "${!dye}" conc1 "${!dye}"
-  layer x ${gray} conc2
-  layer borderLongDashes ${light_gray} conc3
+  layer empty "${!dye}" "${dye}_conc1" "${!dye}"
+  layer x ${gray} "${dye}_conc2"
+  layer borderLongDashes ${light_gray} "${dye}_conc3"
   join_all
   semitrans conc2 0.25
   semitrans conc3 0.25
@@ -1090,24 +1090,24 @@ for wood in "${OVERWORLD_WOODS[@]}"; do
   bark_s="bark_${wood}_s"
   bark="bark_${wood}"
 
-  layer borderSolid "${!bark_s}" logSide3 "${!bark}"
-  layer borderDotted "${!bark_h}" logSide4
-  layer zigzagSolid "${!bark_s}" logSide5
-  layer zigzagSolid2 "${!bark_h}" logSide6
+  layer borderSolid "${!bark_s}" "${wood}_logSide3" "${!bark}"
+  layer borderDotted "${!bark_h}" "${wood}_logSide4"
+  layer zigzagSolid "${!bark_s}" "${wood}_logSide5"
+  layer zigzagSolid2 "${!bark_h}" "${wood}_logSide6"
   stack "block/${wood}_log"
 
-  layer borderSolid "${!shadow}" strippedLogSide1 "${!midtone}"
-  layer borderShortDashes "${!highlight}" strippedLogSide2
+  layer borderSolid "${!shadow}" "${wood}_strippedLogSide1" "${!midtone}"
+  layer borderShortDashes "${!highlight}" "${wood}_strippedLogSide2"
   stack "block/stripped_${wood}_log"
 
-  copy "block/stripped_${wood}_log" strippedLog0
-  layer ringsCentralBullseye "${!highlight}" strippedLog1
-  layer rings "${!shadow}" strippedLog2
+  copy "block/stripped_${wood}_log" "${wood}_strippedLog0"
+  layer ringsCentralBullseye "${!highlight}" "${wood}_strippedLog1"
+  layer rings "${!shadow}" "${wood}_strippedLog2"
   stack "block/stripped_${wood}_log_top"
 
-  copy "block/stripped_${wood}_log_top" logTop1
-  layer borderSolid "${!bark}" logTop2
-  layer borderDotted "${!bark_s}" logTop3
+  copy "block/stripped_${wood}_log_top" "${wood}_logTop1"
+  layer borderSolid "${!bark}" "${wood}_logTop2"
+  layer borderDotted "${!bark_s}" "${wood}_logTop3"
   stack "block/${wood}_log_top"
 done
 
@@ -1119,22 +1119,22 @@ for wood in "${FUNGI[@]}"; do
   bark_s="bark_${wood}_s"
   bark="bark_${wood}"
 
-  layer borderSolid "${!bark_s}" stemSide1 "${!bark}"
-  layer waves "${!bark_h}" stemSide2
+  layer borderSolid "${!bark_s}" "${wood}_stemSide1" "${!bark}"
+  layer waves "${!bark_h}" "${wood}_stemSide2"
   stack "block/${wood}_stem"
 
-  layer borderSolid "${!shadow}" strippedLogSide1 "${!midtone}"
-  layer borderDotted "${!highlight}" strippedLogSide2
+  layer borderSolid "${!shadow}" "${wood}_strippedLogSide1" "${!midtone}"
+  layer borderDotted "${!highlight}" "${wood}_strippedLogSide2"
   stack "block/stripped_${wood}_stem"
 
-  copy "block/stripped_${wood}_stem" strippedLog0
-  layer ringsCentralBullseye "${!shadow}" strippedLog1
-  layer rings "${!highlight}" strippedLog2
+  copy "block/stripped_${wood}_stem" "${wood}_strippedLog0"
+  layer ringsCentralBullseye "${!shadow}" "${wood}_strippedLog1"
+  layer rings "${!highlight}" "${wood}_strippedLog2"
   stack "block/stripped_${wood}_stem_top"
 
-  copy "block/stripped_${wood}_stem_top" logTop1
-  layer borderSolid "${!bark}" logTop2
-  layer borderDotted "${!bark_s}" logTop3
+  copy "block/stripped_${wood}_stem_top" "${wood}_logTop1"
+  layer borderSolid "${!bark}" "${wood}_logTop2"
+  layer borderDotted "${!bark_s}" "${wood}_logTop3"
   stack "block/${wood}_stem_top"
 done
 
@@ -1293,16 +1293,16 @@ stack block/cobweb
 # Wool
 
 for dye in "${DYES[@]}"; do
-  layer empty "${!dye}" wool1 "${!dye}"
-  layer zigzagBroken ${gray} wool2
-  layer zigzagBroken2 ${light_gray} wool3
-  layer borderSolid ${gray} wool4
-  layer borderDotted ${light_gray} wool5
+  layer empty "${!dye}" "${dye}_wool1 ""${!dye}"
+  layer zigzagBroken ${gray} "${dye}_wool2"
+  layer zigzagBroken2 ${light_gray} "${dye}_wool3"
+  layer borderSolid ${gray} "${dye}_wool4"
+  layer borderDotted ${light_gray} "${dye}_wool5"
   join_all
-  semitrans wool4 0.5
-  semitrans wool3 0.25
-  semitrans wool2 0.25
-  semitrans wool5 0.5
+  semitrans "${dye}_wool4" 0.5
+  semitrans "${dye}_wool3" 0.25
+  semitrans "${dye}_wool2" 0.25
+  semitrans "${dye}_wool5" 0.5
   stack block/${dye}_wool
 done
 
@@ -1559,10 +1559,10 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
   shadow=${type}_s
   highlight=${type}_h
 
-  layer diagonalChecksTopLeftBottomRight "${!shadow}" cbb1 "${!type}"
-  layer diagonalChecksBottomLeftTopRight "${!highlight}" cbb2
-  layer diagonalOutlineChecksTopLeftBottomRight "${!highlight}" cbb3
-  layer diagonalOutlineChecksBottomLeftTopRight "${!shadow}" cbb4
+  layer diagonalChecksTopLeftBottomRight "${!shadow}" "${type}_cbb1" "${!type}"
+  layer diagonalChecksBottomLeftTopRight "${!highlight}" "${type}_cbb2"
+  layer diagonalOutlineChecksTopLeftBottomRight "${!highlight}" "${type}_cbb3"
+  layer diagonalOutlineChecksBottomLeftTopRight "${!shadow}" "${type}_cbb4"
   stack "block/${type}_basebase"
 done
 
@@ -1582,40 +1582,40 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
   shadow=${type}_s
   highlight=${type}_h
 
-  copy "block/${type}_base" frontbase1
-  layer commandBlockOctagon $black frontbase2
-  layer craftingGridSpacesCross $white frontbase3
+  copy "block/${type}_base" "${type}_frontbase1"
+  layer commandBlockOctagon $black "${type}_frontbase2"
+  layer craftingGridSpacesCross $white "${type}_frontbase3"
   stack "block/${type}_front_base"
 
   for frame in $(seq 1 4); do
-    copy "block/${type}_front_base" front1
-    layer "dotsInCross${frame}" $command_block_dot front2
+    copy "block/${type}_front_base" "${type}_front1"
+    layer "dotsInCross${frame}" $command_block_dot "${type}_front2"
     stack "block/${type}_front_${frame}"
   done
   donewith "block/${type}_front_base"
   animate4 "block/${type}_front"
 
   copy "block/${type}_base" backbase1
-  layer commandBlockSquare $black backbase2
-  layer craftingGridSpaces $white backbase3
+  layer commandBlockSquare $black "${type}_backbase2"
+  layer craftingGridSpaces $white "${type}_backbase3"
   stack "block/${type}_back_base"
 
   for frame in $(seq 1 4); do
-    copy "block/${type}_back_base" back1
-    layer "glider${frame}" $command_block_dot back2
+    copy "block/${type}_back_base" "${type}_back1"
+    layer "glider${frame}" $command_block_dot "${type}_back2"
     stack "block/${type}_back_${frame}"
   done
   donewith "block/${type}_back_base"
   animate4 "block/${type}_back"
 
-  copy "block/${type}_base" sidebase1
-  layer commandBlockArrowUnconditional $black sidebase2
-  layer craftingGridSpaces $white sidebase3
+  copy "block/${type}_base" "${type}_sidebase1"
+  layer commandBlockArrowUnconditional $black "${type}_sidebase2"
+  layer craftingGridSpaces $white "${type}_sidebase3"
   stack "block/${type}_side_base"
 
   for frame in $(seq 1 4); do
-    copy "block/${type}_side_base" front1
-    layer "glider${frame}" $command_block_dot front2
+    copy "block/${type}_side_base" "${type}_side1"
+    layer "glider${frame}" $command_block_dot "${type}_side2"
     stack "block/${type}_side_${frame}"
   done
   donewith "block/${type}_side_base"
@@ -1628,8 +1628,8 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
   donewith "block/${type}_base"
 
   for frame in $(seq 1 4); do
-    copy "block/${type}_conditional_base" front1
-    layer "glider${frame}" $command_block_dot front2
+    copy "block/${type}_conditional_base" "${type}_cond1"
+    layer "glider${frame}" $command_block_dot "${type}_cond2"
     stack "block/${type}_conditional_${frame}"
   done
   donewith "block/${type}_conditional_base"
