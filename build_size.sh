@@ -1595,7 +1595,7 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
   donewith "block/${type}_front_base"
   animate4 "block/${type}_front"
 
-  copy "block/${type}_base" backbase1
+  copy "block/${type}_base" "${type}_backbase1"
   layer commandBlockSquare $black "${type}_backbase2"
   layer craftingGridSpaces $white "${type}_backbase3"
   stack "block/${type}_back_base"
@@ -1605,7 +1605,7 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
     layer "glider${frame}" $command_block_dot "${type}_${frame}_back2"
     stack "block/${type}_back_${frame}"
   done
-  donewith "block/${type}_back_base"∂
+  donewith "block/${type}_back_base"
   animate4 "block/${type}_back"
 
   copy "block/${type}_base" "${type}_sidebase1"
@@ -1697,8 +1697,9 @@ zip -r "debug-${SIZE}.zip" "$DEBUGDIR"
 zip -r "layers-${SIZE}.zip" "$PNG_DIRECTORY"
 
 # S900. PACKAGING
-ZIPFILE="OcHD-${SIZE}x${SIZE}.zip"
-cd "$OUTROOT" || exit 1
-rm "$ZIPFILE" 2>/dev/null || true
-zip -r "$ZIPFILE" ./*
-mv "$ZIPFILE" ..
+ZIP_FILE="OcHD-${SIZE}x${SIZE}.zip"
+cd "${OUTROOT}" || exit 1
+rm "${ZIP_FILE}" 2>/dev/null || true
+zip -r "${ZIP_FILE}"  ./*
+mv "${ZIP_FILE}" ..
+cd ..
