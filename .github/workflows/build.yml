@@ -38,7 +38,7 @@ jobs:
       - name: Build Texture Pack
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: ./build_size.sh ${{ matrix.size }}
+          run: sudo ./build_size.sh ${{ matrix.size }}
 
       - name: Publish
         uses: actions/upload-artifact@v3
