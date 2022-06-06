@@ -40,5 +40,5 @@ jobs:
       - name: Publish
         uses: actions/upload-artifact@v3
         with:
-          name: OcHD
+          name: OcHD ${{ matrix.size }}x${{ matrix.size }}
           path: out/*.zip
