@@ -332,18 +332,23 @@ layer () {
   fi
 }
 
-semitrans () {
-  convert "$TMPDIR/$1.png" -alpha set -background none -channel A -evaluate multiply "$2" +channel "$TMPDIR/$1.png" &
-}
-
-join_all () {
-  for job in $(jobs -p); do
-    wait "$job" || exit 1
-  done
+layer_semitrans () {
+  if [ -z ${5+x} ]; then
+    convert "$PNG_DIRECTORY/$1.png" -alpha off \
+              -fill $2 -colorize 100% \
+              -alpha on -alpha set -background none -channel A -evaluate multiply "$4" +channel "$TMPDIR/$3.png" &
+  else
+    convert "$PNG_DIRECTORY/$1.png" -alpha off \
+                  -fill "$2" -colorize 100% \
+                  -alpha on -background "$4" -alpha remove -alpha off \
+                  -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png" &
+  fi
 }
 
 stack () {
-  join_all
+  for job in $(jobs -p); do
+    wait "$job" || exit 1
+  done
   NUMFILES=$(ls | wc -l)
   OUTFILE="${OUTDIR}/$1.png"
   if [ $NUMFILES -eq 1 ]; then
@@ -514,11 +519,8 @@ stack block/grass_block_snow
 
 for dye in "${DYES[@]}"; do
   layer empty "${!dye}" "${dye}_conc1" "${!dye}"
-  layer checksSmall ${gray} "${dye}_conc2"
-  layer checksSmall ${light_gray} "${dye}_conc3"
-  join_all
-  semitrans "${dye}_conc2" 0.25
-  semitrans "${dye}_conc3" 0.25
+  layer_semitrans checksSmall ${gray} "${dye}_conc2" 0.25
+  layer_semitrans checksSmall ${light_gray} "${dye}_conc3" 0.25
   stack "block/${dye}_concrete_powder"
 done
 
@@ -896,9 +898,7 @@ layer borderSolidTopLeft ${stone_hh} csb11
 stack block/chiseled_stone_bricks
 
 layer bricks $mortar bricks1 $terracotta
-layer borderDotted $mortar bricks2
-join_all
-semitrans bricks2 0.5
+layer_semitrans borderDotted $mortar bricks2 0.5
 stack block/bricks
 
 layer streaks ${quartz_h} qb0 ${quartz}
@@ -929,19 +929,14 @@ layer borderSolidBottomRight $gray glass2
 layer streaks $white glass3
 stack "block/glass"
 
-layer borderSolid $white tglass1
-layer streaks $white tglass3
-join_all
-semitrans tglass1 0.5
-semitrans tglass3 0.25
+layer_semitrans borderSolid $white tglass1 0.5
+layer_semitrans streaks $white tglass3 0.25
 stack "block/tinted_glass"
 
 for dye in "${DYES[@]}"; do
-  layer empty ${black} "${dye}_glass1" "${!dye}"
+  layer_semitrans empty ${black} "${dye}_glass1" "${!dye}" 0.25
   layer borderSolid "${!dye}" "${dye}_glass2"
   layer streaks "${!dye}" "${dye}_glass3"
-  join_all
-  semitrans "${dye}_glass1" 0.25
   stack "block/${dye}_stained_glass"
 
   layer paneTop "${!dye}" glass_top1
@@ -955,20 +950,15 @@ stack block/glass_pane_top
 
 for dye in "${DYES[@]}"; do
   layer empty "${!dye}" "${dye}_conc1" "${!dye}"
-  layer x ${gray} "${dye}_conc2"
-  layer borderLongDashes ${light_gray} "${dye}_conc3"
-  join_all
-  semitrans "${dye}_conc2" 0.25
-  semitrans "${dye}_conc3" 0.25
+  layer_semitrans x ${gray} "${dye}_conc2" 0.25
+  layer_semitrans borderLongDashes ${light_gray} "${dye}_conc3" 0.25
   stack "block/${dye}_concrete"
 done
 
 # Bone block
 
 layer borderSolid $bone_block_h boneblock1 $bone_block_s
-layer bonesXor ${bone_block_h} boneblock2
-join_all
-semitrans boneblock2 0.5
+layer_semitrans bonesXor ${bone_block_h} boneblock2 0.5
 stack block/bone_block_top
 
 layer borderSolid $bone_block_s boneblockside1 $bone_block
@@ -1294,15 +1284,10 @@ stack block/cobweb
 
 for dye in "${DYES[@]}"; do
   layer empty "${!dye}" "${dye}_wool1 ""${!dye}"
-  layer zigzagBroken ${gray} "${dye}_wool2"
-  layer zigzagBroken2 ${light_gray} "${dye}_wool3"
-  layer borderSolid ${gray} "${dye}_wool4"
-  layer borderDotted ${light_gray} "${dye}_wool5"
-  join_all
-  semitrans "${dye}_wool4" 0.5
-  semitrans "${dye}_wool3" 0.25
-  semitrans "${dye}_wool2" 0.25
-  semitrans "${dye}_wool5" 0.5
+  layer_semitrans zigzagBroken ${gray} "${dye}_wool2" 0.25
+  layer_semitrans zigzagBroken2 ${light_gray} "${dye}_wool3" 0.25
+  layer_semitrans borderSolid ${gray} "${dye}_wool4" 0.5
+  layer_semitrans borderDotted ${light_gray} "${dye}_wool5" 0.5
   stack block/${dye}_wool
 done
 
@@ -1639,9 +1624,7 @@ done
 # Structure & jigsaw blocks
 
 layer empty $structure_block_fg sb1 $structure_block_bg
-layer borderDotted $structure_block_fg sb2
-join_all
-semitrans sb2 0.25
+layer_semitrans borderDotted $structure_block_fg sb2 0.25
 stack block/jigsaw_bottom
 
 layer cornerCrosshairs $structure_block_fg sbc1 $structure_block_bg
