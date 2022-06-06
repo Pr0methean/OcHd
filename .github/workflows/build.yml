@@ -14,14 +14,15 @@ on:
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 jobs:
   # This workflow contains a single job called "build"
   build:
     container:
       image: ghcr.io/pr0methean/inkscapeandimagemagick:main@sha256:9b273d4159517e2d847405cb6d8b996961bcb9a6f2ef540d2b23fca90ea2081d
+      options: --tmpfs
+      env:
+        REGISTRY: ghcr.io
+        IMAGE_NAME: ${{ github.repository }}
     strategy:
       matrix:
         size: [ 4096, 2048, 1024, 512, 256, 128, 64, 32 ]
