@@ -356,12 +356,12 @@ stack () {
   NUMFILES=$(ls | wc -l)
   OUTFILE="${OUTDIR}/$1.png"
   if [ $NUMFILES -eq 1 ]; then
-    cp "$TMPDIR"/*.png "${OUTFILE}"
+    ln -T "$TMPDIR/*.png" "${OUTFILE}"
   else
-    magick "$TMPDIR"/*.png -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
+    magick "$TMPDIR/*.png" -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
   fi
   echo "Wrote image ${OUTFILE}"
-  mv "$TMPDIR"/*.png "$DEBUGDIR"
+  mv "$TMPDIR/*.png" "$DEBUGDIR"
 }
 
 copy () {
