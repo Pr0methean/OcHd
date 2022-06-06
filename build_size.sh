@@ -1495,12 +1495,12 @@ stack block/target_top
 
 layer torchBase $wood_oak torch1
 layer torchShadow $wood_oak_s torch2
-layer torchFlame $black torch3
+layer torchFlameSmall $black torch3
 stack block/torch
 
 layer torchBase $wood_oak storch1
 layer torchShadow $wood_oak_s storch2
-layer soulTorchFlame $black storch3
+layer soulTorchFlameSmall $black storch3
 stack block/soul_torch
 
 layer torchBase $wood_oak rtorch1
