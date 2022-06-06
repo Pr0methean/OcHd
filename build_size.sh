@@ -322,25 +322,25 @@ music_disc_s='#212121'
 
 layer () {
   if [ -z ${4+x} ]; then
-    convert "$PNG_DIRECTORY/$1.png" -alpha off \
+    magick "$PNG_DIRECTORY/$1.png" \
               -fill $2 -colorize 100% \
-              -alpha on "$TMPDIR/$3.png" &
+              "$TMPDIR/$3.png" &
   else
-    convert "$PNG_DIRECTORY/$1.png" -alpha off \
+    magick "$PNG_DIRECTORY/$1.png" \
                   -fill "$2" -colorize 100% \
-                  -alpha on -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png" &
+                  -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png" &
   fi
 }
 
 layer_semitrans () {
   if [ -z ${5+x} ]; then
-    convert "$PNG_DIRECTORY/$1.png" -alpha off \
+    magick "$PNG_DIRECTORY/$1.png" \
               -fill $2 -colorize 100% \
-              -alpha on -alpha set -background none -channel A -evaluate multiply "$4" +channel "$TMPDIR/$3.png" &
+              -alpha set -background none -channel A -evaluate multiply "$4" +channel "$TMPDIR/$3.png" &
   else
-    convert "$PNG_DIRECTORY/$1.png" -alpha off \
+    magick "$PNG_DIRECTORY/$1.png" \
                   -fill "$2" -colorize 100% \
-                  -alpha on -background "$4" -alpha remove -alpha off \
+                  -background "$4" -alpha remove -alpha off \
                   -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png" &
   fi
 }
