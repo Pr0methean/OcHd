@@ -323,8 +323,13 @@ music_disc_s='#212121'
 layer () {
   sed -e "s/#000000/$2/g" "svg/$1.svg" > "$TMPDIR/recolor.svg"
   if [ -z ${4+x} ]; then
-    inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" -y 0.0
+    convert "$PNG_DIRECTORY/$1.png" -alpha off \
+              -fill $2 -colorize 100% \
+              -alpha on "$TMPDIR/$3.png"
   else
+    convert "$PNG_DIRECTORY/$1.png" -alpha off \
+                  -fill "$2" -colorize 100% \
+                  -alpha on -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png"
     inkscape -w "$SIZE" -h "$SIZE" "$TMPDIR/recolor.svg" -o "$TMPDIR/$3.png" -b "$4" -y 1.0
   fi
   rm "$TMPDIR/recolor.svg"
@@ -367,6 +372,7 @@ animate4 () {
 }
 
 SIZE=$1
+PNG_DIRECTORY="png/${SIZE}x${SIZE}"
 TMPDIR="tmp/${SIZE}x${SIZE}"
 DEBUGDIR="debug/${SIZE}x${SIZE}"
 OUTROOT="out/${SIZE}x${SIZE}"
@@ -381,6 +387,16 @@ mkdir -p "$TMPDIR"
 rm -rf "$DEBUGDIR" || true
 mkdir -p "$DEBUGDIR"
 cp -r metadata/*.* "$OUTROOT"
+mkdir -p "$PNG_DIRECTORY"
+
+echo "Converting layers to PNG..."
+cd svg
+for file in ./*.svg; do
+  SHORTNAME="${file%.svg}"
+  inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0
+done
+cd ..
+echo "All layers converted."
 
 # S09. ITEMS USED IN MULTIPLE CATEGORIES
 
