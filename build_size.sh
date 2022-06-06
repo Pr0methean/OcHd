@@ -371,16 +371,16 @@ TMPDIR="tmp/${SIZE}x${SIZE}"
 DEBUGDIR="debug/${SIZE}x${SIZE}"
 OUTROOT="out/${SIZE}x${SIZE}"
 OUTDIR="${OUTROOT}/assets/minecraft/textures"
-rm -rf $OUTDIR || true
-mkdir -p $OUTDIR
-mkdir $OUTDIR/block
-mkdir $OUTDIR/item
-mkdir $OUTDIR/particle
+rm -rf "$OUTDIR" || true
+mkdir -p "$OUTDIR"
+mkdir "$OUTDIR/block"
+mkdir "$OUTDIR/item"
+mkdir "$OUTDIR/particle"
 rm -rf "$TMPDIR" || true
 mkdir -p "$TMPDIR"
 rm -rf "$DEBUGDIR" || true
 mkdir -p "$DEBUGDIR"
-cp -r metadata/*.* $OUTDIR
+cp -r metadata/*.* "$OUTROOT"
 
 # S09. ITEMS USED IN MULTIPLE CATEGORIES
 
