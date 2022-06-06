@@ -24,7 +24,7 @@ jobs:
       image: ghcr.io/pr0methean/inkscapeandimagemagick:main@sha256:bc0a610a233dcbf8889061e56eb7901cc351d8d3754651825daf8e958a41e8f9
     strategy:
       matrix:
-        size: [ 32, 64, 128, 256, 512, 1024, 2048, 4096 ]
+        size: [ 4096, 2048, 1024, 512, 256, 128, 64, 32 ]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
