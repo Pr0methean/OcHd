@@ -31,9 +31,11 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - uses: GabrielBB/xvfb-action@v1
-        name: Build Texture Pack
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Texture Pack
+        uses: GabrielBB/xvfb-action@v1
         with:
           run: ./build_size.sh ${{ matrix.size }}
 
