@@ -1536,12 +1536,12 @@ stack block/bedrock
 
 copy block/end_stone endPortalSide1
 layer endPortalFrameSide $structure_block_bg endPortalSide2
-stack block/end_portal_side
+stack block/end_portal_frame_side
 
 copy block/end_stone endPortalTop1
 layer endPortalFrameTop $structure_block_bg endPortalTop2
 layer railDetector $black endPortalTop3
-stack block/end_portal_top
+stack block/end_portal_frame_top
 
 # Command blocks
 
