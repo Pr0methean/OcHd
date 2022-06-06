@@ -517,8 +517,8 @@ for dye in "${DYES[@]}"; do
   layer checksSmall ${gray} "${dye}_conc2"
   layer checksSmall ${light_gray} "${dye}_conc3"
   join_all
-  semitrans conc2 0.25
-  semitrans conc3 0.25
+  semitrans "${dye}_conc2" 0.25
+  semitrans "${dye}_conc3" 0.25
   stack "block/${dye}_concrete_powder"
 done
 
@@ -958,8 +958,8 @@ for dye in "${DYES[@]}"; do
   layer x ${gray} "${dye}_conc2"
   layer borderLongDashes ${light_gray} "${dye}_conc3"
   join_all
-  semitrans conc2 0.25
-  semitrans conc3 0.25
+  semitrans "${dye}_conc2" 0.25
+  semitrans "${dye}_conc3" 0.25
   stack "block/${dye}_concrete"
 done
 
