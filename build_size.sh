@@ -332,6 +332,10 @@ layer () {
   fi
 }
 
+layer_precolored () {
+  ln -T "$PNG_DIRECTORY/$1.png" "$TMPDIR/$2.png"
+}
+
 layer_semitrans () {
   if [ -z ${5+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" \
@@ -411,7 +415,7 @@ echo "All layers converted."
 
 # Bones and bone meal
 
-layer bonemealSmall $bone_block_h bonemeal1
+layer_precolored bonemealSmall bonemeal1
 stack item/bone_meal
 
 layer boneBottomLeftTopRight $bone_block_h bone1
@@ -1052,7 +1056,7 @@ layer furnaceFront $black furnace2
 stack block/furnace_front
 
 copy block/furnace_side furnacel1
-layer furnaceFrontLit $black furnacel2
+layer_precolored furnaceFrontLit furnacel2
 stack block/furnace_front_on
 
 # S3. AXE BLOCKS
@@ -1230,14 +1234,15 @@ stack "block/crafting_table_side"
 copy block/crafting_table_side table_front_1
 stack "block/crafting_table_front"
 
-layer bookShelves ${black} shelf1 ${wood_oak}
+layer empty ${wood_oak} shelf0 ${wood_oak}
+layer_precolored bookShelves shelf1
 stack "block/bookshelf"
 
 copy block/podzol_top compost0
 stack "block/composter_compost"
 
 copy block/composter_compost compost1
-layer bonemealSmallNoBorder ${bone_block_h} compost2
+layer_precolored bonemealSmallNoBorder compost2
 stack "block/composter_ready"
 
 layer borderSolidThick ${wood_oak} compostframe0
@@ -1502,12 +1507,12 @@ stack block/target_top
 
 layer torchBase $wood_oak torch1
 layer torchShadow $wood_oak_s torch2
-layer torchFlameSmall $black torch3
+layer_precolored torchFlameSmall torch3
 stack block/torch
 
 layer torchBase $wood_oak storch1
 layer torchShadow $wood_oak_s storch2
-layer soulTorchFlameSmall $black storch3
+layer_precolored soulTorchFlameSmall storch3
 stack block/soul_torch
 
 layer torchBase $wood_oak rtorch1
@@ -1554,7 +1559,7 @@ done
 move block/command_block_basebase block/command_block_base
 
 copy block/chain_command_block_basebase chcb1
-layer commandBlockChains $black chcb2
+layer_precolored commandBlockChains chcb2
 stack block/chain_command_block_base
 donewith block/chain_command_block_basebase
 
