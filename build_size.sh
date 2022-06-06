@@ -799,7 +799,7 @@ move item/raw_redstone item/redstone
 
 layer streaks ${quartz_h} quartz_top0 ${quartz}
 layer borderSolidTopLeft ${quartz_h} quartz_top1
-layer borderSolidBottomRight ${quartz_s} $quartz_top2
+layer borderSolidBottomRight ${quartz_s} quartz_top2
 stack block/quartz_block_top
 
 # Carved and/or oxidized ores
