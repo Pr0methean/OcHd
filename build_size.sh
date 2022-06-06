@@ -1686,6 +1686,9 @@ stack "item/music_disc_11"
 layer note ${grass_h} note_1
 stack "particle/note"
 
+zip -r "debug-${SIZE}.zip" "$DEBUGDIR"
+zip -r "layers-${SIZE}.zip" "$PNG_DIRECTORY"
+
 # S900. PACKAGING
 ZIPFILE="OcHD-${SIZE}x${SIZE}.zip"
 cd "$OUTROOT" || exit 1

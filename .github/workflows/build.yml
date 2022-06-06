@@ -42,3 +42,9 @@ jobs:
         with:
           name: OcHD ${{ matrix.size }}x${{ matrix.size }}
           path: out/*.zip
+
+      - name: Publish side outputs
+        uses: actions/upload-artifact@v3
+        with:
+          name: OcHD Debug Output ${{ matrix.size }}x${{ matrix.size }}
+          path: '*.zip'
