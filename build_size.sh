@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-# S00. ARRAY CONSTANTS
+# S000. ARRAY CONSTANTS
 
 WOODS=('acacia' 'birch' 'crimson' 'dark_oak' 'jungle' 'mangrove' 'oak' 'spruce' 'warped')
 OVERWORLD_WOODS=('acacia' 'birch' 'dark_oak' 'jungle' 'mangrove' 'oak' 'spruce')
@@ -15,7 +15,7 @@ NORMAL_MUSIC_DISCS=('far' 'wait' 'strad' 'mall' 'cat' 'pigstep' 'mellohi' '13' '
 DISC_LABELS=('red' 'green' 'brown' 'blue' 'purple' 'cyan' 'light_gray' 'pink' 'lime' 'yellow' 'light_blue' 'magenta' 'orange' 'white')
 OXIDATION_STATES=('exposed' 'weathered' 'oxidized')
 
-# S01. COLOR CONSTANTS
+# S001. COLOR CONSTANTS
 # H = highlight, S = shadow
 
 # Dye
@@ -320,6 +320,8 @@ music_disc_h='#515151'
 music_disc='#404040'
 music_disc_s='#212121'
 
+# S004. SUBROUTINES
+
 layer () {
   if [ -z ${4+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" \
@@ -384,6 +386,8 @@ animate4 () {
   donewith "${1}_4"
 }
 
+# S005. DIRECTORY SETUP
+
 SIZE=$1
 PNG_DIRECTORY="png/${SIZE}x${SIZE}"
 TMPDIR="tmp/${SIZE}x${SIZE}"
@@ -402,6 +406,8 @@ mkdir -p "$DEBUGDIR"
 cp -r metadata/*.* "$OUTROOT"
 mkdir -p "$PNG_DIRECTORY"
 
+# S006. CONVERT LAYERS TO PNG
+
 echo "Converting layers to PNG..."
 cd svg
 for file in ./*.svg; do
@@ -411,7 +417,7 @@ done
 cd ..
 echo "All layers converted."
 
-# S09. ITEMS USED IN MULTIPLE CATEGORIES
+# S009. ITEMS USED IN MULTIPLE CATEGORIES OF BLOCKS
 
 # Bones and bone meal
 
@@ -421,7 +427,7 @@ stack item/bone_meal
 layer boneBottomLeftTopRight $bone_block_h bone1
 stack item/bone
 
-# S10. SHOVEL BLOCKS
+# S010. SHOVEL BLOCKS
 
 # Soft earth
 
@@ -537,7 +543,7 @@ layer bambooThinMinusBorder ${farmland_moist_s} mfarmland2
 layer dots0 ${stone_s} mfarmland3
 stack "block/farmland_moist"
 
-# S20. PICKAXE BLOCKS
+# S020. PICKAXE BLOCKS
 
 # Rock - Overworld
 
@@ -1059,7 +1065,7 @@ copy block/furnace_side furnacel1
 layer_precolored furnaceFrontLit furnacel2
 stack block/furnace_front_on
 
-# S3. AXE BLOCKS
+# S030. AXE BLOCKS
 
 # Planks
 
@@ -1272,7 +1278,7 @@ copy block/jukebox_side noteblock1
 layer note ${wood_oak_s} noteblock4
 stack "block/note_block"
 
-# S4. BLOCKS BROKEN WITH SHEARS
+# S040. BLOCKS BROKEN WITH SHEARS
 
 layer ringsCentralBullseye ${white} cobweb1
 layer x ${white} cobweb2
@@ -1281,9 +1287,9 @@ stack block/cobweb
 
 # todo: glow moss
 
-# S7. LIQUIDS
+# S070. LIQUIDS
 
-# S80. BLOCKS BROKEN WITHOUT TOOLS
+# S080. BLOCKS BROKEN WITHOUT TOOLS
 
 # Wool
 
@@ -1526,7 +1532,7 @@ layer torchRedstoneHead ${redstone_h} artorch3
 layer torchRedstoneHeadShadow ${redstone_s} artorch4
 stack block/redstone_torch_on
 
-# S90. UNBREAKABLE BLOCKS
+# S090. UNBREAKABLE BLOCKS
 
 layer borderSolid $bedrock_s bedrock1 $bedrock
 layer borderLongDashes $bedrock_h bedrock2
