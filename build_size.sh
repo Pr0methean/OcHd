@@ -673,11 +673,6 @@ layer strokeTopLeftBottomRight2TopPart ${crimson_nylium_s} cnyliums3
 layer strokeBottomLeftTopRight2TopPart ${crimson_nylium_h} cnyliums4
 stack block/crimson_nylium_side
 
-copy block/netherrack wnyliums1
-layer topPart ${warped_nylium} wnyliums2
-layer dots3TopPart ${warped_nylium_h} wnyliums3
-stack block/warped_nylium_side
-
 layer bigDotsBottomLeftTopRight ${blackstone_h} bss1 ${blackstone_s}
 layer bigDotsTopLeftBottomRight ${blackstone_h} bss2
 stack block/blackstone
