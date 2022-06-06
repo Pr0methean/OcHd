@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # S00. ARRAY CONSTANTS
 
 WOODS=('acacia' 'birch' 'crimson' 'dark_oak' 'jungle' 'mangrove' 'oak' 'spruce' 'warped')
