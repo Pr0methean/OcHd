@@ -1522,6 +1522,15 @@ layer strokeTopLeftBottomRight2 $bedrock_s bedrock3
 layer strokeBottomLeftTopRight2 $bedrock_h bedrock4
 stack block/bedrock
 
+copy block/end_stone endPortalSide1
+layer endPortalFrameSide $structure_block_bg endPortalSide2
+stack block/end_portal_side
+
+copy block/end_stone endPortalTop1
+layer endPortalFrameTop $structure_block_bg endPortalTop2
+layer railDetector $black endPortalTop3
+stack block/end_portal_top
+
 # Command blocks
 
 for type in "${CMD_BLOCK_TYPES[@]}"; do
