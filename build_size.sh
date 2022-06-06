@@ -356,7 +356,7 @@ stack () {
 }
 
 copy () {
-  cp "$OUTDIR/$1.png" "$TMPDIR/$2.png"
+  ln -T "$OUTDIR/$1.png" "$TMPDIR/$2.png"
 }
 
 move () {
