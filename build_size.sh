@@ -1605,7 +1605,7 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
     layer "glider${frame}" $command_block_dot "${type}_${frame}_back2"
     stack "block/${type}_back_${frame}"
   done
-  donewith "block/${type}_back_base"
+  donewith "block/${type}_back_base"∂
   animate4 "block/${type}_back"
 
   copy "block/${type}_base" "${type}_sidebase1"
