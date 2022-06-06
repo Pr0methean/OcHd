@@ -19,7 +19,7 @@ jobs:
   build:
     container:
       image: ghcr.io/pr0methean/inkscapeandimagemagick:main@sha256:9b273d4159517e2d847405cb6d8b996961bcb9a6f2ef540d2b23fca90ea2081d
-      options: --tmpfs
+      options: --tmpfs /__w/OcHd/OcHd
       env:
         REGISTRY: ghcr.io
         IMAGE_NAME: ${{ github.repository }}
