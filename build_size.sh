@@ -340,7 +340,7 @@ layer_semitrans () {
   else
     magick "$PNG_DIRECTORY/$1.png" \
                   -fill "$2" -colorize 100% \
-                  -background "$4" -alpha remove -alpha off \
+                  -background "$4" -alpha remove \
                   -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png" &
   fi
 }
