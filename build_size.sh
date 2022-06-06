@@ -324,11 +324,11 @@ layer () {
   if [ -z ${4+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" \
               -fill $2 -colorize 100% \
-              "$TMPDIR/$3.png" &
+              "$TMPDIR/$3.png"
   else
     magick "$PNG_DIRECTORY/$1.png" \
                   -fill "$2" -colorize 100% \
-                  -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png" &
+                  -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png"
   fi
 }
 
@@ -340,19 +340,16 @@ layer_semitrans () {
   if [ -z ${5+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" \
               -fill $2 -colorize 100% \
-              -alpha set -background none -channel A -evaluate multiply "$4" +channel "$TMPDIR/$3.png" &
+              -alpha set -background none -channel A -evaluate multiply "$4" +channel "$TMPDIR/$3.png"
   else
     magick "$PNG_DIRECTORY/$1.png" \
                   -fill "$2" -colorize 100% \
                   -background "$4" -alpha remove \
-                  -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png" &
+                  -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png"
   fi
 }
 
 stack () {
-  for job in $(jobs -p); do
-    wait "$job" || exit 1
-  done
   NUMFILES=$(ls | wc -l)
   OUTFILE="${OUTDIR}/$1.png"
   if [ $NUMFILES -eq 1 ]; then
