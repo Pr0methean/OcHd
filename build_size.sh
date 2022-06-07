@@ -1299,7 +1299,7 @@ for dye in "${DYES[@]}"; do
   layer_semitrans zigzagBroken2 ${light_gray} "${dye}_wool3" 0.25
   layer_semitrans borderSolid ${gray} "${dye}_wool4" 0.5
   layer_semitrans borderDotted ${light_gray} "${dye}_wool5" 0.5
-  stack block/${dye}_wool
+  stack "block/${dye}_wool"
 done
 
 # Tnt
