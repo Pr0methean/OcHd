@@ -1294,7 +1294,7 @@ stack block/cobweb
 # Wool
 
 for dye in "${DYES[@]}"; do
-  layer empty "${!dye}" "${dye}_wool1 ""${!dye}"
+  layer empty "${!dye}" "${dye}_wool1" "${!dye}"
   layer_semitrans zigzagBroken ${gray} "${dye}_wool2" 0.25
   layer_semitrans zigzagBroken2 ${light_gray} "${dye}_wool3" 0.25
   layer_semitrans borderSolid ${gray} "${dye}_wool4" 0.5
