@@ -947,6 +947,8 @@ layer borderDotted ${red_nether_brick_h} rnb2
 layer borderDottedBottomRight ${red_nether_brick_s} rnb3
 stack block/red_nether_bricks
 
+# Glass
+
 layer borderSolid $white glass1
 layer borderSolidBottomRight $gray glass2
 layer streaks $white glass3
