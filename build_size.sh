@@ -1344,14 +1344,14 @@ layer bambooThinMinusBorder ${sugarcane} sugarcane3
 stack block/sugar_cane
 
 layer wart0 ${crimson_wart_s} wart0
-stack block/nether_wart_stage_0
+stack block/nether_wart_stage0
 
 layer wart1 ${crimson_wart_s} wart1
-stack block/nether_wart_stage_1
+stack block/nether_wart_stage1
 
 layer wart2 ${crimson_wart_s} wart2
 layer wart2a ${crimson_wart_h} wart2a
-stack block/nether_wart_stage_2
+stack block/nether_wart_stage2
 
 layer carrots0 ${veg_leaves_s} carrots0
 stack block/carrots_stage0
