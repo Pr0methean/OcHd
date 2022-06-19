@@ -1437,7 +1437,7 @@ layer leaves3 ${grass_h} leavess1
 layer leaves3b ${grass_s} leavess2
 stack block/spruce_leaves
 
-# Other plants
+# Protruding grass
 
 layer bottomPart ${grass_s} tallgrassb0
 layer grassTall ${grass} tallgrassb1
