@@ -1524,13 +1524,13 @@ stack block/soul_torch
 layer torchBase $wood_oak rtorch1
 layer torchShadow $wood_oak_s rtorch2
 layer torchRedstoneHead $black rtorch3
-stack block/redstone_torch
+stack block/redstone_torch_off
 
 layer torchBase $wood_oak artorch1
 layer torchShadow $wood_oak_s artorch2
 layer torchRedstoneHead ${redstone_h} artorch3
 layer torchRedstoneHeadShadow ${redstone_s} artorch4
-stack block/redstone_torch_on
+stack block/redstone_torch
 
 # S090. UNBREAKABLE BLOCKS
 
