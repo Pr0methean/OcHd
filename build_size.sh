@@ -1148,6 +1148,7 @@ layer rings ${mushroom_brown_cap_h} bmush1 ${mushroom_brown_cap_s}
 stack block/brown_mushroom_block
 
 layer borderRoundDotsVaryingSize ${mushroom_inside_s} mushin1 ${mushroom_inside}
+layer dots0 ${mushroom_inside_s} mushin2
 stack block/mushroom_block_inside
 
 layer stripesThick ${mushroom_stem_s} mushstem1 ${mushroom_stem_h}
