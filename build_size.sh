@@ -281,6 +281,12 @@ glowstone_h='#ffffff'
 glowstone='#ffda74'
 glowstone_s='#cc8654'
 glowstone_ss='#6f4522'
+nether_brick_h='#442727'
+nether_brick='#302020'
+nether_brick_s='#000000'
+red_nether_brick_h='#730000'
+red_nether_brick='#440000'
+red_nether_brick_s='#2e0000'
 
 # End
 end_stone_h='#ffffb4'
@@ -516,6 +522,11 @@ layer strokeBottomLeftTopRight2 ${mud_s} mud2
 layer borderSolid ${mud_h} mud3
 layer borderDotted ${mud_s} mud4
 stack block/mud
+
+layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
+layer strokeBottomLeftTopRight2 ${mud_brick_s} mb2
+layer borderDotted ${mud_h} mb4
+stack block/packed_mud
 
 layer snow ${snow_s} snow1 ${snow}
 stack block/snow
@@ -872,11 +883,6 @@ stack block/quartz_pillar
 
 layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
 layer strokeBottomLeftTopRight2 ${mud_brick_s} mb2
-layer borderDotted ${mud_h} mb4
-stack block/packed_mud
-
-layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
-layer strokeBottomLeftTopRight2 ${mud_brick_s} mb2
 layer bricks ${mud_s} mb3
 layer borderDotted ${mud_h} mb4
 stack block/mud_bricks
@@ -907,7 +913,7 @@ layer borderSolid ${stone_ss} csb10
 layer borderSolidTopLeft ${stone_hh} csb11
 stack block/chiseled_stone_bricks
 
-layer bricks $mortar bricks1 $terracotta
+layer bricksSmall $mortar bricks1 $terracotta
 layer_semitrans borderDotted $mortar bricks2 0.5
 stack block/bricks
 
@@ -916,23 +922,30 @@ layer bricks ${quartz_s} qb1
 layer borderDotted ${quartz_h} qb2
 stack block/quartz_bricks
 
-layer bricks ${blackstone_s} pbs1 ${blackstone}
+layer bricksSmall ${blackstone_s} pbs1 ${blackstone}
 layer borderDotted ${blackstone_h} pbs3
 stack block/polished_blackstone_bricks
 
 copy block/deepslate db0
-layer bricks ${deepslate_s} db1
+layer bricksSmall ${deepslate_s} db1
 layer borderDotted ${deepslate_h} db2
 layer borderDottedBottomRight ${deepslate_s} db3
 stack block/deepslate_bricks
 
 copy block/end_stone esb0
-layer bricks ${end_stone_s} esb1
+layer bricksSmall ${end_stone_s} esb1
 layer borderShortDashes ${end_stone_h} esb2
 stack block/end_stone_bricks
 
-# todo: nether bricks
-# Glass
+layer bricksSmall ${nether_brick_h} nb1 ${nether_brick}
+layer borderDotted ${nether_brick_h} nb2
+layer borderDottedBottomRight ${deepslate_s} db3
+stack block/nether_bricks
+
+layer bricksSmall ${red_nether_brick_s} rnb1 ${red_nether_brick}
+layer borderDotted ${red_nether_brick_h} rnb2
+layer borderDottedBottomRight ${red_nether_brick_s} rnb3
+stack block/red_nether_bricks
 
 layer borderSolid $white glass1
 layer borderSolidBottomRight $gray glass2
