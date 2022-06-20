@@ -350,7 +350,7 @@ join_conversion_job () {
 }
 
 join_output_job () {
-  pid="${output_jobs[$1]}"
+  pid="${out_jobs[$1]}"
   echo "Joining output job for $1 (id $pid)"
   join_job_ "$pid"
 }
@@ -511,7 +511,9 @@ echo "Converting layers to PNG..."
 cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
-  inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0 &
+  until inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0; do
+    sleep 1
+  done &
   conversion_jobs["${SHORTNAME}"]=$!
 done
 cd ..
