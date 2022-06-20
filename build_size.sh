@@ -363,7 +363,7 @@ push () {
   if [ -z ${4+x} ]; then
     parallel -m --id "layer_$3" push_ "$1" "$2" "$3"
   else
-    parallel -m --id "layer_$3" 4 push_ "$1" "$2" "$3" "$4"
+    parallel -m --id "layer_$3" push_ "$1" "$2" "$3" "$4"
   fi
   layers+=("$3")
 }
