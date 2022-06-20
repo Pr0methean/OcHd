@@ -360,8 +360,11 @@ export -f push_
 
 push () {
   args=("$@")
-  env_parallel --env args -k --bg --id "layer_$3" push_ '${args[@]}'
-  layers+=("$3")
+  if [ -z ${4+x} ]; then
+    sem --id "layer_$3" push_ "$1" "$2" "$3"
+  else
+    sem --id "layer_$3" push_ "$1" "$2" "$3" "$4"
+  fi
 }
 
 out_layer_ () {
@@ -381,8 +384,11 @@ out_layer_ () {
 export -f out_layer_
 
 out_layer () {
-  args=("$@")
-  env_parallel --env args -k --bg --id "out_$3" out_layer_ '${args[@]}'
+  if [ -z ${4+x} ]; then
+    sem --id "out_$3" out_layer_ "$1" "$2" "$3"
+  else
+    sem --id "out_$3" out_layer_ "$1" "$2" "$3" "$4"
+  fi
 }
 
 push_precolored_ () {
@@ -415,14 +421,18 @@ push_semitrans_ () {
 export -f push_semitrans_
 
 push_semitrans () {
-  args=("$@")
-  env_parallel --env args -k --bg --id "layer_$3" push_semitrans_ '${args[@]}'
+  if [ -z ${5+x} ]; then
+    sem --id "layer_$3" push_semitrans_ "$1" "$2" "$3" "$4"
+  else
+    sem --id "layer_$3" push_semitrans_ "$1" "$2" "$3" "$4" "$5"
+  fi
   layers+=("$3")
 }
 
 out_stack_ () {
   layers=("${@:2}")
   layer_files=()
+  echo "Starting output job $1 using layers: ${layers[*]}"
   for layer in "${layers[@]}"; do
     layer_files+=("$TMPDIR/$layer.png")
     echo "Waiting for layer job $layer"
@@ -444,7 +454,6 @@ out_stack_ () {
 export -f out_stack_
 
 out_stack () {
-  echo "Scheduling output job $1 using layers: ${layers[*]}"
   sem --id "out_$1" out_stack_ "$1" "${layers[@]}"
   layers=()
 }
