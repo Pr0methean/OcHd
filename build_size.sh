@@ -514,6 +514,7 @@ cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
   {
+    echo "Waiting to start conversion job for ${SHORTNAME}"
     sem --id inkscape --fg -j4% inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0
     echo "Finished conversion job for ${SHORTNAME}"
   } &
@@ -1792,5 +1793,3 @@ rm "${ZIP_FILE}" 2>/dev/null || true
 zip -r "${ZIP_FILE}"  ./*
 mv "${ZIP_FILE}" ..
 cd ..
-
-}
