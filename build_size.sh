@@ -384,9 +384,9 @@ push_precolored_ () {
 }
 
 push_precolored () {
-  sem --id "layer_$3" push_precolored_ "$@"
-  layer_jobs+=("layer_$3")
-  layers+=("$TMPDIR/$3.png")
+  sem --id "layer_$2" push_precolored_ "$@"
+  layer_jobs+=("layer_$2")
+  layers+=("$TMPDIR/$2.png")
 }
 
 push_semitrans_ () {
@@ -415,6 +415,7 @@ out_stack_ () {
     sem --wait --id "$job"
     echo "Done waiting for layer job $job"
   done
+  OUTFILE="${OUTDIR}/$1.png"
   if [ ${#my_layers[@]} -eq 1 ]; then
     ln -T "${my_layers[0]}" "${OUTFILE}"
   else
@@ -431,7 +432,6 @@ out_stack () {
   layer_jobs=()
   my_layers=("${layers[@]}")
   layers=()
-  OUTFILE="${OUTDIR}/$1.png"
   sem --id "out_$1" out_stack_ "$@"
 }
 
