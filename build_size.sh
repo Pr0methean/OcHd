@@ -347,15 +347,13 @@ export -f join_output_job
 push_ () {
   join_conversion_job "$1"
   if [ -z ${4+x} ]; then
-    magick "$PNG_DIRECTORY/$1.png" \
-              -fill "$2" -colorize 100% \
-              "$TMPDIR/$3.png"
+    magick "$PNG_DIRECTORY/$1.png" -fill "$2" -colorize 100% "$TMPDIR/$3.png"
   else
     magick "$PNG_DIRECTORY/$1.png" \
                   -fill "$2" -colorize 100% \
                   -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png"
   fi
-  echo "Wrote layer $3"
+  echo "Wrote layer $3 with args: $*"
 }
 export -f push_
 
