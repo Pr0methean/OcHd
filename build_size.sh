@@ -385,7 +385,7 @@ out_layer_ () {
 export -f out_layer_
 
 out_layer () {
-  echo "out_layer_ arguments: input $1, fill $2, output $3, background $4"
+  echo "out_layer_ arguments: input $1, fill $2, output $3"
   if [ -z ${4+x} ]; then
     sem --id "out_$3" --max-args 3 out_layer_ "$1" "$2" "$3"
   else
@@ -406,7 +406,7 @@ push_precolored () {
 }
 
 push_semitrans_ () {
-  echo "push_semitrans_ arguments: input $1, fill $2, output $3, $4, $5"
+  echo "push_semitrans_ arguments: input $1, fill $2, output $3, $4"
   join_conversion_job "$1"
   if [ -z ${5+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" \
@@ -423,7 +423,7 @@ push_semitrans_ () {
 export -f push_semitrans_
 
 push_semitrans () {
-  echo "push_semitrans arguments: input $1, fill $2, output $3, $4, $5"
+  echo "push_semitrans arguments: input $1, fill $2, output $3, $4"
   if [ -z ${5+x} ]; then
     sem --id "layer_$3" --max-args 4 push_semitrans_ "$1" "$2" "$3" "$4"
   else
@@ -433,16 +433,16 @@ push_semitrans () {
 }
 
 out_stack_ () {
-  layers=($2)
+  my_layers=($2)
   layer_files=()
   echo "Starting output job $1 using layers: $2"
-  for layer in "${layers[@]}"; do
+  for layer in "${my_layers[@]}"; do
     layer_files+=("$TMPDIR/$layer.png")
     echo "Waiting for layer job $layer"
     sem --wait --id "layer_$layer"
   done
   OUTFILE="${OUTDIR}/$1.png"
-  if [ ${#layers[@]} -eq 1 ]; then
+  if [ ${#my_layers[@]} -eq 1 ]; then
     echo "Copying ${layer_files[0]} to output $1"
     ln -T "${layer_files[0]}" "${OUTFILE}"
   else
