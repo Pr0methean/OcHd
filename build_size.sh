@@ -340,7 +340,7 @@ join_job_ () {
 
 join_job () {
   echo "Joining job with id $1"
-  join_job "$1"
+  join_job_ "$1"
 }
 
 join_conversion_job () {
