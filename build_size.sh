@@ -345,6 +345,7 @@ join_output_job () {
 export -f join_output_job
 
 push_ () {
+  echo "push_ arguments: $*"
   join_conversion_job "$1"
   if [ -z ${4+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" -fill "$2" -colorize 100% "$TMPDIR/$3.png"
@@ -353,17 +354,18 @@ push_ () {
                   -fill "$2" -colorize 100% \
                   -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png"
   fi
-  echo "Wrote layer $3 with args: $*"
+  echo "Wrote layer $3"
 }
 export -f push_
 
 push () {
-  args=($@)
+  args=("$@")
   sem --id "layer_$3" push_ "${args[@]}"
   layers+=("$3")
 }
 
 out_layer_ () {
+  echo "out_layer_ arguments: $*"
   join_conversion_job "$1"
   if [ -z ${4+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" \
@@ -379,7 +381,7 @@ out_layer_ () {
 export -f out_layer_
 
 out_layer () {
-  args=($@)
+  args=("$@")
   sem --id "out_$3" out_layer_ "${args[@]}"
 }
 
@@ -396,6 +398,7 @@ push_precolored () {
 }
 
 push_semitrans_ () {
+  echo "push_semitrans_ arguments: $*"
   join_conversion_job "$1"
   if [ -z ${5+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" \
@@ -412,7 +415,7 @@ push_semitrans_ () {
 export -f push_semitrans_
 
 push_semitrans () {
-  args=($@)
+  args=("$@")
   sem --id "layer_$3" push_semitrans_ "${args[@]}"
   layers+=("$3")
 }
