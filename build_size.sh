@@ -328,7 +328,6 @@ music_disc_s='#212121'
 
 # S004. SUBROUTINES
 export SHELL=$(type -p bash)
-layer_jobs=()
 layers=()
 
 join_conversion_job () {
@@ -362,7 +361,7 @@ export -f push_
 
 push () {
   sem --id "layer_$3" push_ "$@"
-  layer_jobs+=("layer_$3")
+  layer_jobs+=("$3")
   layers+=("$TMPDIR/$3.png")
 }
 
@@ -394,7 +393,7 @@ export -f push_precolored_
 
 push_precolored () {
   sem --id "layer_$2" push_precolored_ "$@"
-  layer_jobs+=("layer_$2")
+  layer_jobs+=("$2")
   layers+=("$TMPDIR/$2.png")
 }
 
@@ -416,37 +415,35 @@ export -f push_semitrans_
 
 push_semitrans () {
   sem --id "layer_$3" push_semitrans_ "$@"
-  layer_jobs+=($!)
-  layers+=("$TMPDIR/$3.png")
+  layer_jobs+=("$3")
 }
 
 out_stack_ () {
-  for job in "${my_layer_jobs[@]}"; do
+  layers=${@:2}
+  layer_files=()
+  for layer in "${layers[@]}"; do
+    layer_files+=("$TMPDIR/$layer.png")
     echo "Waiting for layer job $job"
-    sem --wait --id "$job"
-    echo "Done waiting for layer job $job"
+    sem --wait --id "layer_$job"
   done
   OUTFILE="${OUTDIR}/$1.png"
-  if [ ${#my_layers[@]} -eq 1 ]; then
+  if [ ${#layers[@]} -eq 1 ]; then
     ln -T "${my_layers[0]}" "${OUTFILE}"
   else
-    echo "Building output $1 from layers: $my_layers"
-    magick "${my_layers[@]/#/-}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
+    echo "Building output $1 from layers: ${layer_files[*]}"
+    magick "${layer_files[@]/#/-}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
   fi
   echo "Wrote image ${OUTFILE}"
-  for layer in "${my_layers[@]}"; do
+  for layer in "${layer_files[@]}"; do
     mv "$layer" "$DEBUGDIR"
   done
 }
 export -f out_stack_
 
 out_stack () {
-  export my_layer_jobs=("${layer_jobs[@]}")
-  layer_jobs=()
-  export my_layers=("${layers[@]}")
+  echo "Scheduling output job $1 using layers: ${layers[*]}"
+  sem --id "out_$1" out_stack_ "${layers[@]}"
   layers=()
-  echo "Scheduling output job $1 using layers: $my_layers"
-  sem --id "out_$1" out_stack_ "$@"
 }
 
 push_copy_ () {
