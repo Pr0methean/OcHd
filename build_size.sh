@@ -328,93 +328,102 @@ music_disc_s='#212121'
 
 # S004. SUBROUTINES
 layer_jobs=()
-declare -A out_jobs
-declare -A conversion_jobs
 layers=()
 
-join_job_ () {
-  while (ps -p "$1" > /dev/null); do
-    sleep 10
-  done
-}
-
-join_job () {
-  echo "Joining job with id $1"
-  join_job_ "$1"
-}
-
 join_conversion_job () {
-  echo "Joining conversion job for ${SHORTNAME}"
-  sem --wait --id "convert_${SHORTNAME}"
-  echo "Joined conversion job for ${SHORTNAME}"
+  echo "Waiting for conversion job $1"
+  sem --wait --id "convert_$1"
+  echo "Done waiting for conversion job $1"
 }
 
 join_output_job () {
-  pid="${out_jobs[$1]}"
-  echo "Joining output job for $1 (id $pid)"
-  join_job_ "$pid"
+  echo "Waiting for output job $1"
+  sem --wait --id "out_$1"
+  echo "Done waiting for output job $1"
 }
 
+push_ () {
+  join_conversion_job "$1"
+  if [ -z ${4+x} ]; then
+    magick "$PNG_DIRECTORY/$1.png" \
+              -fill "$2" -colorize 100% \
+              "$TMPDIR/$3.png"
+  else
+    magick "$PNG_DIRECTORY/$1.png" \
+                  -fill "$2" -colorize 100% \
+                  -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png"
+  fi
+}
 push () {
-  {
-    join_conversion_job "$1"
-    if [ -z ${4+x} ]; then
-      magick "$PNG_DIRECTORY/$1.png" \
-                -fill "$2" -colorize 100% \
-                "$TMPDIR/$3.png"
-    else
-      magick "$PNG_DIRECTORY/$1.png" \
-                    -fill "$2" -colorize 100% \
-                    -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png"
-    fi
-  } &
-  layer_jobs+=($!)
+  sem --id "layer_$3" push_ "$@"
+  layer_jobs+=("layer_$3")
   layers+=("$TMPDIR/$3.png")
+}
+
+out_layer_ () {
+  join_conversion_job "$1"
+  if [ -z ${4+x} ]; then
+    magick "$PNG_DIRECTORY/$1.png" \
+              -fill "$2" -colorize 100% \
+              "$OUTDIR/$3.png"
+  else
+    magick "$PNG_DIRECTORY/$1.png" \
+                  -fill "$2" -colorize 100% \
+                  -background "$4" -alpha remove -alpha off "$OUTDIR/$3.png"
+  fi
+  echo "Wrote output file $3"
 }
 
 out_layer () {
-  {
-    join_conversion_job "$1"
-    if [ -z ${4+x} ]; then
-      magick "$PNG_DIRECTORY/$1.png" \
-                -fill "$2" -colorize 100% \
-                "$OUTDIR/$3.png"
-    else
-      magick "$PNG_DIRECTORY/$1.png" \
-                    -fill "$2" -colorize 100% \
-                    -background "$4" -alpha remove -alpha off "$OUTDIR/$3.png"
-    fi
-    echo "Wrote output file $3"
-  } &
-  out_jobs["$3"]=$!
+  sem --id "out_$3" out_layer_ "$@"
+}
+
+push_precolored_ () {
+  join_conversion_job "$1"
+  ln -T "$PNG_DIRECTORY/$1.png" "$TMPDIR/$2.png"
 }
 
 push_precolored () {
-  {
-    join_conversion_job "$1"
-    ln -T "$PNG_DIRECTORY/$1.png" "$TMPDIR/$2.png"
-  } &
-  layer_jobs+=($!)
+  sem --id "layer_$3" push_precolored_ "$@"
+  layer_jobs+=("layer_$3")
+  layers+=("$TMPDIR/$3.png")
+}
 
-  layers+=("$TMPDIR/$2.png")
+push_semitrans_ () {
+  join_conversion_job "$1"
+  if [ -z ${5+x} ]; then
+    magick "$PNG_DIRECTORY/$1.png" \
+              -fill "$2" -colorize 100% \
+              -alpha set -background none -channel A -evaluate multiply "$4" +channel "$TMPDIR/$3.png"
+  else
+    magick "$PNG_DIRECTORY/$1.png" \
+                  -fill "$2" -colorize 100% \
+                  -background "$4" -alpha remove \
+                  -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png"
+  fi
 }
 
 push_semitrans () {
-  {
-    join_conversion_job "$1"
-    if [ -z ${5+x} ]; then
-      magick "$PNG_DIRECTORY/$1.png" \
-                -fill "$2" -colorize 100% \
-                -alpha set -background none -channel A -evaluate multiply "$4" +channel "$TMPDIR/$3.png"
-    else
-      magick "$PNG_DIRECTORY/$1.png" \
-                    -fill "$2" -colorize 100% \
-                    -background "$4" -alpha remove \
-                    -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png"
-    fi
-  } &
+  sem --id "layer_$3" push_semitrans_ "$@"
   layer_jobs+=($!)
   layers+=("$TMPDIR/$3.png")
+}
+
+out_stack_ () {
+  for job in "${my_layer_jobs[@]}"; do
+    echo "Waiting for layer job $job"
+    sem --wait --id "$job"
+    echo "Done waiting for layer job $job"
+  done
+  if [ ${#my_layers[@]} -eq 1 ]; then
+    ln -T "${my_layers[0]}" "${OUTFILE}"
+  else
+    magick "${my_layers[@]/#/-}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
+  fi
+  echo "Wrote image ${OUTFILE}"
+  for layer in "${my_layers[@]}"; do
+    mv "$layer" "$DEBUGDIR"
+  done
 }
 
 out_stack () {
@@ -423,68 +432,57 @@ out_stack () {
   my_layers=("${layers[@]}")
   layers=()
   OUTFILE="${OUTDIR}/$1.png"
+  sem --id "out_$1" out_stack_ "$@"
+}
 
-  {
-    for job in "${my_layer_jobs[@]}"; do
-      join_job "$job"
-    done
-    if [ ${#my_layers[@]} -eq 1 ]; then
-      ln -T "${my_layers[0]}" "${OUTFILE}"
-    else
-      magick "${my_layers[@]/#/-}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
-    fi
-    echo "Wrote image ${OUTFILE}"
-    for layer in "${my_layers[@]}"; do
-      mv "$layer" "$DEBUGDIR"
-    done
-  } &
-  out_jobs["$1"]=$!
+push_copy_ () {
+  join_output_job "$1"
+  ln -T "$OUTDIR/$1.png" "$TMPDIR/$2.png"
 }
 
 push_copy () {
-  {
-    join_output_job "$1"
-    ln -T "$OUTDIR/$1.png" "$TMPDIR/$2.png"
-  } &
-  layer_jobs+=($!)
+  sem --id "layer_$2" push_copy_ "$@"
+  layer_jobs+=("layer_$2")
   layers+=("$TMPDIR/$2.png")
 }
 
+copy_ () {
+  join_output_job "$1"
+  ln -T "$OUTDIR/$1.png" "$OUTDIR/$2.png"
+}
+
 copy () {
-  {
-    join_output_job "$1"
-    ln -T "$OUTDIR/$1.png" "$OUTDIR/$2.png"
-  } &
-  out_jobs["$2"]=$!
+  sem --id "out_$2" copy_ "$@"
+}
+
+rename_out_ () {
+  join_output_job "$1"
+  mv "$OUTDIR/$1.png" "$OUTDIR/$2.png"
 }
 
 rename_out () {
-  {
-    join_output_job "$1"
-    mv "$OUTDIR/$1.png" "$OUTDIR/$2.png"
-  } &
-  out_jobs["$2"]=$!
+  sem --id "out_$2" rename_out_ "$@"
 }
 
 done_with_out () {
   mv "${OUTDIR}/${1}.png" "${DEBUGDIR}"
-  unset "out_jobs[$1]"
+}
+
+animate4_ () {
+  join_output_job "${1}_1"
+  join_output_job "${1}_2"
+  join_output_job "${1}_3"
+  join_output_job "${1}_4"
+  convert "${OUTDIR}/${1}_1.png" "${OUTDIR}/${1}_2.png" "${OUTDIR}/${1}_3.png" "${OUTDIR}/${1}_4.png" -append "${OUTDIR}/${1}.png"
+  done_with_out "${1}_1"
+  done_with_out "${1}_2"
+  done_with_out "${1}_3"
+  done_with_out "${1}_4"
+  done_with_out "$2"
 }
 
 animate4 () {
-  {
-    join_job out_jobs["${1}_1"]
-    join_job out_jobs["${1}_2"]
-    join_job out_jobs["${1}_3"]
-    join_job out_jobs["${1}_4"]
-    convert "${OUTDIR}/${1}_1.png" "${OUTDIR}/${1}_2.png" "${OUTDIR}/${1}_3.png" "${OUTDIR}/${1}_4.png" -append "${OUTDIR}/${1}.png"
-    done_with_out "${1}_1"
-    done_with_out "${1}_2"
-    done_with_out "${1}_3"
-    done_with_out "${1}_4"
-    done_with_out "$2"
-  } &
-  out_jobs["$1"]=$!
+  sem --id "out_$1" animate4_ "$@"
 }
 
 # S005. DIRECTORY SETUP
@@ -1777,9 +1775,8 @@ out_layer note ${grass_h} "particle/note"
 
 # S900. PACKAGING
 
-for job in "${out_jobs[@]}"; do
-  join_job $job
-done
+echo "All jobs launched; waiting for them to finish..."
+sem --wait --progress
 
 zip -r "debug-${SIZE}.zip" "$DEBUGDIR"
 zip -r "layers-${SIZE}.zip" "$PNG_DIRECTORY"
