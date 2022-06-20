@@ -502,6 +502,7 @@ animate4_ () {
   done_with_out "$2"
   echo "Wrote animated texture $1"
 }
+export -f animate4_
 
 animate4 () {
   sem --id "out_$1" animate4_ "$@"
@@ -512,6 +513,7 @@ convert_ () {
   sem --id inkscape --fg -j4% inkscape -w "$SIZE" -h "$SIZE" "$1.svg" -o "../$PNG_DIRECTORY/$1.png" -y 0.0
   echo "Finished conversion job $1"
 }
+export -f convert_
 
 # S005. DIRECTORY SETUP
 
