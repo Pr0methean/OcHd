@@ -345,44 +345,52 @@ join_output_job () {
 export -f join_output_job
 
 push_ () {
+  args=($*)
   echo "push_ arguments: $*"
-  join_conversion_job "$1"
-  if [ -z ${4+x} ]; then
-    magick "$PNG_DIRECTORY/$1.png" -fill "$2" -colorize 100% "$TMPDIR/$3.png"
+  in_file=${args[0]}
+  fill_color=${args[1]}
+  out_file=${args[2]}
+  join_conversion_job "$in_file"
+  if [ "${#args}" -le 3 ]; then
+    magick "$PNG_DIRECTORY/$in_file.png" -fill "$fill_color" -colorize 100% "$TMPDIR/$out_file.png"
   else
-    magick "$PNG_DIRECTORY/$1.png" \
-                  -fill "$2" -colorize 100% \
-                  -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png"
+    bg_color=${args[3]}
+    magick "$PNG_DIRECTORY/$in_file.png" \
+                  -fill "$fill_color" -colorize 100% \
+                  -background "$bg_color" -alpha remove -alpha off "$TMPDIR/$out_file.png"
   fi
-  echo "Wrote layer $3"
+  echo "Wrote layer $out_file"
 }
 export -f push_
 
 push () {
-  args=("$@")
-  env_parallel --env args -k --bg --id "layer_$3" push_ '${args[@]}'
+  sem --id "layer_$3" push_ "${args[*]}"
   layers+=("$3")
 }
 
 out_layer_ () {
+  args=($*)
   echo "out_layer_ arguments: $*"
-  join_conversion_job "$1"
-  if [ -z ${4+x} ]; then
-    magick "$PNG_DIRECTORY/$1.png" \
-              -fill "$2" -colorize 100% \
+  in_file=${args[0]}
+  fill_color=${args[1]}
+  out_file=${args[2]}
+  join_conversion_job "$in_file"
+  if [ "${#args}" -le 3 ]; then
+    magick "$PNG_DIRECTORY/$in_file.png" \
+              -fill "$fill_color" -colorize 100% \
               "$OUTDIR/$3.png"
   else
-    magick "$PNG_DIRECTORY/$1.png" \
-                  -fill "$2" -colorize 100% \
-                  -background "$4" -alpha remove -alpha off "$OUTDIR/$3.png"
+    bg_color=${args[3]}
+    magick "$PNG_DIRECTORY/$in_file.png" \
+                  -fill "$fill_color" -colorize 100% \
+                  -background "$bg_color" -alpha remove -alpha off "$OUTDIR/$out_file.png"
   fi
-  echo "Wrote single-layer output file $3"
+  echo "Wrote single-layer output file $out_file"
 }
 export -f out_layer_
 
 out_layer () {
-  args=("$@")
-  env_parallel --env args -k --bg --id "out_$3" out_layer_ '${args[@]}'
+  sem --id "out_$3" out_layer_ "$*"
 }
 
 push_precolored_ () {
@@ -398,25 +406,29 @@ push_precolored () {
 }
 
 push_semitrans_ () {
+  args=($*)
   echo "push_semitrans_ arguments: $*"
-  join_conversion_job "$1"
-  if [ -z ${5+x} ]; then
-    magick "$PNG_DIRECTORY/$1.png" \
-              -fill "$2" -colorize 100% \
-              -alpha set -background none -channel A -evaluate multiply "$4" +channel "$TMPDIR/$3.png"
+  in_file=${args[0]}
+  fill_color=${args[1]}
+  out_file=${args[2]}
+  join_conversion_job "$in_file"
+  if [ "${#args}" -le 4 ]; then
+    opacity=${args[3]}
+    magick "$PNG_DIRECTORY/$in_file.png" -fill "$fill_color" -colorize 100% \
+              -alpha set -background none -channel A -evaluate multiply "$opacity" +channel "$TMPDIR/$out_file.png"
   else
-    magick "$PNG_DIRECTORY/$1.png" \
-                  -fill "$2" -colorize 100% \
-                  -background "$4" -alpha remove \
-                  -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png"
+    bg_color=${args[3]}
+    opacity=${args[4]}
+    magick "$PNG_DIRECTORY/$in_file.png" -fill "$fill_color" -colorize 100% \
+                  -background "$bg_color" -alpha remove \
+                  -alpha set -background none -channel A -evaluate multiply "$opacity" +channel "$TMPDIR/$out_file.png"
   fi
-  echo "Wrote semitransparent layer $3"
+  echo "Wrote semitransparent layer $out_file"
 }
 export -f push_semitrans_
 
 push_semitrans () {
-  args=("$@")
-  env_parallel --env args -k --bg --id "layer_$3" push_semitrans_ '${args[@]}'
+  sem --id "layer_$3" push_semitrans_ "$*"
   layers+=("$3")
 }
 
