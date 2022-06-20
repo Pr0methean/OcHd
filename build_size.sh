@@ -328,8 +328,8 @@ music_disc_s='#212121'
 
 # S004. SUBROUTINES
 layer_jobs=()
-declare -A out_jobs
-declare -A conversion_jobs
+declare -a out_jobs
+declare -a conversion_jobs
 layers=()
 
 join_job_ () {
@@ -346,6 +346,12 @@ join_job () {
 join_conversion_job () {
   pid="${conversion_jobs[$1]}"
   echo "Joining conversion job for $1 (id $pid)"
+  join_job_ "$pid"
+}
+
+join_output_job () {
+  pid="${output_jobs[$1]}"
+  echo "Joining output job for $1 (id $pid)"
   join_job_ "$pid"
 }
 
@@ -379,7 +385,7 @@ out_layer () {
                     -background "$4" -alpha remove -alpha off "$OUTDIR/$3.png"
     fi
   } &
-  out_jobs[$3]=$!
+  out_jobs["$3"]=$!
 }
 
 push_precolored () {
@@ -431,12 +437,12 @@ out_stack () {
       mv "$layer" "$DEBUGDIR"
     done
   } &
-  out_jobs[$1]=$!
+  out_jobs["$1"]=$!
 }
 
 push_copy () {
   {
-    join_job out_jobs[$1]
+    join_output_job $1
     ln -T "$OUTDIR/$1.png" "$TMPDIR/$2.png"
   } &
   layer_jobs+=($!)
@@ -445,18 +451,18 @@ push_copy () {
 
 copy () {
   {
-    join_job out_jobs[$1]
+    join_output_job $1
     ln -T "$OUTDIR/$1.png" "$OUTDIR/$2.png"
   } &
-  out_jobs[$2]=$!
+  out_jobs["$2"]=$!
 }
 
 rename_out () {
   {
-    join_job out_jobs[$1]
+    join_output_job $1
     mv "$OUTDIR/$1.png" "$OUTDIR/$2.png"
   } &
-  out_jobs[$2]=$!
+  out_jobs["$2"]=$!
 }
 
 done_with_out () {
@@ -476,7 +482,7 @@ animate4 () {
     done_with_out "${1}_3"
     done_with_out "${1}_4"
   } &
-  out_jobs[$1]=$!
+  out_jobs["$1"]=$!
 }
 
 # S005. DIRECTORY SETUP
@@ -506,7 +512,7 @@ cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
   inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0 &
-  conversion_jobs[$SHORTNAME]=$!
+  conversion_jobs["$SHORTNAME"]=$!
 done
 cd ..
 
