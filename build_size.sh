@@ -384,6 +384,7 @@ out_layer () {
                     -fill "$2" -colorize 100% \
                     -background "$4" -alpha remove -alpha off "$OUTDIR/$3.png"
     fi
+    echo "Wrote output file $3"
   } &
   out_jobs["$3"]=$!
 }
@@ -442,7 +443,7 @@ out_stack () {
 
 push_copy () {
   {
-    join_output_job $1
+    join_output_job "$1"
     ln -T "$OUTDIR/$1.png" "$TMPDIR/$2.png"
   } &
   layer_jobs+=($!)
@@ -451,7 +452,7 @@ push_copy () {
 
 copy () {
   {
-    join_output_job $1
+    join_output_job "$1"
     ln -T "$OUTDIR/$1.png" "$OUTDIR/$2.png"
   } &
   out_jobs["$2"]=$!
@@ -459,7 +460,7 @@ copy () {
 
 rename_out () {
   {
-    join_output_job $1
+    join_output_job "$1"
     mv "$OUTDIR/$1.png" "$OUTDIR/$2.png"
   } &
   out_jobs["$2"]=$!
@@ -481,6 +482,7 @@ animate4 () {
     done_with_out "${1}_2"
     done_with_out "${1}_3"
     done_with_out "${1}_4"
+    done_with_out "$2"
   } &
   out_jobs["$1"]=$!
 }
@@ -511,10 +513,13 @@ echo "Converting layers to PNG..."
 cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
-  until inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0; do
-    echo "Retrying conversion job for ${SHORTNAME}"
-    sleep $((1 + $RANDOM % 10))
-  done &
+  {
+    until inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0; do
+      echo "Retrying conversion job for ${SHORTNAME}"
+      sleep $((1 + $RANDOM % 10))
+    done
+    echo "Finished conversion job for ${SHORTNAME}"
+  } &
   conversion_jobs["${SHORTNAME}"]=$!
 done
 cd ..
@@ -1653,12 +1658,18 @@ rename_out block/command_block_basebase block/command_block_base
 push_copy block/chain_command_block_basebase chcb1
 push_precolored commandBlockChains chcb2
 out_stack block/chain_command_block_base
-done_with_out block/chain_command_block_basebase
+{
+  join_output_job block/chain_command_block_base
+  done_with_out block/chain_command_block_basebase
+} &
 
 push_copy block/repeating_command_block_basebase rcb1
 push loopArrow $black rcb2
 out_stack block/repeating_command_block_base
-done_with_out block/repeating_command_block_basebase
+{
+  join_output_job block/repeating_command_block_base
+  done_with_out block/repeating_command_block_basebase
+} &
 
 for type in "${CMD_BLOCK_TYPES[@]}"; do
   shadow=${type}_s
@@ -1674,8 +1685,7 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
     push "dotsInCross${frame}" $command_block_dot "${type}_${frame}_front2"
     out_stack "block/${type}_front_${frame}"
   done
-  done_with_out "block/${type}_front_base"
-  animate4 "block/${type}_front"
+  animate4 "block/${type}_front" "block/${type}_front_base"
 
   push_copy "block/${type}_base" "${type}_backbase1"
   push commandBlockSquare $black "${type}_backbase2"
@@ -1687,8 +1697,7 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
     push "glider${frame}" $command_block_dot "${type}_${frame}_back2"
     out_stack "block/${type}_back_${frame}"
   done
-  done_with_out "block/${type}_back_base"
-  animate4 "block/${type}_back"
+  animate4 "block/${type}_back" "block/${type}_back_base"
 
   push_copy "block/${type}_base" "${type}_sidebase1"
   push commandBlockArrowUnconditional $black "${type}_sidebase2"
@@ -1700,22 +1709,22 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
     push "glider${frame}" $command_block_dot "${type}_${frame}_side2"
     out_stack "block/${type}_side_${frame}"
   done
-  done_with_out "block/${type}_side_base"
-  animate4 "block/${type}_side"
+  animate4 "block/${type}_side" "block/${type}_side_base"
 
   push_copy "block/${type}_base" "${type}_condbase1"
   push commandBlockArrow $black "${type}_condbase2"
   push craftingGridSpaces $white "${type}_condbase3"
   out_stack "block/${type}_conditional_base"
-  done_with_out "block/${type}_base"
+  {
+    join_output_job "block/${type}_conditional_base"
+    done_with_out "block/${type}_base"
+  } &
 
   for frame in $(seq 1 4); do
     push_copy "block/${type}_conditional_base" "${type}_${frame}_cond1"
     push "glider${frame}" $command_block_dot "${type}_${frame}_cond2"
     out_stack "block/${type}_conditional_${frame}"
-  done
-  done_with_out "block/${type}_conditional_base"
-  animate4 "block/${type}_conditional"
+  animate4 "block/${type}_conditional" "block/${type}_conditional_base"
 done
 
 # Structure & jigsaw blocks
