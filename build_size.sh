@@ -345,7 +345,7 @@ join_output_job () {
 export -f join_output_job
 
 push_ () {
-  echo "push_ arguments: input $1, fill $2, output $3, background $4"
+  echo "push_ arguments: input $1, fill $2, output $3"
   join_conversion_job "$1"
   if [ -z ${4+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" -fill "$2" -colorize 100% "$TMPDIR/$3.png"
@@ -359,7 +359,7 @@ push_ () {
 export -f push_
 
 push () {
-  echo "push arguments: input $1, fill $2, output $3, background $4"
+  echo "push arguments: input $1, fill $2, output $3"
   if [ -z ${4+x} ]; then
     sem --id "layer_$3" --max-args 3 push_ "$1" "$2" "$3"
   else
@@ -369,7 +369,7 @@ push () {
 }
 
 out_layer_ () {
-  echo "out_layer_ arguments: input $1, fill $2, output $3, background $4"
+  echo "out_layer_ arguments: input $1, fill $2, output $3"
   join_conversion_job "$1"
   if [ -z ${4+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" \
