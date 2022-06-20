@@ -430,6 +430,7 @@ out_stack_ () {
   if [ ${#my_layers[@]} -eq 1 ]; then
     ln -T "${my_layers[0]}" "${OUTFILE}"
   else
+    echo "Squashing layers: $my_layers"
     magick "${my_layers[@]/#/-}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
   fi
   echo "Wrote image ${OUTFILE}"
