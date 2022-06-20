@@ -332,9 +332,15 @@ declare -A out_jobs
 declare -A conversion_jobs
 layers=()
 
+join_job () {
+  while ps -p "$1" > /dev/null; do
+    sleep 10
+  done
+}
+
 push () {
   {
-    wait "${conversion_jobs[$1]}" || exit 1
+    join_job "${conversion_jobs[$1]}"
     if [ -z ${4+x} ]; then
       magick "$PNG_DIRECTORY/$1.png" \
                 -fill $2 -colorize 100% \
@@ -351,7 +357,7 @@ push () {
 
 out_layer () {
   {
-    wait "${conversion_jobs[$1]}" || exit 1
+    join_job "${conversion_jobs[$1]}"
     if [ -z ${4+x} ]; then
       magick "$PNG_DIRECTORY/$1.png" \
                 -fill $2 -colorize 100% \
@@ -367,7 +373,7 @@ out_layer () {
 
 push_precolored () {
   {
-    wait "${conversion_jobs[$1]}" || exit 1
+    join_job "${conversion_jobs[$1]}"
     ln -T "$PNG_DIRECTORY/$1.png" "$TMPDIR/$2.png"
   } &
   layer_jobs+=($!)
@@ -377,7 +383,7 @@ push_precolored () {
 
 push_semitrans () {
   {
-    wait "${conversion_jobs[$1]}" || exit 1
+    join_job "${conversion_jobs[$1]}"
     if [ -z ${5+x} ]; then
       magick "$PNG_DIRECTORY/$1.png" \
                 -fill $2 -colorize 100% \
@@ -402,7 +408,7 @@ out_stack () {
 
   {
     for job in "${my_layer_jobs[@]}"; do
-      wait "$job" || exit 1
+      join_job "$job"
     done
     if [ ${#my_layers[@]} -eq 1 ]; then
       ln -T $TMPDIR/*.png "${OUTFILE}"
@@ -419,7 +425,7 @@ out_stack () {
 
 push_copy () {
   {
-    wait out_jobs[$1] || exit 1
+    join_job out_jobs[$1]
     ln -T "$OUTDIR/$1.png" "$TMPDIR/$2.png"
   } &
   layer_jobs+=($!)
@@ -428,7 +434,7 @@ push_copy () {
 
 copy () {
   {
-    wait out_jobs[$1] || exit 1
+    join_job out_jobs[$1]
     ln -T "$OUTDIR/$1.png" "$OUTDIR/$2.png"
   } &
   out_jobs[$2]=$!
@@ -436,7 +442,7 @@ copy () {
 
 rename_out () {
   {
-    wait out_jobs[$1] || exit 1
+    join_job out_jobs[$1]
     mv "$OUTDIR/$1.png" "$OUTDIR/$2.png"
   } &
   out_jobs[$2]=$!
@@ -449,10 +455,10 @@ done_with_out () {
 
 animate4 () {
   {
-    wait out_jobs["${1}_1"] || exit 1
-    wait out_jobs["${1}_2"] || exit 1
-    wait out_jobs["${1}_3"] || exit 1
-    wait out_jobs["${1}_4"] || exit 1
+    join_job out_jobs["${1}_1"]
+    join_job out_jobs["${1}_2"]
+    join_job out_jobs["${1}_3"]
+    join_job out_jobs["${1}_4"]
     convert "${OUTDIR}/${1}_1.png" "${OUTDIR}/${1}_2.png" "${OUTDIR}/${1}_3.png" "${OUTDIR}/${1}_4.png" -append "${OUTDIR}/${1}.png"
     done_with_out "${1}_1"
     done_with_out "${1}_2"
@@ -1745,14 +1751,14 @@ out_layer note ${grass_h} "particle/note"
 # S900. PACKAGING
 
 for job in "${out_jobs[@]}"; do
-  wait $job || exit 1
+  join_job $job
 done
 
 zip -r "debug-${SIZE}.zip" "$DEBUGDIR"
 zip -r "layers-${SIZE}.zip" "$PNG_DIRECTORY"
 
 ZIP_FILE="OcHD-${SIZE}x${SIZE}.zip"
-cd "${OUTROOT}" || exit 1
+cd "${OUTROOT}"
 rm "${ZIP_FILE}" 2>/dev/null || true
 zip -r "${ZIP_FILE}"  ./*
 mv "${ZIP_FILE}" ..
