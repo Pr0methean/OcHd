@@ -512,7 +512,8 @@ cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
   until inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0; do
-    sleep 1
+    echo "Retrying conversion job for ${SHORTNAME}"
+    sleep $((1 + $RANDOM % 10))
   done &
   conversion_jobs["${SHORTNAME}"]=$!
 done
@@ -597,12 +598,15 @@ push diagonalOutlineChecksTopLeftBottomRight ${mycelium_h} mycelium3
 push diagonalOutlineChecksBottomLeftTopRight ${mycelium_s} mycelium4
 out_stack block/mycelium_top
 
-push_copy block/dirt mycelium_side1
-magick "${OUTDIR}/block/mycelium_top.png" -crop '100%x34.375%' "${TMPDIR}/mycelium_side2.png"
-# FIXME: Find a way to not output these
-rm "${TMPDIR}/mycelium_side2-1.png"
-rm "${TMPDIR}/mycelium_side2-2.png"
-out_stack block/mycelium_side
+{
+  join_output_job block/mycelium_top
+  push_copy block/dirt mycelium_side1
+  magick "${OUTDIR}/block/mycelium_top.png" -crop '100%x34.375%' "${TMPDIR}/mycelium_side2.png"
+  # FIXME: Find a way to not output these
+  rm "${TMPDIR}/mycelium_side2-1.png"
+  rm "${TMPDIR}/mycelium_side2-2.png"
+  out_stack block/mycelium_side
+} &
 
 push strokeTopLeftBottomRight4 ${moss_h} moss1 ${moss}
 push strokeBottomLeftTopRight4 ${moss_s} moss2
@@ -1782,3 +1786,5 @@ rm "${ZIP_FILE}" 2>/dev/null || true
 zip -r "${ZIP_FILE}"  ./*
 mv "${ZIP_FILE}" ..
 cd ..
+
+}
