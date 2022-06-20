@@ -486,7 +486,7 @@ mkdir -p "$PNG_DIRECTORY"
 
 echo "Converting layers to PNG..."
 cd svg
-for file in ./*.svg; do
+for file in *.svg; do
   SHORTNAME="${file%.svg}"
   inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0 &
   conversion_jobs[$SHORTNAME]=$!
