@@ -328,8 +328,8 @@ music_disc_s='#212121'
 
 # S004. SUBROUTINES
 layer_jobs=()
-declare -a out_jobs
-declare -a conversion_jobs
+declare -A out_jobs
+declare -A conversion_jobs
 layers=()
 
 join_job_ () {
@@ -512,7 +512,7 @@ cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
   inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0 &
-  conversion_jobs["$SHORTNAME"]=$!
+  conversion_jobs["${SHORTNAME}"]=$!
 done
 cd ..
 
