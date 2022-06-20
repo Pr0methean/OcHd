@@ -365,6 +365,7 @@ push () {
   else
     sem --id "layer_$3" push_ "$1" "$2" "$3" "$4"
   fi
+  layers+=("$3")
 }
 
 out_layer_ () {
@@ -455,6 +456,7 @@ export -f out_stack_
 
 out_stack () {
   sem --id "out_$1" out_stack_ "$1" "${layers[*]}"
+  layers=()
 }
 
 push_copy_ () {
