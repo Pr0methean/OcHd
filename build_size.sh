@@ -327,6 +327,7 @@ music_disc='#404040'
 music_disc_s='#212121'
 
 # S004. SUBROUTINES
+export SHELL=$(type -p bash)
 layer_jobs=()
 layers=()
 
@@ -335,12 +336,14 @@ join_conversion_job () {
   sem --wait --id "convert_$1"
   echo "Done waiting for conversion job $1"
 }
+export -f join_conversion_job
 
 join_output_job () {
   echo "Waiting for output job $1"
   sem --wait --id "out_$1"
   echo "Done waiting for output job $1"
 }
+export -f join_output_job
 
 push_ () {
   join_conversion_job "$1"
@@ -354,6 +357,8 @@ push_ () {
                   -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png"
   fi
 }
+export -f push_
+
 push () {
   sem --id "layer_$3" push_ "$@"
   layer_jobs+=("layer_$3")
@@ -373,6 +378,7 @@ out_layer_ () {
   fi
   echo "Wrote output file $3"
 }
+export -f out_layer_
 
 out_layer () {
   sem --id "out_$3" out_layer_ "$@"
@@ -382,6 +388,7 @@ push_precolored_ () {
   join_conversion_job "$1"
   ln -T "$PNG_DIRECTORY/$1.png" "$TMPDIR/$2.png"
 }
+export -f push_precolored_
 
 push_precolored () {
   sem --id "layer_$2" push_precolored_ "$@"
@@ -402,6 +409,7 @@ push_semitrans_ () {
                   -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png"
   fi
 }
+export -f push_semitrans_
 
 push_semitrans () {
   sem --id "layer_$3" push_semitrans_ "$@"
@@ -426,11 +434,12 @@ out_stack_ () {
     mv "$layer" "$DEBUGDIR"
   done
 }
+export -f out_stack_
 
 out_stack () {
-  my_layer_jobs=("${layer_jobs[@]}")
+  export my_layer_jobs=("${layer_jobs[@]}")
   layer_jobs=()
-  my_layers=("${layers[@]}")
+  export my_layers=("${layers[@]}")
   layers=()
   sem --id "out_$1" out_stack_ "$@"
 }
@@ -439,6 +448,7 @@ push_copy_ () {
   join_output_job "$1"
   ln -T "$OUTDIR/$1.png" "$TMPDIR/$2.png"
 }
+export -f push_copy_
 
 push_copy () {
   sem --id "layer_$2" push_copy_ "$@"
@@ -450,6 +460,7 @@ copy_ () {
   join_output_job "$1"
   ln -T "$OUTDIR/$1.png" "$OUTDIR/$2.png"
 }
+export -f copy_
 
 copy () {
   sem --id "out_$2" copy_ "$@"
@@ -459,6 +470,7 @@ rename_out_ () {
   join_output_job "$1"
   mv "$OUTDIR/$1.png" "$OUTDIR/$2.png"
 }
+export -f rename_out_
 
 rename_out () {
   sem --id "out_$2" rename_out_ "$@"
@@ -467,6 +479,7 @@ rename_out () {
 done_with_out () {
   mv "${OUTDIR}/${1}.png" "${DEBUGDIR}"
 }
+export -f done_with_out
 
 animate4_ () {
   join_output_job "${1}_1"
