@@ -385,7 +385,7 @@ out_layer_ () {
 export -f out_layer_
 
 out_layer () {
-  echo "out_layer_ arguments: input $1, fill $2, output $3"
+  echo "out_layer arguments: input $1, fill $2, output $3"
   if [ -z ${4+x} ]; then
     sem --id "out_$3" --max-args 3 out_layer_ "$1" "$2" "$3"
   else
@@ -435,7 +435,7 @@ push_semitrans () {
 out_stack_ () {
   my_layers=($2)
   layer_files=()
-  echo "Starting output job $1 using layers: $2"
+  echo "out_stack_ args: out file $1, layers ${layers[*]}"
   for layer in "${my_layers[@]}"; do
     layer_files+=("$TMPDIR/$layer.png")
     echo "Waiting for layer job $layer"
