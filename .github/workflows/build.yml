@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     container:
-      image: ghcr.io/pr0methean/inkscapeandimagemagick:main@sha256:694fa1840701d3ec93b7978c8df339e1813a88e82950f6ee79f1e4b929de9d77
+      image: ghcr.io/pr0methean/inkscapeandimagemagick:main@sha256:829a993ad74c47ba884cd38f969238d9076c7ea7bb5990e3d12c8c32c5e2ca08
       env:
         REGISTRY: ghcr.io
         IMAGE_NAME: ${{ github.repository }}
