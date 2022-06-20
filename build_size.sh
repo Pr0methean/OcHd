@@ -360,7 +360,7 @@ export -f push_
 
 push () {
   args=("$@")
-  sem --id "layer_$3" push_ "${args[@]}"
+  env_parallel --env args -k --bg --id "layer_$3" push_ '${args[@]}'
   layers+=("$3")
 }
 
@@ -382,7 +382,7 @@ export -f out_layer_
 
 out_layer () {
   args=("$@")
-  sem --id "out_$3" out_layer_ "${args[@]}"
+  env_parallel --env args -k --bg --id "out_$3" out_layer_ '${args[@]}'
 }
 
 push_precolored_ () {
@@ -416,7 +416,7 @@ export -f push_semitrans_
 
 push_semitrans () {
   args=("$@")
-  sem --id "layer_$3" push_semitrans_ "${args[@]}"
+  env_parallel --env args -k --bg --id "layer_$3" push_semitrans_ '${args[@]}'
   layers+=("$3")
 }
 
