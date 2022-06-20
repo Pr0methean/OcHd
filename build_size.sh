@@ -514,10 +514,7 @@ cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
   {
-    until inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0; do
-      echo "Retrying conversion job for ${SHORTNAME}"
-      sleep $((1 + $RANDOM % 10))
-    done
+    sem -fg -j4% inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0
     echo "Finished conversion job for ${SHORTNAME}"
   } &
   conversion_jobs["${SHORTNAME}"]=$!
