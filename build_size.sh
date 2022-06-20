@@ -327,85 +327,139 @@ music_disc='#404040'
 music_disc_s='#212121'
 
 # S004. SUBROUTINES
+layer_jobs=()
+declare -A out_jobs
+declare -A conversion_jobs
+layers=()
 
 push () {
-  if [ -z ${4+x} ]; then
-    magick "$PNG_DIRECTORY/$1.png" \
-              -fill $2 -colorize 100% \
-              "$TMPDIR/$3.png" &
-  else
-    magick "$PNG_DIRECTORY/$1.png" \
-                  -fill "$2" -colorize 100% \
-                  -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png" &
-  fi
+  {
+    wait "${conversion_jobs[$1]}" || exit 1
+    if [ -z ${4+x} ]; then
+      magick "$PNG_DIRECTORY/$1.png" \
+                -fill $2 -colorize 100% \
+                "$TMPDIR/$3.png" &
+    else
+      magick "$PNG_DIRECTORY/$1.png" \
+                    -fill "$2" -colorize 100% \
+                    -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png" &
+    fi
+  } &
+  layer_jobs+=($!)
+  layers+=("$TMPDIR/$3.png")
 }
 
 out_layer () {
-  if [ -z ${4+x} ]; then
-    magick "$PNG_DIRECTORY/$1.png" \
-              -fill $2 -colorize 100% \
-              "$OUTDIR/$3.png"
-  else
-    magick "$PNG_DIRECTORY/$1.png" \
-                  -fill "$2" -colorize 100% \
-                  -background "$4" -alpha remove -alpha off "$OUTDIR/$3.png"
-  fi
+  {
+    wait "${conversion_jobs[$1]}" || exit 1
+    if [ -z ${4+x} ]; then
+      magick "$PNG_DIRECTORY/$1.png" \
+                -fill $2 -colorize 100% \
+                "$OUTDIR/$3.png"
+    else
+      magick "$PNG_DIRECTORY/$1.png" \
+                    -fill "$2" -colorize 100% \
+                    -background "$4" -alpha remove -alpha off "$OUTDIR/$3.png"
+    fi
+  } &
+  out_jobs[$3]=$!
 }
 
 push_precolored () {
-  ln -T "$PNG_DIRECTORY/$1.png" "$TMPDIR/$2.png"
+  {
+    wait "${conversion_jobs[$1]}" || exit 1
+    ln -T "$PNG_DIRECTORY/$1.png" "$TMPDIR/$2.png"
+  } &
+  layer_jobs+=($!)
+
+  layers+=("$TMPDIR/$2.png")
 }
 
 push_semitrans () {
-  if [ -z ${5+x} ]; then
-    magick "$PNG_DIRECTORY/$1.png" \
-              -fill $2 -colorize 100% \
-              -alpha set -background none -channel A -evaluate multiply "$4" +channel "$TMPDIR/$3.png" &
-  else
-    magick "$PNG_DIRECTORY/$1.png" \
-                  -fill "$2" -colorize 100% \
-                  -background "$4" -alpha remove \
-                  -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png" &
-  fi
+  {
+    wait "${conversion_jobs[$1]}" || exit 1
+    if [ -z ${5+x} ]; then
+      magick "$PNG_DIRECTORY/$1.png" \
+                -fill $2 -colorize 100% \
+                -alpha set -background none -channel A -evaluate multiply "$4" +channel "$TMPDIR/$3.png"
+    else
+      magick "$PNG_DIRECTORY/$1.png" \
+                    -fill "$2" -colorize 100% \
+                    -background "$4" -alpha remove \
+                    -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png"
+    fi
+  } &
+  layer_jobs+=($!)
+  layers+=("$TMPDIR/$3.png")
 }
 
 out_stack () {
-  for job in $(jobs -p); do
-    wait "$job" || exit 1
-  done
-  NUMFILES=$(ls | wc -l)
+  my_layer_jobs=("${layer_jobs[@]}")
+  layer_jobs=()
+  my_layers=("${layers[@]}")
+  layers=()
   OUTFILE="${OUTDIR}/$1.png"
-  if [ $NUMFILES -eq 1 ]; then
-    ln -T $TMPDIR/*.png "${OUTFILE}"
-  else
-    magick $TMPDIR/*.png -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
-  fi
-  echo "Wrote image ${OUTFILE}"
-  mv $TMPDIR/*.png "$DEBUGDIR"
+
+  {
+    for job in "${my_layer_jobs[@]}"; do
+      wait "$job" || exit 1
+    done
+    if [ ${#my_layers[@]} -eq 1 ]; then
+      ln -T $TMPDIR/*.png "${OUTFILE}"
+    else
+      magick "${my_layers[@]/#/-}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
+    fi
+    echo "Wrote image ${OUTFILE}"
+    for layer in "${my_layers[@]}"; do
+      mv "$layer" "$DEBUGDIR"
+    done
+  } &
+  out_jobs[$1]=$!
 }
 
 push_copy () {
-  ln -T "$OUTDIR/$1.png" "$TMPDIR/$2.png"
+  {
+    wait out_jobs[$1] || exit 1
+    ln -T "$OUTDIR/$1.png" "$TMPDIR/$2.png"
+  } &
+  layer_jobs+=($!)
+  layers+=("$TMPDIR/$2.png")
 }
 
 copy () {
-  ln -T "$OUTDIR/$1.png" "$OUTDIR/$2.png"
+  {
+    wait out_jobs[$1] || exit 1
+    ln -T "$OUTDIR/$1.png" "$OUTDIR/$2.png"
+  } &
+  out_jobs[$2]=$!
 }
 
 rename_out () {
-  mv "$OUTDIR/$1.png" "$OUTDIR/$2.png"
+  {
+    wait out_jobs[$1] || exit 1
+    mv "$OUTDIR/$1.png" "$OUTDIR/$2.png"
+  } &
+  out_jobs[$2]=$!
 }
 
 done_with_out () {
   mv "${OUTDIR}/${1}.png" "${DEBUGDIR}"
+  unset "out_jobs[$1]"
 }
 
 animate4 () {
-  convert "${OUTDIR}/${1}_1.png" "${OUTDIR}/${1}_2.png" "${OUTDIR}/${1}_3.png" "${OUTDIR}/${1}_4.png" -append "${OUTDIR}/${1}.png"
-  done_with_out "${1}_1"
-  done_with_out "${1}_2"
-  done_with_out "${1}_3"
-  done_with_out "${1}_4"
+  wait out_jobs["${1}_1"] || exit 1
+  wait out_jobs["${1}_2"] || exit 1
+  wait out_jobs["${1}_3"] || exit 1
+  wait out_jobs["${1}_4"] || exit 1
+  {
+    convert "${OUTDIR}/${1}_1.png" "${OUTDIR}/${1}_2.png" "${OUTDIR}/${1}_3.png" "${OUTDIR}/${1}_4.png" -append "${OUTDIR}/${1}.png"
+    done_with_out "${1}_1"
+    done_with_out "${1}_2"
+    done_with_out "${1}_3"
+    done_with_out "${1}_4"
+  } &
+  out_jobs[$1]=$!
 }
 
 # S005. DIRECTORY SETUP
@@ -434,10 +488,10 @@ echo "Converting layers to PNG..."
 cd svg
 for file in ./*.svg; do
   SHORTNAME="${file%.svg}"
-  inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0
+  inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0 &
+  conversion_jobs[$SHORTNAME]=$!
 done
 cd ..
-echo "All layers converted."
 
 # S009. ITEMS USED IN MULTIPLE CATEGORIES OF BLOCKS
 
@@ -1689,6 +1743,10 @@ out_stack "item/music_disc_11"
 out_layer note ${grass_h} "particle/note"
 
 # S900. PACKAGING
+
+for job in "${out_jobs[@]}"; do
+  wait $job || exit 1
+done
 
 zip -r "debug-${SIZE}.zip" "$DEBUGDIR"
 zip -r "layers-${SIZE}.zip" "$PNG_DIRECTORY"
