@@ -356,6 +356,7 @@ push_ () {
                   -fill "$2" -colorize 100% \
                   -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png"
   fi
+  echo "Wrote layer $3"
 }
 export -f push_
 
@@ -387,6 +388,7 @@ out_layer () {
 push_precolored_ () {
   join_conversion_job "$1"
   ln -T "$PNG_DIRECTORY/$1.png" "$TMPDIR/$2.png"
+  echo "Wrote precolored layer $3"
 }
 export -f push_precolored_
 
@@ -408,6 +410,7 @@ push_semitrans_ () {
                   -background "$4" -alpha remove \
                   -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png"
   fi
+  echo "Wrote layer $3"
 }
 export -f push_semitrans_
 
@@ -445,8 +448,11 @@ out_stack () {
 }
 
 push_copy_ () {
+  echo "Waiting for output job $1"
   join_output_job "$1"
+  echo "Done waiting for output job $1"
   ln -T "$OUTDIR/$1.png" "$TMPDIR/$2.png"
+  echo "Copied output $1 to layer $2"
 }
 export -f push_copy_
 
@@ -482,30 +488,39 @@ done_with_out () {
 export -f done_with_out
 
 animate4_ () {
+  echo "Waiting for frames of $1"
   join_output_job "${1}_1"
   join_output_job "${1}_2"
   join_output_job "${1}_3"
   join_output_job "${1}_4"
+  echo "Frames ready; creating animated texture $1"
   convert "${OUTDIR}/${1}_1.png" "${OUTDIR}/${1}_2.png" "${OUTDIR}/${1}_3.png" "${OUTDIR}/${1}_4.png" -append "${OUTDIR}/${1}.png"
   done_with_out "${1}_1"
   done_with_out "${1}_2"
   done_with_out "${1}_3"
   done_with_out "${1}_4"
   done_with_out "$2"
+  echo "Wrote animated texture $1"
 }
 
 animate4 () {
   sem --id "out_$1" animate4_ "$@"
 }
 
+convert_ () {
+  echo "Starting conversion job $1"
+  sem --id inkscape --fg -j4% inkscape -w "$SIZE" -h "$SIZE" "$1.svg" -o "../$PNG_DIRECTORY/$1.png" -y 0.0
+  echo "Finished conversion job $1"
+}
+
 # S005. DIRECTORY SETUP
 
-SIZE=$1
-PNG_DIRECTORY="png/${SIZE}x${SIZE}"
-TMPDIR="tmp/${SIZE}x${SIZE}"
-DEBUGDIR="debug/${SIZE}x${SIZE}"
-OUTROOT="out/${SIZE}x${SIZE}"
-OUTDIR="${OUTROOT}/assets/minecraft/textures"
+export SIZE=$1
+export PNG_DIRECTORY="png/${SIZE}x${SIZE}"
+export TMPDIR="tmp/${SIZE}x${SIZE}"
+export DEBUGDIR="debug/${SIZE}x${SIZE}"
+export OUTROOT="out/${SIZE}x${SIZE}"
+export OUTDIR="${OUTROOT}/assets/minecraft/textures"
 rm -rf "$OUTDIR" || true
 mkdir -p "$OUTDIR"
 mkdir "$OUTDIR/block"
@@ -524,8 +539,8 @@ echo "Converting layers to PNG..."
 cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
-  echo "Launching conversion job for ${SHORTNAME}"
-  sem --id "convert_${SHORTNAME}" sem --id inkscape --fg -j4% inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0
+  echo "Scheduling conversion∂ job for ${SHORTNAME}"
+  sem --id "convert_$1" convert_ $1
 done
 cd ..
 
