@@ -516,10 +516,10 @@ convert_ () {
 # S005. DIRECTORY SETUP
 
 export SIZE=$1
-export PNG_DIRECTORY="png/${SIZE}x${SIZE}"
-export TMPDIR="tmp/${SIZE}x${SIZE}"
-export DEBUGDIR="debug/${SIZE}x${SIZE}"
-export OUTROOT="out/${SIZE}x${SIZE}"
+export PNG_DIRECTORY="$(pwd)/png/${SIZE}x${SIZE}"
+export TMPDIR="$(pwd)/tmp/${SIZE}x${SIZE}"
+export DEBUGDIR="$(pwd)/debug/${SIZE}x${SIZE}"
+export OUTROOT="$(pwd)/out/${SIZE}x${SIZE}"
 export OUTDIR="${OUTROOT}/assets/minecraft/textures"
 rm -rf "$OUTDIR" || true
 mkdir -p "$OUTDIR"
@@ -539,8 +539,8 @@ echo "Converting layers to PNG..."
 cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
-  echo "Scheduling conversion∂ job for ${SHORTNAME}"
-  sem --id "convert_$1" convert_ $1
+  echo "Scheduling conversion job for ${SHORTNAME}"
+  sem --id "convert_$SHORTNAME" convert_ "$SHORTNAME"
 done
 cd ..
 
