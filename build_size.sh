@@ -361,8 +361,7 @@ export -f push_
 
 push () {
   sem --id "layer_$3" push_ "$@"
-  layer_jobs+=("$3")
-  layers+=("$TMPDIR/$3.png")
+  layers+=("$3")
 }
 
 out_layer_ () {
@@ -393,8 +392,7 @@ export -f push_precolored_
 
 push_precolored () {
   sem --id "layer_$2" push_precolored_ "$@"
-  layer_jobs+=("$2")
-  layers+=("$TMPDIR/$2.png")
+  layers+=("$2")
 }
 
 push_semitrans_ () {
@@ -415,20 +413,20 @@ export -f push_semitrans_
 
 push_semitrans () {
   sem --id "layer_$3" push_semitrans_ "$@"
-  layer_jobs+=("$3")
+  layers+=("$3")
 }
 
 out_stack_ () {
-  layers=${@:2}
+  layers=("${@:2}")
   layer_files=()
   for layer in "${layers[@]}"; do
     layer_files+=("$TMPDIR/$layer.png")
-    echo "Waiting for layer job $job"
-    sem --wait --id "layer_$job"
+    echo "Waiting for layer job $layer"
+    sem --wait --id "layer_$layer"
   done
   OUTFILE="${OUTDIR}/$1.png"
   if [ ${#layers[@]} -eq 1 ]; then
-    ln -T "${my_layers[0]}" "${OUTFILE}"
+    ln -T "${layer_files[0]}" "${OUTFILE}"
   else
     echo "Building output $1 from layers: ${layer_files[*]}"
     magick "${layer_files[@]/#/-}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
@@ -457,8 +455,7 @@ export -f push_copy_
 
 push_copy () {
   sem --id "layer_$2" push_copy_ "$@"
-  layer_jobs+=("layer_$2")
-  layers+=("$TMPDIR/$2.png")
+  layers+=("$2")
 }
 
 copy_ () {
