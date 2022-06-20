@@ -510,7 +510,7 @@ animate4 () {
 
 convert_ () {
   echo "Starting conversion job $1"
-  sem --id inkscape --fg -j4% inkscape -w "$SIZE" -h "$SIZE" "$1.svg" -o "../$PNG_DIRECTORY/$1.png" -y 0.0
+  sem --id inkscape --fg -j4% inkscape -w "$SIZE" -h "$SIZE" "$SVG_DIRECTORY/$1.svg" -o "$PNG_DIRECTORY/$1.png" -y 0.0
   echo "Finished conversion job $1"
 }
 export -f convert_
@@ -518,6 +518,7 @@ export -f convert_
 # S005. DIRECTORY SETUP
 
 export SIZE=$1
+export SVG_DIRECTORY="$(pwd)/svg"
 export PNG_DIRECTORY="$(pwd)/png/${SIZE}x${SIZE}"
 export TMPDIR="$(pwd)/tmp/${SIZE}x${SIZE}"
 export DEBUGDIR="$(pwd)/debug/${SIZE}x${SIZE}"
