@@ -344,9 +344,9 @@ join_job () {
 }
 
 join_conversion_job () {
-  pid="${conversion_jobs[$1]}"
-  echo "Joining conversion job for $1 (id $pid)"
-  join_job_ "$pid"
+  echo "Joining conversion job for ${SHORTNAME}"
+  sem --wait --id "convert_${SHORTNAME}"
+  echo "Joined conversion job for ${SHORTNAME}"
 }
 
 join_output_job () {
@@ -361,11 +361,11 @@ push () {
     if [ -z ${4+x} ]; then
       magick "$PNG_DIRECTORY/$1.png" \
                 -fill "$2" -colorize 100% \
-                "$TMPDIR/$3.png" &
+                "$TMPDIR/$3.png"
     else
       magick "$PNG_DIRECTORY/$1.png" \
                     -fill "$2" -colorize 100% \
-                    -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png" &
+                    -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png"
     fi
   } &
   layer_jobs+=($!)
@@ -513,12 +513,8 @@ echo "Converting layers to PNG..."
 cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
-  {
-    echo "Waiting to start conversion job for ${SHORTNAME}"
-    sem --id inkscape --fg -j4% inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0
-    echo "Finished conversion job for ${SHORTNAME}"
-  } &
-  conversion_jobs["${SHORTNAME}"]=$!
+  echo "Launching conversion job for ${SHORTNAME}"
+  sem --id "convert_${SHORTNAME}" sem --id inkscape --fg -j4% inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0
 done
 cd ..
 
