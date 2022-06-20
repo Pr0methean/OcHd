@@ -448,11 +448,11 @@ done_with_out () {
 }
 
 animate4 () {
-  wait out_jobs["${1}_1"] || exit 1
-  wait out_jobs["${1}_2"] || exit 1
-  wait out_jobs["${1}_3"] || exit 1
-  wait out_jobs["${1}_4"] || exit 1
   {
+    wait out_jobs["${1}_1"] || exit 1
+    wait out_jobs["${1}_2"] || exit 1
+    wait out_jobs["${1}_3"] || exit 1
+    wait out_jobs["${1}_4"] || exit 1
     convert "${OUTDIR}/${1}_1.png" "${OUTDIR}/${1}_2.png" "${OUTDIR}/${1}_3.png" "${OUTDIR}/${1}_4.png" -append "${OUTDIR}/${1}.png"
     done_with_out "${1}_1"
     done_with_out "${1}_2"
