@@ -333,7 +333,7 @@ declare -A conversion_jobs
 layers=()
 
 join_job () {
-  while ps -p "$1" > /dev/null; do
+  while (ps -p "$1" > /dev/null); do
     sleep 10
   done
 }
