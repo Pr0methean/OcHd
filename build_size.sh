@@ -328,7 +328,7 @@ music_disc_s='#212121'
 
 # S004. SUBROUTINES
 
-layer () {
+push () {
   if [ -z ${4+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" \
               -fill $2 -colorize 100% \
@@ -340,11 +340,23 @@ layer () {
   fi
 }
 
-layer_precolored () {
+out_layer () {
+  if [ -z ${4+x} ]; then
+    magick "$PNG_DIRECTORY/$1.png" \
+              -fill $2 -colorize 100% \
+              "$OUTDIR/$3.png" &
+  else
+    magick "$PNG_DIRECTORY/$1.png" \
+                  -fill "$2" -colorize 100% \
+                  -background "$4" -alpha remove -alpha off "$OUTDIR/$3.png" &
+  fi
+}
+
+push_precolored () {
   ln -T "$PNG_DIRECTORY/$1.png" "$TMPDIR/$2.png"
 }
 
-layer_semitrans () {
+push_semitrans () {
   if [ -z ${5+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" \
               -fill $2 -colorize 100% \
@@ -357,7 +369,7 @@ layer_semitrans () {
   fi
 }
 
-stack () {
+out_stack () {
   for job in $(jobs -p); do
     wait "$job" || exit 1
   done
@@ -372,24 +384,28 @@ stack () {
   mv $TMPDIR/*.png "$DEBUGDIR"
 }
 
-copy () {
+push_copy () {
   ln -T "$OUTDIR/$1.png" "$TMPDIR/$2.png"
 }
 
-move () {
+copy () {
+  ln -T "$OUTDIR/$1.png" "$OUTDIR/$2.png"
+}
+
+rename_out () {
   mv "$OUTDIR/$1.png" "$OUTDIR/$2.png"
 }
 
-donewith () {
+done_with_out () {
   mv "${OUTDIR}/${1}.png" "${DEBUGDIR}"
 }
 
 animate4 () {
   convert "${OUTDIR}/${1}_1.png" "${OUTDIR}/${1}_2.png" "${OUTDIR}/${1}_3.png" "${OUTDIR}/${1}_4.png" -append "${OUTDIR}/${1}.png"
-  donewith "${1}_1"
-  donewith "${1}_2"
-  donewith "${1}_3"
-  donewith "${1}_4"
+  done_with_out "${1}_1"
+  done_with_out "${1}_2"
+  done_with_out "${1}_3"
+  done_with_out "${1}_4"
 }
 
 # S005. DIRECTORY SETUP
@@ -427,658 +443,651 @@ echo "All layers converted."
 
 # Bones and bone meal
 
-layer_precolored bonemealSmall bonemeal1
-stack item/bone_meal
+push_precolored bonemealSmall bonemeal1
+out_stack item/bone_meal
 
-layer boneBottomLeftTopRight $bone_block_h bone1
-stack item/bone
+out_layer boneBottomLeftTopRight $bone_block_h item/bone
 
 # S010. SHOVEL BLOCKS
 
 # Soft earth
 
-layer dots3 $dirt_s dirt1 $dirt
-layer dots2 $dirt_h dirt2
-stack block/dirt
+push dots3 $dirt_s dirt1 $dirt
+push dots2 $dirt_h dirt2
+out_stack block/dirt
 
-layer checksLarge ${gravel_s} gravel1 ${gravel}
-layer checksLargeOutline ${gravel_h} gravel2
-stack block/gravel
+push checksLarge ${gravel_s} gravel1 ${gravel}
+push checksLargeOutline ${gravel_h} gravel2
+out_stack block/gravel
 
-layer checksSmall ${sand_s} sand1 ${sand}
-layer checksSmallOutline ${sand_h} sand2
-stack block/sand
+push checksSmall ${sand_s} sand1 ${sand}
+push checksSmallOutline ${sand_h} sand2
+out_stack block/sand
 
-layer checksSmall ${red_sand_h} rsand1 ${red_sand}
-layer checksSmallOutline ${red_sand_s} rsand2
-stack block/red_sand
+push checksSmall ${red_sand_h} rsand1 ${red_sand}
+push checksSmallOutline ${red_sand_s} rsand2
+out_stack block/red_sand
 
-layer diagonalChecksTopLeftBottomRight ${clay_s} clay1 ${clay}
-layer diagonalChecksBottomLeftTopRight ${clay_h} clay2
-layer diagonalOutlineChecksTopLeftBottomRight ${clay_h} clay3
-layer diagonalOutlineChecksBottomLeftTopRight ${clay_s} clay4
-stack block/clay
+push diagonalChecksTopLeftBottomRight ${clay_s} clay1 ${clay}
+push diagonalChecksBottomLeftTopRight ${clay_h} clay2
+push diagonalOutlineChecksTopLeftBottomRight ${clay_h} clay3
+push diagonalOutlineChecksBottomLeftTopRight ${clay_s} clay4
+out_stack block/clay
 
 # Nether
 
-layer borderSolid ${soul_sand_s} ssand1 ${soul_sand}
-layer checksSmall ${soul_sand_h} ssand2
-layer soulHeads ${soul_sand_s} ssand3
-layer soulTopLeftFace ${soul_sand_h} ssand4
-layer soulBottomRightFace ${soul_sand_h} ssand5
-stack block/soul_sand
+push borderSolid ${soul_sand_s} ssand1 ${soul_sand}
+push checksSmall ${soul_sand_h} ssand2
+push soulHeads ${soul_sand_s} ssand3
+push soulTopLeftFace ${soul_sand_h} ssand4
+push soulBottomRightFace ${soul_sand_h} ssand5
+out_stack block/soul_sand
 
-layer borderSolid ${soul_soil} ssoil0 ${soul_soil_s}
-layer strokeBottomLeftTopRight4 ${soul_soil_h} ssoil1
-layer soulHeads ${soul_soil} ssoil3
-layer soulTopLeftFace ${soul_soil_h} ssoil4
-layer soulBottomRightFace ${soul_soil_s} ssoil5
-stack block/soul_soil
+push borderSolid ${soul_soil} ssoil0 ${soul_soil_s}
+push strokeBottomLeftTopRight4 ${soul_soil_h} ssoil1
+push soulHeads ${soul_soil} ssoil3
+push soulTopLeftFace ${soul_soil_h} ssoil4
+push soulBottomRightFace ${soul_soil_s} ssoil5
+out_stack block/soul_soil
 
 # Ground covers
 
-layer vees $grass_s grass $grass_h
-stack block/grass_block_top
+out_layer vees $grass_s block/grass_block_top $grass_h
 
-layer topPart $grass_h grass_side_ol1
-layer veesTop $grass_s grass_side_ol2
-stack block/grass_block_side_overlay
+push topPart $grass_h grass_side_ol1
+push veesTop $grass_s grass_side_ol2
+out_stack block/grass_block_side_overlay
 
-copy block/dirt grass_side_1
-layer topPart $grass_item_h grass_side_2
-layer veesTop $grass_item_s grass_side_3
-stack block/grass_block_side
+push_copy block/dirt grass_side_1
+push topPart $grass_item_h grass_side_2
+push veesTop $grass_item_s grass_side_3
+out_stack block/grass_block_side
 
-layer zigzagBroken ${podzol_h} podzol1 ${podzol}
-layer borderDotted ${podzol_s} podzol2
-stack block/podzol_top
+push zigzagBroken ${podzol_h} podzol1 ${podzol}
+push borderDotted ${podzol_s} podzol2
+out_stack block/podzol_top
 
-copy block/dirt podzol_side1
-layer topPart $podzol podzol_side2
-layer zigzagBrokenTopPart ${podzol_h} podzol_side3
-stack block/podzol_side
+push_copy block/dirt podzol_side1
+push topPart $podzol podzol_side2
+push zigzagBrokenTopPart ${podzol_h} podzol_side3
+out_stack block/podzol_side
 
-layer diagonalChecksTopLeftBottomRight ${mycelium_s} mycelium1 ${mycelium}
-layer diagonalChecksBottomLeftTopRight ${mycelium_h} mycelium2
-layer diagonalOutlineChecksTopLeftBottomRight ${mycelium_h} mycelium3
-layer diagonalOutlineChecksBottomLeftTopRight ${mycelium_s} mycelium4
-stack block/mycelium_top
+push diagonalChecksTopLeftBottomRight ${mycelium_s} mycelium1 ${mycelium}
+push diagonalChecksBottomLeftTopRight ${mycelium_h} mycelium2
+push diagonalOutlineChecksTopLeftBottomRight ${mycelium_h} mycelium3
+push diagonalOutlineChecksBottomLeftTopRight ${mycelium_s} mycelium4
+out_stack block/mycelium_top
 
-copy block/dirt mycelium_side1
+push_copy block/dirt mycelium_side1
 magick "${OUTDIR}/block/mycelium_top.png" -crop '100%x34.375%' "${TMPDIR}/mycelium_side2.png"
 # FIXME: Find a way to not output these
 rm "${TMPDIR}/mycelium_side2-1.png"
 rm "${TMPDIR}/mycelium_side2-2.png"
-stack block/mycelium_side
+out_stack block/mycelium_side
 
-layer strokeTopLeftBottomRight4 ${moss_h} moss1 ${moss}
-layer strokeBottomLeftTopRight4 ${moss_s} moss2
-layer borderSolid ${moss_h} moss3
-layer borderShortDashes ${moss_s} moss4
-stack block/moss_block
+push strokeTopLeftBottomRight4 ${moss_h} moss1 ${moss}
+push strokeBottomLeftTopRight4 ${moss_s} moss2
+push borderSolid ${moss_h} moss3
+push borderShortDashes ${moss_s} moss4
+out_stack block/moss_block
 
-layer strokeTopLeftBottomRight2 ${mud_h} mud1 ${mud}
-layer strokeBottomLeftTopRight2 ${mud_s} mud2
-layer borderSolid ${mud_h} mud3
-layer borderDotted ${mud_s} mud4
-stack block/mud
+push strokeTopLeftBottomRight2 ${mud_h} mud1 ${mud}
+push strokeBottomLeftTopRight2 ${mud_s} mud2
+push borderSolid ${mud_h} mud3
+push borderDotted ${mud_s} mud4
+out_stack block/mud
 
-layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
-layer strokeBottomLeftTopRight2 ${mud_brick_s} mb2
-layer borderDotted ${mud_h} mb4
-stack block/packed_mud
+push strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
+push strokeBottomLeftTopRight2 ${mud_brick_s} mb2
+push borderDotted ${mud_h} mb4
+out_stack block/packed_mud
 
-layer snow ${snow_s} snow1 ${snow}
-stack block/snow
+out_layer snow ${snow_s} block/snow ${snow}
 
-copy block/dirt snow_side_1
-layer topPart ${snow} snow_side_2
-layer snowTopPart ${snow_s} snow_side_3
-stack block/grass_block_snow
+push_copy block/dirt snow_side_1
+push topPart ${snow} snow_side_2
+push snowTopPart ${snow_s} snow_side_3
+out_stack block/grass_block_snow
 
 # Concrete powder
 
 for dye in "${DYES[@]}"; do
-  layer empty "${!dye}" "${dye}_conc1" "${!dye}"
-  layer_semitrans checksSmall ${gray} "${dye}_conc2" 0.25
-  layer_semitrans checksSmall ${light_gray} "${dye}_conc3" 0.25
-  stack "block/${dye}_concrete_powder"
+  push empty "${!dye}" "${dye}_conc1" "${!dye}"
+  push_semitrans checksSmall ${gray} "${dye}_conc2" 0.25
+  push_semitrans checksSmall ${light_gray} "${dye}_conc3" 0.25
+  out_stack "block/${dye}_concrete_powder"
 done
 
-layer bambooThick ${farmland} farmland1 ${farmland_h}
-layer bambooThinMinusBorder ${farmland_s} farmland2
-stack "block/farmland"
+push bambooThick ${farmland} farmland1 ${farmland_h}
+push bambooThinMinusBorder ${farmland_s} farmland2
+out_stack "block/farmland"
 
-layer bambooThick ${farmland_moist} mfarmland1 ${farmland_moist_h}
-layer bambooThinMinusBorder ${farmland_moist_s} mfarmland2
-layer dots0 ${stone_s} mfarmland3
-stack "block/farmland_moist"
+push bambooThick ${farmland_moist} mfarmland1 ${farmland_moist_h}
+push bambooThinMinusBorder ${farmland_moist_s} mfarmland2
+push dots0 ${stone_s} mfarmland3
+out_stack "block/farmland_moist"
 
 # S020. PICKAXE BLOCKS
 
 # Rock - Overworld
 
-layer checksLarge $stone_h stone $stone_s
-stack block/stone
+out_layer checksLarge $stone_h block/stone $stone_s
 
-layer borderSolid $stone_ss stone2 $stone
-stack block/smooth_stone
+out_layer borderSolid $stone_ss block/smooth_stone $stone
 
-layer checksLarge $stone_s cobblestone1 $stone_h
-layer checksSmall $stone cobblestone2
-layer borderSolid $stone_hh cobblestone3
-layer borderShortDashes $stone_ss cobblestone6
-stack block/cobblestone
+push checksLarge $stone_s cobblestone1 $stone_h
+push checksSmall $stone cobblestone2
+push borderSolid $stone_hh cobblestone3
+push borderShortDashes $stone_ss cobblestone6
+out_stack block/cobblestone
 
-copy block/cobblestone mcs1
-layer dots3 ${moss_h} mcs4
-layer dots2 ${moss_s} mcs5
-layer dots1 ${moss} mcs6
-layer borderSolid ${moss_h} mcs10
-layer borderShortDashes ${moss_s} mcs11
-stack block/mossy_cobblestone
+push_copy block/cobblestone mcs1
+push dots3 ${moss_h} mcs4
+push dots2 ${moss_s} mcs5
+push dots1 ${moss} mcs6
+push borderSolid ${moss_h} mcs10
+push borderShortDashes ${moss_s} mcs11
+out_stack block/mossy_cobblestone
 
-layer checksLarge $deepslate_h deepslate1 $deepslate_s
-layer checksSmall $deepslate deepslate2
-stack block/cobbled_deepslate
+push checksLarge $deepslate_h deepslate1 $deepslate_s
+push checksSmall $deepslate deepslate2
+out_stack block/cobbled_deepslate
 
-layer diagonalChecksBottomLeftTopRight $deepslate_h deep1 $deepslate
-layer diagonalChecksTopLeftBottomRight $deepslate_s deep2
-stack block/deepslate
+push diagonalChecksBottomLeftTopRight $deepslate_h deep1 $deepslate
+push diagonalChecksTopLeftBottomRight $deepslate_s deep2
+out_stack block/deepslate
 
-copy block/deepslate deeptop0
-layer borderSolid ${deepslate_s} deeptop11
-layer borderDotted ${deepslate_h} deeptop12
-stack block/deepslate_top
+push_copy block/deepslate deeptop0
+push borderSolid ${deepslate_s} deeptop11
+push borderDotted ${deepslate_h} deeptop12
+out_stack block/deepslate_top
 
-layer checksLarge ${sand_s} sandstone1 ${sand}
-layer borderLongDashes ${sand_h} sandstone2
-stack block/sandstone_bottom
+push checksLarge ${sand_s} sandstone1 ${sand}
+push borderLongDashes ${sand_h} sandstone2
+out_stack block/sandstone_bottom
 
-copy block/sandstone_bottom sandstonetop1
-layer borderSolidThick ${sand_s} sandstonetop2
-layer borderSolid ${sand_h} sandstonetop3
-stack block/sandstone_top
+push_copy block/sandstone_bottom sandstonetop1
+push borderSolidThick ${sand_s} sandstonetop2
+push borderSolid ${sand_h} sandstonetop3
+out_stack block/sandstone_top
 
-layer topPart ${sand_s} sandstoneside1 ${sand}
-layer borderSolid ${sand_s} sandstoneside2
-layer topStripeThick ${sand_h} sandstoneside3
-layer borderShortDashes ${sand_h} sandstoneside4
-stack block/sandstone
+push topPart ${sand_s} sandstoneside1 ${sand}
+push borderSolid ${sand_s} sandstoneside2
+push topStripeThick ${sand_h} sandstoneside3
+push borderShortDashes ${sand_h} sandstoneside4
+out_stack block/sandstone
 
-layer checksLarge ${sand_h} csandstone1 ${sand}
-layer borderSolid ${sand_s} csandstone2
-layer borderSolidTopLeft ${sand_h} csandstone3
-stack block/cut_sandstone
+push checksLarge ${sand_h} csandstone1 ${sand}
+push borderSolid ${sand_s} csandstone2
+push borderSolidTopLeft ${sand_h} csandstone3
+out_stack block/cut_sandstone
 
-copy block/cut_sandstone chsandstone1
-layer creeperFaceSmall ${sand_s} chsandstone4
-stack block/chiseled_sandstone
+push_copy block/cut_sandstone chsandstone1
+push creeperFaceSmall ${sand_s} chsandstone4
+out_stack block/chiseled_sandstone
 
-layer checksLarge ${red_sand_h} rsandstone1 ${red_sand}
-layer borderLongDashes ${red_sand_s} rsandstone2
-stack block/red_sandstone_bottom
+push checksLarge ${red_sand_h} rsandstone1 ${red_sand}
+push borderLongDashes ${red_sand_s} rsandstone2
+out_stack block/red_sandstone_bottom
 
-copy block/red_sandstone_bottom rsandstonetop1
-layer borderSolidThick ${red_sand_h} rsandstonetop2
-layer borderSolid ${red_sand_s} rsandstonetop3
-stack block/red_sandstone_top
+push_copy block/red_sandstone_bottom rsandstonetop1
+push borderSolidThick ${red_sand_h} rsandstonetop2
+push borderSolid ${red_sand_s} rsandstonetop3
+out_stack block/red_sandstone_top
 
-layer topPart ${red_sand_s} rsandstoneside1 ${red_sand}
-layer borderSolid ${red_sand_h} rsandstoneside2
-layer topStripeThick ${red_sand_h} rsandstoneside3
-layer borderShortDashes ${red_sand_s} rsandstoneside4
-stack block/red_sandstone
+push topPart ${red_sand_s} rsandstoneside1 ${red_sand}
+push borderSolid ${red_sand_h} rsandstoneside2
+push topStripeThick ${red_sand_h} rsandstoneside3
+push borderShortDashes ${red_sand_s} rsandstoneside4
+out_stack block/red_sandstone
 
-layer checksLarge ${red_sand_h} rcsandstone1 ${red_sand}
-layer borderSolid ${red_sand_s} rcsandstone2
-layer borderSolidTopLeft ${red_sand_h} rcsandstone3
-stack block/cut_red_sandstone
+push checksLarge ${red_sand_h} rcsandstone1 ${red_sand}
+push borderSolid ${red_sand_s} rcsandstone2
+push borderSolidTopLeft ${red_sand_h} rcsandstone3
+out_stack block/cut_red_sandstone
 
-copy block/cut_red_sandstone chrsandstone1
-layer witherSymbol ${red_sand_s} chrsandstone2
-stack block/chiseled_red_sandstone
+push_copy block/cut_red_sandstone chrsandstone1
+push witherSymbol ${red_sand_s} chrsandstone2
+out_stack block/chiseled_red_sandstone
 
-layer bigRingsBottomLeftTopRight ${andesite_h} a1 ${andesite}
-layer bigRingsTopLeftBottomRight ${andesite_s} a2
-stack block/andesite
+push bigRingsBottomLeftTopRight ${andesite_h} a1 ${andesite}
+push bigRingsTopLeftBottomRight ${andesite_s} a2
+out_stack block/andesite
 
-copy block/andesite ap1
-layer borderSolidBottomRight ${andesite_s} ap2
-layer borderSolidTopLeft ${andesite_h} ap3
-stack block/polished_andesite
+push_copy block/andesite ap1
+push borderSolidBottomRight ${andesite_s} ap2
+push borderSolidTopLeft ${andesite_h} ap3
+out_stack block/polished_andesite
 
-layer bigRingsBottomLeftTopRight ${diorite_s} d1 ${diorite}
-layer bigRingsTopLeftBottomRight ${diorite_h} d2
-stack block/diorite
+push bigRingsBottomLeftTopRight ${diorite_s} d1 ${diorite}
+push bigRingsTopLeftBottomRight ${diorite_h} d2
+out_stack block/diorite
 
-copy block/diorite dp1
-layer borderSolidBottomRight ${diorite_s} dp2
-layer borderSolidTopLeft ${diorite_h} dp3
-stack block/polished_diorite
+push_copy block/diorite dp1
+push borderSolidBottomRight ${diorite_s} dp2
+push borderSolidTopLeft ${diorite_h} dp3
+out_stack block/polished_diorite
 
-layer bigDotsBottomLeftTopRight ${granite_s} g11 ${granite}
-layer bigDotsTopLeftBottomRight ${granite_h} g12
-layer bigRingsBottomLeftTopRight ${granite_h} g21
-layer bigRingsTopLeftBottomRight ${granite_s} g22
-stack block/granite
+push bigDotsBottomLeftTopRight ${granite_s} g11 ${granite}
+push bigDotsTopLeftBottomRight ${granite_h} g12
+push bigRingsBottomLeftTopRight ${granite_h} g21
+push bigRingsTopLeftBottomRight ${granite_s} g22
+out_stack block/granite
 
-copy block/granite gp1
-layer borderSolidBottomRight ${granite_s} gp2
-layer borderSolidTopLeft ${granite_h} gp3
-stack block/polished_granite
+push_copy block/granite gp1
+push borderSolidBottomRight ${granite_s} gp2
+push borderSolidTopLeft ${granite_h} gp3
+out_stack block/polished_granite
 
 # Rock - Nether
 
-layer diagonalOutlineChecksTopLeftBottomRight $netherrack_s nether1 $netherrack
-layer diagonalOutlineChecksBottomLeftTopRight $netherrack_h nether2
-stack block/netherrack
+push diagonalOutlineChecksTopLeftBottomRight $netherrack_s nether1 $netherrack
+push diagonalOutlineChecksBottomLeftTopRight $netherrack_h nether2
+out_stack block/netherrack
 
-layer strokeTopLeftBottomRight2 ${warped_nylium_h} wnylium1 ${warped_nylium}
-layer strokeBottomLeftTopRight2 ${warped_nylium_s} wnylium2
-layer borderShortDashes ${warped_nylium_s} wnylium3
-stack block/warped_nylium
+push strokeTopLeftBottomRight2 ${warped_nylium_h} wnylium1 ${warped_nylium}
+push strokeBottomLeftTopRight2 ${warped_nylium_s} wnylium2
+push borderShortDashes ${warped_nylium_s} wnylium3
+out_stack block/warped_nylium
 
-copy block/netherrack wnyliums1
-layer topPart ${warped_nylium} wnyliums2
-layer strokeTopLeftBottomRight2TopPart ${warped_nylium_h} wnyliums3
-layer strokeBottomLeftTopRight2TopPart ${warped_nylium_s} wnyliums4
-stack block/warped_nylium_side
+push_copy block/netherrack wnyliums1
+push topPart ${warped_nylium} wnyliums2
+push strokeTopLeftBottomRight2TopPart ${warped_nylium_h} wnyliums3
+push strokeBottomLeftTopRight2TopPart ${warped_nylium_s} wnyliums4
+out_stack block/warped_nylium_side
 
-layer strokeTopLeftBottomRight2 ${crimson_nylium_s} cnylium1 ${crimson_nylium}
-layer strokeBottomLeftTopRight2 ${crimson_nylium_h} cnylium2
-layer borderLongDashes ${crimson_nylium_h} cnylium3
-stack block/crimson_nylium
+push strokeTopLeftBottomRight2 ${crimson_nylium_s} cnylium1 ${crimson_nylium}
+push strokeBottomLeftTopRight2 ${crimson_nylium_h} cnylium2
+push borderLongDashes ${crimson_nylium_h} cnylium3
+out_stack block/crimson_nylium
 
-copy block/netherrack cnyliums1
-layer topPart ${crimson_nylium} cnyliums2
-layer strokeTopLeftBottomRight2TopPart ${crimson_nylium_s} cnyliums3
-layer strokeBottomLeftTopRight2TopPart ${crimson_nylium_h} cnyliums4
-stack block/crimson_nylium_side
+push_copy block/netherrack cnyliums1
+push topPart ${crimson_nylium} cnyliums2
+push strokeTopLeftBottomRight2TopPart ${crimson_nylium_s} cnyliums3
+push strokeBottomLeftTopRight2TopPart ${crimson_nylium_h} cnyliums4
+out_stack block/crimson_nylium_side
 
-layer bigDotsBottomLeftTopRight ${blackstone_h} bss1 ${blackstone_s}
-layer bigDotsTopLeftBottomRight ${blackstone_h} bss2
-stack block/blackstone
+push bigDotsBottomLeftTopRight ${blackstone_h} bss1 ${blackstone_s}
+push bigDotsTopLeftBottomRight ${blackstone_h} bss2
+out_stack block/blackstone
 
-layer bigRingsBottomLeftTopRight ${blackstone_h} bst1 ${blackstone}
-layer bigRingsTopLeftBottomRight ${blackstone_s} bst2
-stack block/blackstone_top
+push bigRingsBottomLeftTopRight ${blackstone_h} bst1 ${blackstone}
+push bigRingsTopLeftBottomRight ${blackstone_s} bst2
+out_stack block/blackstone_top
 
-copy block/blackstone gbs0
-layer bigRingsBottomLeftTopRight ${gold} gbs1
-stack block/gilded_blackstone
+push_copy block/blackstone gbs0
+push bigRingsBottomLeftTopRight ${gold} gbs1
+out_stack block/gilded_blackstone
 
-copy block/blackstone pbs1
-layer borderSolidBottomRight ${blackstone_s} pbs2
-layer borderSolidTopLeft ${blackstone_h} pbs3
-stack block/polished_blackstone
+push_copy block/blackstone pbs1
+push borderSolidBottomRight ${blackstone_s} pbs2
+push borderSolidTopLeft ${blackstone_h} pbs3
+out_stack block/polished_blackstone
 
-layer bigRingsBottomLeftTopRight ${basalt_h} bas1 ${basalt}
-layer bigRingsTopLeftBottomRight ${basalt_s} bas2
-layer borderSolid ${basalt_s} bas3
-layer borderLongDashes ${basalt_h} bas4
-stack block/basalt_top
+push bigRingsBottomLeftTopRight ${basalt_h} bas1 ${basalt}
+push bigRingsTopLeftBottomRight ${basalt_s} bas2
+push borderSolid ${basalt_s} bas3
+push borderLongDashes ${basalt_h} bas4
+out_stack block/basalt_top
 
-layer stripesVerticalThick ${basalt} bass1 ${basalt_s}
-layer borderLongDashes ${basalt_h} bass2
-stack block/basalt_side
+push stripesVerticalThick ${basalt} bass1 ${basalt_s}
+push borderLongDashes ${basalt_h} bass2
+out_stack block/basalt_side
 
-layer stripesVerticalThick ${basalt_h} basps1 ${basalt}
-layer borderSolidBottomRight ${basalt_s} basps2
-layer borderSolidTopLeft ${basalt_h} basps3
-stack block/polished_basalt_side
+push stripesVerticalThick ${basalt_h} basps1 ${basalt}
+push borderSolidBottomRight ${basalt_s} basps2
+push borderSolidTopLeft ${basalt_h} basps3
+out_stack block/polished_basalt_side
 
-layer ringsCentralBullseye ${basalt_s} baspt11 ${basalt}
-layer rings ${basalt_h} baspt12
-layer cutInQuarters1 ${basalt_s} baspt20 ${basalt}
-layer cutInQuarters2 ${basalt_h} baspt21
-layer borderSolidBottomRight ${basalt_s} baspt30
-layer borderSolidTopLeft ${basalt_h} baspt31
-stack block/polished_basalt_top
+push ringsCentralBullseye ${basalt_s} baspt11 ${basalt}
+push rings ${basalt_h} baspt12
+push cutInQuarters1 ${basalt_s} baspt20 ${basalt}
+push cutInQuarters2 ${basalt_h} baspt21
+push borderSolidBottomRight ${basalt_s} baspt30
+push borderSolidTopLeft ${basalt_h} baspt31
+out_stack block/polished_basalt_top
 
-layer borderSolid ${glowstone_ss} gs0 ${glowstone_s}
-layer checksSmall ${glowstone} gs1
-layer lampOn ${glowstone_h} gs2
-stack block/glowstone
+push borderSolid ${glowstone_ss} gs0 ${glowstone_s}
+push checksSmall ${glowstone} gs1
+push lampOn ${glowstone_h} gs2
+out_stack block/glowstone
 
 # Rock - End
 
-layer checksLargeOutline ${end_stone_s} endstone1 ${end_stone}
-layer bigDotsTopLeftBottomRight ${end_stone_h} endstone2
-stack block/end_stone
+push checksLargeOutline ${end_stone_s} endstone1 ${end_stone}
+push bigDotsTopLeftBottomRight ${end_stone_h} endstone2
+out_stack block/end_stone
 
 # Ores
 
-layer diamond1 ${diamond_hh} diamond1
-layer diamond2 ${diamond_s} diamond2
-stack item/diamond
+push diamond1 ${diamond_hh} diamond1
+push diamond2 ${diamond_s} diamond2
+out_stack item/diamond
 
-layer emeraldTopLeft ${emerald_h} emerald1
-layer emeraldBottomRight ${emerald_s} emerald2
-stack item/emerald
+push emeraldTopLeft ${emerald_h} emerald1
+push emeraldBottomRight ${emerald_s} emerald2
+out_stack item/emerald
 
-layer lapis ${lapis} lapis1
-layer lapisHighlight ${lapis_h} lapis2
-layer lapisShadow ${lapis_s} lapis3
-stack item/lapis
+push lapis ${lapis} lapis1
+push lapisHighlight ${lapis_h} lapis2
+push lapisShadow ${lapis_s} lapis3
+out_stack item/lapis
 
 for ore in "${SIMPLE_ORES[@]}"; do
-  layer "$ore" "${!ore}" "${ore}_item"
-  stack "item/${ore}"
+  push "$ore" "${!ore}" "${ore}_item"
+  out_stack "item/${ore}"
 
   highlight="${ore}_h"
   shadow="${ore}_s"
 
-  layer bigCircle "${!shadow}" "${ore}_rawitem1"
-  layer "$ore" "${!highlight}" "${ore}_rawitem3"
-  stack "item/raw_${ore}"
+  push bigCircle "${!shadow}" "${ore}_rawitem1"
+  push "$ore" "${!highlight}" "${ore}_rawitem3"
+  out_stack "item/raw_${ore}"
 
-  layer checksSmall "${!highlight}" "${ore}_rawblock1" "${!ore}"
-  layer "$ore" "${!shadow}" "${ore}_rawblock2"
-  stack "block/raw_${ore}_block"
+  push checksSmall "${!highlight}" "${ore}_rawblock1" "${!ore}"
+  push "$ore" "${!shadow}" "${ore}_rawblock2"
+  out_stack "block/raw_${ore}_block"
 
-  layer ingotMask "${!ore}" "${ore}_ingot1"
-  layer ingotBorder "${!shadow}" "${ore}_ingot2"
-  layer ingotBorderTopLeft "${!highlight}" "${ore}_ingot3"
-  layer "$ore" "${!shadow}" "${ore}_ingot4"
-  stack "item/${ore}_ingot"
+  push ingotMask "${!ore}" "${ore}_ingot1"
+  push ingotBorder "${!shadow}" "${ore}_ingot2"
+  push ingotBorderTopLeft "${!highlight}" "${ore}_ingot3"
+  push "$ore" "${!shadow}" "${ore}_ingot4"
+  out_stack "item/${ore}_ingot"
 done
 
 for ore in "${ORES[@]}"; do
-  copy block/stone "${ore}1"
-  copy "item/${ore}" "${ore}2"
-  stack "block/${ore}_ore"
+  push_copy block/stone "${ore}1"
+  push_copy "item/${ore}" "${ore}2"
+  out_stack "block/${ore}_ore"
 
-  copy block/deepslate "deep${ore}1"
-  copy "item/${ore}" "deep${ore}2"
-  stack "block/deepslate_${ore}_ore"
+  push_copy block/deepslate "deep${ore}1"
+  push_copy "item/${ore}" "deep${ore}2"
+  out_stack "block/deepslate_${ore}_ore"
 
-  copy block/netherrack "nether${ore}1"
-  copy "item/${ore}" "nether${ore}2"
-  stack "block/nether_${ore}_ore"
+  push_copy block/netherrack "nether${ore}1"
+  push_copy "item/${ore}" "nether${ore}2"
+  out_stack "block/nether_${ore}_ore"
 done
 
 for ore in "${SIMPLE_ORES[@]}"; do
   highlight="${ore}_h"
   shadow="${ore}_s"
 
-  layer streaks "${!highlight}" "${ore}_block0" "${!ore}"
-  layer "$ore" "${!shadow}" "${ore}_block1"
-  layer borderSolidTopLeft "${!highlight}" "${ore}_block3"
-  layer borderSolidBottomRight "${!shadow}" "${ore}_block4"
-  stack "block/${ore}_block"
+  push streaks "${!highlight}" "${ore}_block0" "${!ore}"
+  push "$ore" "${!shadow}" "${ore}_block1"
+  push borderSolidTopLeft "${!highlight}" "${ore}_block3"
+  push borderSolidBottomRight "${!shadow}" "${ore}_block4"
+  out_stack "block/${ore}_block"
 done
 
-layer checksLarge ${lapis_s} lapis_block0 ${lapis_h}
-layer checksSmall ${lapis} lapis_block1
-layer borderSolidTopLeft ${lapis_h} lapis_block3
-layer borderSolidBottomRight ${lapis_s} lapis_block4
-stack block/lapis_block
+push checksLarge ${lapis_s} lapis_block0 ${lapis_h}
+push checksSmall ${lapis} lapis_block1
+push borderSolidTopLeft ${lapis_h} lapis_block3
+push borderSolidBottomRight ${lapis_s} lapis_block4
+out_stack block/lapis_block
 
-layer streaks ${diamond_h} diamond_block1 ${diamond}
-layer diamond1 ${diamond_hh} diamond_block2
-layer diamond2 ${diamond_s} diamond_block3
-layer borderSolid ${diamond_s} diamond_block4
-layer borderSolidTopLeft ${diamond_hh} diamond_block5
-stack block/diamond_block
+push streaks ${diamond_h} diamond_block1 ${diamond}
+push diamond1 ${diamond_hh} diamond_block2
+push diamond2 ${diamond_s} diamond_block3
+push borderSolid ${diamond_s} diamond_block4
+push borderSolidTopLeft ${diamond_hh} diamond_block5
+out_stack block/diamond_block
 
-layer streaks ${emerald_hh} emerald_block1 ${emerald_h}
-layer emeraldTopLeft ${emerald_hh} emerald_block2
-layer emeraldBottomRight ${emerald_s} emerald_block3
-layer borderSolid ${emerald} emerald_block4
-layer borderSolidTopLeft ${emerald_h} emerald_block5
-stack block/emerald_block
+push streaks ${emerald_hh} emerald_block1 ${emerald_h}
+push emeraldTopLeft ${emerald_hh} emerald_block2
+push emeraldBottomRight ${emerald_s} emerald_block3
+push borderSolid ${emerald} emerald_block4
+push borderSolidTopLeft ${emerald_h} emerald_block5
+out_stack block/emerald_block
 
-move item/quartz_ingot item/quartz
-move block/raw_quartz_block block/quartz_block_bottom
-move block/quartz_block block/quartz_block_side
+rename_out item/quartz_ingot item/quartz
+rename_out block/raw_quartz_block block/quartz_block_bottom
+rename_out block/quartz_block block/quartz_block_side
 
-move item/lapis item/lapis_lazuli
-move item/raw_redstone item/redstone
+rename_out item/lapis item/lapis_lazuli
+rename_out item/raw_redstone item/redstone
 
-layer streaks ${quartz_h} quartz_top0 ${quartz}
-layer borderSolidTopLeft ${quartz_h} quartz_top1
-layer borderSolidBottomRight ${quartz_s} quartz_top2
-stack block/quartz_block_top
+push streaks ${quartz_h} quartz_top0 ${quartz}
+push borderSolidTopLeft ${quartz_h} quartz_top1
+push borderSolidBottomRight ${quartz_s} quartz_top2
+out_stack block/quartz_block_top
 
 # Carved and/or oxidized ores
 
-layer streaks ${copper_h} cutcopper10 ${copper}
-layer borderSolid ${copper_s} cutcopper11
-layer borderSolidTopLeft ${copper_h} cutcopper12
-layer cutInQuarters1 ${copper_s} cutcopper20
-layer cutInQuarters2 ${copper_h} cutcopper30
-stack block/cut_copper
+push streaks ${copper_h} cutcopper10 ${copper}
+push borderSolid ${copper_s} cutcopper11
+push borderSolidTopLeft ${copper_h} cutcopper12
+push cutInQuarters1 ${copper_s} cutcopper20
+push cutInQuarters2 ${copper_h} cutcopper30
+out_stack block/cut_copper
 
 for oxidation_state in "${OXIDATION_STATES[@]}"; do
   color="${oxidation_state}_copper"
   shadow="${oxidation_state}_copper_s"
   highlight="${oxidation_state}_copper_h"
 
-  layer streaks "${!highlight}" "${oxidation_state}_copper_block0" "${!color}"
-  layer borderSolidTopLeft ${!highlight} "${oxidation_state}_copper_block2"
-  layer borderSolidBottomRight ${!shadow} "${oxidation_state}_copper_block3"
-  layer copper2oxide "${!shadow}" "${oxidation_state}_copper_block4"
-  stack "block/${oxidation_state}_copper"
+  push streaks "${!highlight}" "${oxidation_state}_copper_block0" "${!color}"
+  push borderSolidTopLeft ${!highlight} "${oxidation_state}_copper_block2"
+  push borderSolidBottomRight ${!shadow} "${oxidation_state}_copper_block3"
+  push copper2oxide "${!shadow}" "${oxidation_state}_copper_block4"
+  out_stack "block/${oxidation_state}_copper"
 
-  layer streaks "${!highlight}" "${oxidation_state}_cutcopper10" "${!color}"
-  layer borderSolid "${!shadow}" "${oxidation_state}_cutcopper11"
-  layer borderSolidTopLeft "${!highlight}" "${oxidation_state}_cutcopper12"
-  layer cutInQuarters1 "${!shadow}" "${oxidation_state}_cutcopper20"
-  layer cutInQuarters2 "${!highlight}" "${oxidation_state}_cutcopper30"
-  stack "block/cut_${oxidation_state}_copper"
+  push streaks "${!highlight}" "${oxidation_state}_cutcopper10" "${!color}"
+  push borderSolid "${!shadow}" "${oxidation_state}_cutcopper11"
+  push borderSolidTopLeft "${!highlight}" "${oxidation_state}_cutcopper12"
+  push cutInQuarters1 "${!shadow}" "${oxidation_state}_cutcopper20"
+  push cutInQuarters2 "${!highlight}" "${oxidation_state}_cutcopper30"
+  out_stack "block/cut_${oxidation_state}_copper"
 done
 
-layer rings ${quartz_h} quartz1 ${quartz}
-layer borderSolid ${quartz_s} quartz2
-layer borderDotted ${quartz_h} quartz3
-stack block/quartz_pillar_top
+push rings ${quartz_h} quartz1 ${quartz}
+push borderSolid ${quartz_s} quartz2
+push borderDotted ${quartz_h} quartz3
+out_stack block/quartz_pillar_top
 
-layer tntSticksSide ${quartz} qp1 ${quartz_s}
-layer borderSolid ${quartz_s} qp2
-layer borderLongDashes ${quartz_h} qp3
-stack block/quartz_pillar
+push tntSticksSide ${quartz} qp1 ${quartz_s}
+push borderSolid ${quartz_s} qp2
+push borderLongDashes ${quartz_h} qp3
+out_stack block/quartz_pillar
 
 # Bricks
 
-layer strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
-layer strokeBottomLeftTopRight2 ${mud_brick_s} mb2
-layer bricks ${mud_s} mb3
-layer borderDotted ${mud_h} mb4
-stack block/mud_bricks
+push strokeTopLeftBottomRight2 ${mud_brick_h} mb1 ${mud_brick}
+push strokeBottomLeftTopRight2 ${mud_brick_s} mb2
+push bricks ${mud_s} mb3
+push borderDotted ${mud_h} mb4
+out_stack block/mud_bricks
 
-layer checksLarge $stone_h sb1 $stone
-layer bricks $stone_ss sb2
-layer borderShortDashes $stone_s sb3
-stack block/stone_bricks
+push checksLarge $stone_h sb1 $stone
+push bricks $stone_ss sb2
+push borderShortDashes $stone_s sb3
+out_stack block/stone_bricks
 
-layer checksLarge $stone_h crsb1 $stone
-layer bricks $stone_ss crsb2
-layer streaks $stone_ss crsb3
-layer borderShortDashes $stone_s crsb5
-stack block/cracked_stone_bricks
+push checksLarge $stone_h crsb1 $stone
+push bricks $stone_ss crsb2
+push streaks $stone_ss crsb3
+push borderShortDashes $stone_s crsb5
+out_stack block/cracked_stone_bricks
 
-copy block/stone_bricks msb1
-layer dots3 ${moss_s} msb2
-layer dots2 ${moss_h} msb3
-layer dots1 ${moss} msb4
-layer borderSolid ${moss_h} msb5
-layer borderShortDashes ${moss_s} msb6
-stack block/mossy_stone_bricks
+push_copy block/stone_bricks msb1
+push dots3 ${moss_s} msb2
+push dots2 ${moss_h} msb3
+push dots1 ${moss} msb4
+push borderSolid ${moss_h} msb5
+push borderShortDashes ${moss_s} msb6
+out_stack block/mossy_stone_bricks
 
-copy block/stone csb1
-layer ringsCentralBullseye ${stone_hh} csb2
-layer rings ${stone_ss} csb3
-layer borderSolid ${stone_ss} csb10
-layer borderSolidTopLeft ${stone_hh} csb11
-stack block/chiseled_stone_bricks
+push_copy block/stone csb1
+push ringsCentralBullseye ${stone_hh} csb2
+push rings ${stone_ss} csb3
+push borderSolid ${stone_ss} csb10
+push borderSolidTopLeft ${stone_hh} csb11
+out_stack block/chiseled_stone_bricks
 
-layer bricksSmall $mortar bricks1 $terracotta
-layer_semitrans borderDotted $mortar bricks2 0.5
-stack block/bricks
+push bricksSmall $mortar bricks1 $terracotta
+push_semitrans borderDotted $mortar bricks2 0.5
+out_stack block/bricks
 
-layer streaks ${quartz_h} qb0 ${quartz}
-layer bricks ${quartz_s} qb1
-layer borderDotted ${quartz_h} qb2
-stack block/quartz_bricks
+push streaks ${quartz_h} qb0 ${quartz}
+push bricks ${quartz_s} qb1
+push borderDotted ${quartz_h} qb2
+out_stack block/quartz_bricks
 
-layer bricksSmall ${blackstone_s} pbs1 ${blackstone}
-layer borderDotted ${blackstone_h} pbs3
-stack block/polished_blackstone_bricks
+push bricksSmall ${blackstone_s} pbs1 ${blackstone}
+push borderDotted ${blackstone_h} pbs3
+out_stack block/polished_blackstone_bricks
 
-copy block/deepslate db0
-layer bricksSmall ${deepslate_s} db1
-layer borderDotted ${deepslate_h} db2
-layer borderDottedBottomRight ${deepslate_s} db3
-stack block/deepslate_bricks
+push_copy block/deepslate db0
+push bricksSmall ${deepslate_s} db1
+push borderDotted ${deepslate_h} db2
+push borderDottedBottomRight ${deepslate_s} db3
+out_stack block/deepslate_bricks
 
-copy block/end_stone esb0
-layer bricksSmall ${end_stone_s} esb1
-layer borderShortDashes ${end_stone_h} esb2
-stack block/end_stone_bricks
+push_copy block/end_stone esb0
+push bricksSmall ${end_stone_s} esb1
+push borderShortDashes ${end_stone_h} esb2
+out_stack block/end_stone_bricks
 
-layer bricksSmall ${nether_brick_h} nb1 ${nether_brick}
-layer borderDotted ${nether_brick_h} nb2
-layer borderDottedBottomRight ${deepslate_s} db3
-stack block/nether_bricks
+push bricksSmall ${nether_brick_h} nb1 ${nether_brick}
+push borderDotted ${nether_brick_h} nb2
+push borderDottedBottomRight ${deepslate_s} db3
+out_stack block/nether_bricks
 
-layer bricksSmall ${red_nether_brick_s} rnb1 ${red_nether_brick}
-layer borderDotted ${red_nether_brick_h} rnb2
-layer borderDottedBottomRight ${red_nether_brick_s} rnb3
-stack block/red_nether_bricks
+push bricksSmall ${red_nether_brick_s} rnb1 ${red_nether_brick}
+push borderDotted ${red_nether_brick_h} rnb2
+push borderDottedBottomRight ${red_nether_brick_s} rnb3
+out_stack block/red_nether_bricks
 
 # Glass
 
-layer borderSolid $white glass1
-layer borderSolidBottomRight $gray glass2
-layer streaks $white glass3
-stack "block/glass"
+push borderSolid $white glass1
+push borderSolidBottomRight $gray glass2
+push streaks $white glass3
+out_stack "block/glass"
 
-layer_semitrans borderSolid $white tglass1 0.5
-layer_semitrans streaks $white tglass3 0.25
-stack "block/tinted_glass"
+push_semitrans borderSolid $white tglass1 0.5
+push_semitrans streaks $white tglass3 0.25
+out_stack "block/tinted_glass"
 
 for dye in "${DYES[@]}"; do
-  layer_semitrans empty ${black} "${dye}_glass1" "${!dye}" 0.25
-  layer borderSolid "${!dye}" "${dye}_glass2"
-  layer streaks "${!dye}" "${dye}_glass3"
-  stack "block/${dye}_stained_glass"
+  push_semitrans empty ${black} "${dye}_glass1" "${!dye}" 0.25
+  push borderSolid "${!dye}" "${dye}_glass2"
+  push streaks "${!dye}" "${dye}_glass3"
+  out_stack "block/${dye}_stained_glass"
 
-  layer paneTop "${!dye}" glass_top1
-  stack "block/${dye}_stained_glass_pane_top"
+  out_layer paneTop "${!dye}" "block/${dye}_stained_glass_pane_top"
 done
 
-copy "block/white_stained_glass_pane_top" glassTop1
-stack block/glass_pane_top
+copy "block/white_stained_glass_pane_top" "block/glass_pane_top"
 
 # Concrete
 
 for dye in "${DYES[@]}"; do
-  layer empty "${!dye}" "${dye}_conc1" "${!dye}"
-  layer_semitrans x ${gray} "${dye}_conc2" 0.25
-  layer_semitrans borderLongDashes ${light_gray} "${dye}_conc3" 0.25
-  stack "block/${dye}_concrete"
+  push empty "${!dye}" "${dye}_conc1" "${!dye}"
+  push_semitrans x ${gray} "${dye}_conc2" 0.25
+  push_semitrans borderLongDashes ${light_gray} "${dye}_conc3" 0.25
+  out_stack "block/${dye}_concrete"
 done
 
 # Bone block
 
-layer borderSolid $bone_block_h boneblock1 $bone_block_s
-layer_semitrans bonesXor ${bone_block_h} boneblock2 0.5
-stack block/bone_block_top
+push borderSolid $bone_block_h boneblock1 $bone_block_s
+push_semitrans bonesXor ${bone_block_h} boneblock2 0.5
+out_stack block/bone_block_top
 
-layer borderSolid $bone_block_s boneblockside1 $bone_block
-layer borderDotted $bone_block_h boneblockside2
-layer boneBottomLeftTopRight $bone_block_s boneblockside3
-layer boneTopLeftBottomRight $bone_block_h boneblockside4
-stack block/bone_block_side
+push borderSolid $bone_block_s boneblockside1 $bone_block
+push borderDotted $bone_block_h boneblockside2
+push boneBottomLeftTopRight $bone_block_s boneblockside3
+push boneTopLeftBottomRight $bone_block_h boneblockside4
+out_stack block/bone_block_side
 
 # Rails
 
-layer railTies $wood_oak rail1
-layer rail $stone_h rail2
-stack block/rail
+push railTies $wood_oak rail1
+push rail $stone_h rail2
+out_stack block/rail
 
-layer railTies $wood_oak_s rail1
-layer thirdRail $black rail2
-layer rail $gold rail3
-stack block/powered_rail
+push railTies $wood_oak_s rail1
+push thirdRail $black rail2
+push rail $gold rail3
+out_stack block/powered_rail
 
-layer railTies $wood_oak_s rail1
-layer thirdRail $redstone_h rail2
-layer rail $gold rail3
-stack block/powered_rail_on
+push railTies $wood_oak_s rail1
+push thirdRail $redstone_h rail2
+push rail $gold rail3
+out_stack block/powered_rail_on
 
-layer railTies $wood_oak_s arail0
-layer rail $stone_h arail1
-layer thirdRail $black arail2
-stack block/activator_rail
+push railTies $wood_oak_s arail0
+push rail $stone_h arail1
+push thirdRail $black arail2
+out_stack block/activator_rail
 
-layer railTies $wood_oak_s aarail0
-layer rail $stone_h aarail1
-layer thirdRail $redstone_h aarail2
-stack block/activator_rail_on
+push railTies $wood_oak_s aarail0
+push rail $stone_h aarail1
+push thirdRail $redstone_h aarail2
+out_stack block/activator_rail_on
 
-layer railTies $wood_oak_s drail0
-layer rail $stone_h drail1
-layer railDetectorPlate $black drail2
-stack block/detector_rail
+push railTies $wood_oak_s drail0
+push rail $stone_h drail1
+push railDetectorPlate $black drail2
+out_stack block/detector_rail
 
-layer railTies $wood_oak_s adrail0
-layer rail $stone_h adrail1
-layer railDetectorPlate $redstone_h adrail2
-stack block/detector_rail_on
+push railTies $wood_oak_s adrail0
+push rail $stone_h adrail1
+push railDetectorPlate $redstone_h adrail2
+out_stack block/detector_rail_on
 
-layer railTieCorner $wood_oak railc0
-layer railCorner $stone_h railc1
-stack block/rail_corner
+push railTieCorner $wood_oak railc0
+push railCorner $stone_h railc1
+out_stack block/rail_corner
 
 # Redstone components
 
-copy block/smooth_stone repeater1
-layer repeaterSideInputs ${stone_s} repeater2
-layer repeater ${black} repeater3
-stack block/repeater
+push_copy block/smooth_stone repeater1
+push repeaterSideInputs ${stone_s} repeater2
+push repeater ${black} repeater3
+out_stack block/repeater
 
-copy block/smooth_stone repeatero1
-layer repeaterSideInputs ${stone_s} repeatero2
-layer repeater ${redstone_h} repeatero3
-stack block/repeater_on
+push_copy block/smooth_stone repeatero1
+push repeaterSideInputs ${stone_s} repeatero2
+push repeater ${redstone_h} repeatero3
+out_stack block/repeater_on
 
-copy block/smooth_stone comparator1
-layer repeaterSideInputs ${stone_s} comparator2
-layer comparator ${black} comparator3
-stack block/comparator
+push_copy block/smooth_stone comparator1
+push repeaterSideInputs ${stone_s} comparator2
+push comparator ${black} comparator3
+out_stack block/comparator
 
-copy block/smooth_stone comparatoro1
-layer repeaterSideInputs ${stone_s} comparatoro2
-layer comparator ${redstone_h} comparatoro3
-stack block/comparator_on
+push_copy block/smooth_stone comparatoro1
+push repeaterSideInputs ${stone_s} comparatoro2
+push comparator ${redstone_h} comparatoro3
+out_stack block/comparator_on
 
-layer bigDiamond ${redstone_s} rloff0 ${redstone}
-layer lamp ${redstone_h} rloff2
-layer borderSolidBottomRight ${redstone_s} rloff4
-layer borderSolidTopLeft ${redstone_h} rloff6
-stack block/redstone_lamp
+push bigDiamond ${redstone_s} rloff0 ${redstone}
+push lamp ${redstone_h} rloff2
+push borderSolidBottomRight ${redstone_s} rloff4
+push borderSolidTopLeft ${redstone_h} rloff6
+out_stack block/redstone_lamp
 
-layer bigDiamond ${redstone_lamp_s} rl0 ${redstone_lamp}
-layer lampOn ${redstone_lamp_h} rl1
-layer borderSolidBottomRight ${redstone_lamp_s} rl2
-layer borderSolidTopLeft ${redstone_lamp_h} rl3
-stack block/redstone_lamp_on
+push bigDiamond ${redstone_lamp_s} rl0 ${redstone_lamp}
+push lampOn ${redstone_lamp_h} rl1
+push borderSolidBottomRight ${redstone_lamp_s} rl2
+push borderSolidTopLeft ${redstone_lamp_h} rl3
+out_stack block/redstone_lamp_on
 
 # Job-site and misc pickaxe blocks
 
-layer bottomHalf $stone_h furnaceside1 $stone
-layer borderSolid $stone_ss furnaceside2
-stack block/furnace_side
+push bottomHalf $stone_h furnaceside1 $stone
+push borderSolid $stone_ss furnaceside2
+out_stack block/furnace_side
 
-copy block/furnace_side furnace1
-layer furnaceFront $black furnace2
-stack block/furnace_front
+push_copy block/furnace_side furnace1
+push furnaceFront $black furnace2
+out_stack block/furnace_front
 
-copy block/furnace_side furnacel1
-layer_precolored furnaceFrontLit furnacel2
-stack block/furnace_front_on
+push_copy block/furnace_side furnacel1
+push_precolored furnaceFrontLit furnacel2
+out_stack block/furnace_front_on
 
 # S030. AXE BLOCKS
 
@@ -1089,10 +1098,10 @@ for wood in "${WOODS[@]}"; do
   shadow="wood_${wood}_s"
   midtone="wood_${wood}"
 
-  layer waves "${!highlight}" "${wood}_planks0" "${!midtone}"
-  layer planksTopBorder "${!shadow}" "${wood}_planks1"
-  layer borderShortDashes "${!highlight}" "${wood}_planks2"
-  stack "block/${wood}_planks"
+  push waves "${!highlight}" "${wood}_planks0" "${!midtone}"
+  push planksTopBorder "${!shadow}" "${wood}_planks1"
+  push borderShortDashes "${!highlight}" "${wood}_planks2"
+  out_stack "block/${wood}_planks"
 done
 
 # Logs, wood & hyphae
@@ -1105,25 +1114,25 @@ for wood in "${OVERWORLD_WOODS[@]}"; do
   bark_s="bark_${wood}_s"
   bark="bark_${wood}"
 
-  layer borderSolid "${!bark_s}" "${wood}_logSide3" "${!bark}"
-  layer borderDotted "${!bark_h}" "${wood}_logSide4"
-  layer zigzagSolid "${!bark_s}" "${wood}_logSide5"
-  layer zigzagSolid2 "${!bark_h}" "${wood}_logSide6"
-  stack "block/${wood}_log"
+  push borderSolid "${!bark_s}" "${wood}_logSide3" "${!bark}"
+  push borderDotted "${!bark_h}" "${wood}_logSide4"
+  push zigzagSolid "${!bark_s}" "${wood}_logSide5"
+  push zigzagSolid2 "${!bark_h}" "${wood}_logSide6"
+  out_stack "block/${wood}_log"
 
-  layer borderSolid "${!shadow}" "${wood}_strippedLogSide1" "${!midtone}"
-  layer borderShortDashes "${!highlight}" "${wood}_strippedLogSide2"
-  stack "block/stripped_${wood}_log"
+  push borderSolid "${!shadow}" "${wood}_strippedLogSide1" "${!midtone}"
+  push borderShortDashes "${!highlight}" "${wood}_strippedLogSide2"
+  out_stack "block/stripped_${wood}_log"
 
-  copy "block/stripped_${wood}_log" "${wood}_strippedLog0"
-  layer ringsCentralBullseye "${!highlight}" "${wood}_strippedLog1"
-  layer rings "${!shadow}" "${wood}_strippedLog2"
-  stack "block/stripped_${wood}_log_top"
+  push_copy "block/stripped_${wood}_log" "${wood}_strippedLog0"
+  push ringsCentralBullseye "${!highlight}" "${wood}_strippedLog1"
+  push rings "${!shadow}" "${wood}_strippedLog2"
+  out_stack "block/stripped_${wood}_log_top"
 
-  copy "block/stripped_${wood}_log_top" "${wood}_logTop1"
-  layer borderSolid "${!bark}" "${wood}_logTop2"
-  layer borderDotted "${!bark_s}" "${wood}_logTop3"
-  stack "block/${wood}_log_top"
+  push_copy "block/stripped_${wood}_log_top" "${wood}_logTop1"
+  push borderSolid "${!bark}" "${wood}_logTop2"
+  push borderDotted "${!bark_s}" "${wood}_logTop3"
+  out_stack "block/${wood}_log_top"
 done
 
 for wood in "${FUNGI[@]}"; do
@@ -1134,172 +1143,168 @@ for wood in "${FUNGI[@]}"; do
   bark_s="bark_${wood}_s"
   bark="bark_${wood}"
 
-  layer borderSolid "${!bark_s}" "${wood}_stemSide1" "${!bark}"
-  layer waves "${!bark_h}" "${wood}_stemSide2"
-  stack "block/${wood}_stem"
+  push borderSolid "${!bark_s}" "${wood}_stemSide1" "${!bark}"
+  push waves "${!bark_h}" "${wood}_stemSide2"
+  out_stack "block/${wood}_stem"
 
-  layer borderSolid "${!shadow}" "${wood}_strippedLogSide1" "${!midtone}"
-  layer borderDotted "${!highlight}" "${wood}_strippedLogSide2"
-  stack "block/stripped_${wood}_stem"
+  push borderSolid "${!shadow}" "${wood}_strippedLogSide1" "${!midtone}"
+  push borderDotted "${!highlight}" "${wood}_strippedLogSide2"
+  out_stack "block/stripped_${wood}_stem"
 
-  copy "block/stripped_${wood}_stem" "${wood}_strippedLog0"
-  layer ringsCentralBullseye "${!shadow}" "${wood}_strippedLog1"
-  layer rings "${!highlight}" "${wood}_strippedLog2"
-  stack "block/stripped_${wood}_stem_top"
+  push_copy "block/stripped_${wood}_stem" "${wood}_strippedLog0"
+  push ringsCentralBullseye "${!shadow}" "${wood}_strippedLog1"
+  push rings "${!highlight}" "${wood}_strippedLog2"
+  out_stack "block/stripped_${wood}_stem_top"
 
-  copy "block/stripped_${wood}_stem_top" "${wood}_logTop1"
-  layer borderSolid "${!bark}" "${wood}_logTop2"
-  layer borderDotted "${!bark_s}" "${wood}_logTop3"
-  stack "block/${wood}_stem_top"
+  push_copy "block/stripped_${wood}_stem_top" "${wood}_logTop1"
+  push borderSolid "${!bark}" "${wood}_logTop2"
+  push borderDotted "${!bark_s}" "${wood}_logTop3"
+  out_stack "block/${wood}_stem_top"
 done
 
 # Giant mushrooms
 
-layer mushroomSpots ${white} rmush1 $mushroom_red_cap
-layer borderRoundDots ${white} rmush2
-stack block/red_mushroom_block
+push mushroomSpots ${white} rmush1 $mushroom_red_cap
+push borderRoundDots ${white} rmush2
+out_stack block/red_mushroom_block
 
-layer rings ${mushroom_brown_cap_h} bmush1 ${mushroom_brown_cap_s}
-stack block/brown_mushroom_block
+out_layer rings ${mushroom_brown_cap_h} block/brown_mushroom_block ${mushroom_brown_cap_s}
 
-layer borderRoundDotsVaryingSize ${mushroom_inside_s} mushin1 ${mushroom_inside}
-layer dots0 ${mushroom_inside_s} mushin2
-stack block/mushroom_block_inside
+push borderRoundDotsVaryingSize ${mushroom_inside_s} mushin1 ${mushroom_inside}
+push dots0 ${mushroom_inside_s} mushin2
+out_stack block/mushroom_block_inside
 
-layer stripesThick ${mushroom_stem_s} mushstem1 ${mushroom_stem_h}
-layer borderShortDashes ${mushroom_stem} mushstem2
-stack block/mushroom_stem
+push stripesThick ${mushroom_stem_s} mushstem1 ${mushroom_stem_h}
+push borderShortDashes ${mushroom_stem} mushstem2
+out_stack block/mushroom_stem
 
 # Wooden trapdoors
 
-layer waves ${wood_warped} trapdoorw1
-layer borderSolidThick ${wood_warped} trapdoorw2
-layer borderSolid ${wood_warped_h} trapdoorw3
-layer borderShortDashes ${wood_warped_s} trapdoorw4
-layer trapdoorHingesBig ${stone_s} trapdoorw5
-layer trapdoorHinges ${stone_h} trapdoorw6
-stack "block/warped_trapdoor"
+push waves ${wood_warped} trapdoorw1
+push borderSolidThick ${wood_warped} trapdoorw2
+push borderSolid ${wood_warped_h} trapdoorw3
+push borderShortDashes ${wood_warped_s} trapdoorw4
+push trapdoorHingesBig ${stone_s} trapdoorw5
+push trapdoorHinges ${stone_h} trapdoorw6
+out_stack "block/warped_trapdoor"
 
-layer zigzagSolid2 ${wood_crimson_h} trapdoorc0
-layer zigzagSolid ${wood_crimson_s} trapdoorc1
-layer borderSolidThick ${wood_crimson} trapdoorc2
-layer borderSolid ${wood_crimson_s} trapdoorc3
-layer borderShortDashes ${wood_crimson_h} trapdoorc4
-layer trapdoorHingesBig ${stone_h} trapdoorc5
-layer trapdoorHinges ${stone_s} trapdoorc6
-stack "block/crimson_trapdoor"
+push zigzagSolid2 ${wood_crimson_h} trapdoorc0
+push zigzagSolid ${wood_crimson_s} trapdoorc1
+push borderSolidThick ${wood_crimson} trapdoorc2
+push borderSolid ${wood_crimson_s} trapdoorc3
+push borderShortDashes ${wood_crimson_h} trapdoorc4
+push trapdoorHingesBig ${stone_h} trapdoorc5
+push trapdoorHinges ${stone_s} trapdoorc6
+out_stack "block/crimson_trapdoor"
 
-layer cross ${wood_oak} trapdooro1
-layer borderSolidThick ${wood_oak} trapdooro2
-layer borderSolid ${wood_oak_s} trapdooro3
-layer borderLongDashes ${wood_oak_h} trapdooro4
-layer trapdoorHingesBig ${stone} trapdooro5
-layer trapdoorHinges ${stone_h} trapdooro6
-stack "block/oak_trapdoor"
+push cross ${wood_oak} trapdooro1
+push borderSolidThick ${wood_oak} trapdooro2
+push borderSolid ${wood_oak_s} trapdooro3
+push borderLongDashes ${wood_oak_h} trapdooro4
+push trapdoorHingesBig ${stone} trapdooro5
+push trapdoorHinges ${stone_h} trapdooro6
+out_stack "block/oak_trapdoor"
 
-layer planksTopVertical ${wood_spruce} trapdoors1 ${wood_spruce_s}
-layer borderSolidThick ${wood_spruce_s} trapdoors2
-layer borderLongDashes ${wood_spruce_h} trapdoors3
-layer trapdoorHingesBig ${stone} trapdoors5
-layer trapdoorHinges ${stone_s} trapdoors6
-stack "block/spruce_trapdoor"
+push planksTopVertical ${wood_spruce} trapdoors1 ${wood_spruce_s}
+push borderSolidThick ${wood_spruce_s} trapdoors2
+push borderLongDashes ${wood_spruce_h} trapdoors3
+push trapdoorHingesBig ${stone} trapdoors5
+push trapdoorHinges ${stone_s} trapdoors6
+out_stack "block/spruce_trapdoor"
 
-layer trapdoor1 ${wood_birch} trapdoorb1
-layer borderSolid ${wood_birch_s} trapdoorb2
-layer trapdoorHingesBig ${stone_s} trapdoorb3
-stack "block/birch_trapdoor"
+push trapdoor1 ${wood_birch} trapdoorb1
+push borderSolid ${wood_birch_s} trapdoorb2
+push trapdoorHingesBig ${stone_s} trapdoorb3
+out_stack "block/birch_trapdoor"
 
-layer trapdoor2 ${wood_jungle} trapdoorj1
-layer borderSolid ${wood_jungle_s} trapdoorj2
-layer borderShortDashes ${wood_jungle_h} trapdoorj3
-layer trapdoorHingesBig ${stone_s} trapdoorj5
-layer trapdoorHinges ${stone} trapdoorj6
-stack "block/jungle_trapdoor"
+push trapdoor2 ${wood_jungle} trapdoorj1
+push borderSolid ${wood_jungle_s} trapdoorj2
+push borderShortDashes ${wood_jungle_h} trapdoorj3
+push trapdoorHingesBig ${stone_s} trapdoorj5
+push trapdoorHinges ${stone} trapdoorj6
+out_stack "block/jungle_trapdoor"
 
-layer ringsHole ${wood_mangrove} trapdoorm0
-layer rings2 ${wood_mangrove_s} trapdoorm2
-layer borderDotted ${wood_mangrove_h} trapdoorm3
-layer trapdoorHingesBig ${stone_h} trapdoorm5
-layer trapdoorHinges ${stone_s} trapdoorm6
-stack "block/mangrove_trapdoor"
+push ringsHole ${wood_mangrove} trapdoorm0
+push rings2 ${wood_mangrove_s} trapdoorm2
+push borderDotted ${wood_mangrove_h} trapdoorm3
+push trapdoorHingesBig ${stone_h} trapdoorm5
+push trapdoorHinges ${stone_s} trapdoorm6
+out_stack "block/mangrove_trapdoor"
 
-layer bigDiamond ${wood_acacia} trapdoora0
-layer borderSolidThick ${wood_acacia} trapdoora1
-layer borderSolid ${wood_acacia_h} trapdoora2
-layer trapdoorHingesBig ${stone_s} trapdoora5
-layer trapdoorHinges ${stone_h} trapdoora6
-stack "block/acacia_trapdoor"
+push bigDiamond ${wood_acacia} trapdoora0
+push borderSolidThick ${wood_acacia} trapdoora1
+push borderSolid ${wood_acacia_h} trapdoora2
+push trapdoorHingesBig ${stone_s} trapdoora5
+push trapdoorHinges ${stone_h} trapdoora6
+out_stack "block/acacia_trapdoor"
 
-layer 2x2BottomRight ${wood_dark_oak_h} trapdoord0 ${wood_dark_oak}
-layer 2x2TopLeft ${wood_dark_oak_s} trapdoord1
-layer borderShortDashes ${wood_dark_oak} trapdoord2
-layer trapdoorHingesBig ${stone_h} trapdoord6
-stack "block/dark_oak_trapdoor"
+push 2x2BottomRight ${wood_dark_oak_h} trapdoord0 ${wood_dark_oak}
+push 2x2TopLeft ${wood_dark_oak_s} trapdoord1
+push borderShortDashes ${wood_dark_oak} trapdoord2
+push trapdoorHingesBig ${stone_h} trapdoord6
+out_stack "block/dark_oak_trapdoor"
 
 # Functional wooden blocks
 
-layer rail $wood_oak ladder1
-layer railTies $wood_oak_h ladder2
-stack block/ladder
+push rail $wood_oak ladder1
+push railTies $wood_oak_h ladder2
+out_stack block/ladder
 
-layer waves ${wood_oak_h} table0 ${wood_oak}
-layer craftingGrid ${wood_oak_s} table1
-layer borderSolid ${wood_dark_oak} table2
-layer cornersTri ${wood_oak_h} table3
-stack "block/crafting_table_top"
+push waves ${wood_oak_h} table0 ${wood_oak}
+push craftingGrid ${wood_oak_s} table1
+push borderSolid ${wood_dark_oak} table2
+push cornersTri ${wood_oak_h} table3
+out_stack "block/crafting_table_top"
 
-copy block/oak_planks table_side_1
-layer borderSolid ${wood_oak_h} table_side_2
-layer craftingSide ${wood_dark_oak} table_side_3
-stack "block/crafting_table_side"
+push_copy block/oak_planks table_side_1
+push borderSolid ${wood_oak_h} table_side_2
+push craftingSide ${wood_dark_oak} table_side_3
+out_stack "block/crafting_table_side"
 
-copy block/crafting_table_side table_front_1
-stack "block/crafting_table_front"
+copy "block/crafting_table_side" "block/crafting_table_front"
 
-layer empty ${wood_oak} shelf0 ${wood_oak}
-layer_precolored bookShelves shelf1
-stack "block/bookshelf"
+push empty ${wood_oak} shelf0 ${wood_oak}
+push_precolored bookShelves shelf1
+out_stack "block/bookshelf"
 
-copy block/podzol_top compost0
-stack "block/composter_compost"
+copy "block/podzol_top" "block/composter_compost"
 
-copy block/composter_compost compost1
-layer_precolored bonemealSmallNoBorder compost2
-stack "block/composter_ready"
+push_copy block/composter_compost compost1
+push_precolored bonemealSmallNoBorder compost2
+out_stack "block/composter_ready"
 
-layer borderSolidThick ${wood_oak} compostframe0
-stack "block/composter_top"
+out_layer borderSolidThick ${wood_oak} "block/composter_top"
 
-layer stripesThick ${wood_oak_s} compostSide0 ${wood_oak}
-layer borderDotted ${wood_oak_h} compostSide1
-stack "block/composter_side"
+push stripesThick ${wood_oak_s} compostSide0 ${wood_oak}
+push borderDotted ${wood_oak_h} compostSide1
+out_stack "block/composter_side"
 
-layer planksTopVertical ${wood_oak} compostBottom0 ${wood_oak_s}
-layer borderSolidThick ${wood_oak_s} compostBottom1
-layer borderSolid ${wood_oak} compostBottom2
-stack "block/composter_bottom"
+push planksTopVertical ${wood_oak} compostBottom0 ${wood_oak_s}
+push borderSolidThick ${wood_oak_s} compostBottom1
+push borderSolid ${wood_oak} compostBottom2
+out_stack "block/composter_bottom"
 
-layer strokeTopLeftBottomRight4 ${wood_oak} jukeboxSide0 ${wood_dark_oak}
-layer strokeBottomLeftTopRight4 ${wood_oak} jukeboxSide1
-layer borderSolidThick ${wood_oak_h} jukeboxSide2
-layer borderDotted ${wood_oak_s} jukeboxSide3
-stack "block/jukebox_side"
+push strokeTopLeftBottomRight4 ${wood_oak} jukeboxSide0 ${wood_dark_oak}
+push strokeBottomLeftTopRight4 ${wood_oak} jukeboxSide1
+push borderSolidThick ${wood_oak_h} jukeboxSide2
+push borderDotted ${wood_oak_s} jukeboxSide3
+out_stack "block/jukebox_side"
 
-layer borderSolidThick ${wood_oak_h} jukeboxTop0 ${wood_oak}
-layer borderDotted ${wood_oak_s} jukeboxTop1
-layer thirdRail ${black} jukeboxTop2
-stack "block/jukebox_top"
+push borderSolidThick ${wood_oak_h} jukeboxTop0 ${wood_oak}
+push borderDotted ${wood_oak_s} jukeboxTop1
+push thirdRail ${black} jukeboxTop2
+out_stack "block/jukebox_top"
 
-copy block/jukebox_side noteblock1
-layer note ${wood_oak_s} noteblock4
-stack "block/note_block"
+push_copy block/jukebox_side noteblock1
+push note ${wood_oak_s} noteblock4
+out_stack "block/note_block"
 
 # S040. BLOCKS BROKEN WITH SHEARS
 
-layer ringsCentralBullseye ${white} cobweb1
-layer x ${white} cobweb2
-layer cross ${white} cobweb3
-stack block/cobweb
+push ringsCentralBullseye ${white} cobweb1
+push x ${white} cobweb2
+push cross ${white} cobweb3
+out_stack block/cobweb
 
 # todo: glow moss
 
@@ -1310,260 +1315,242 @@ stack block/cobweb
 # Wool
 
 for dye in "${DYES[@]}"; do
-  layer empty "${!dye}" "${dye}_wool1" "${!dye}"
-  layer_semitrans zigzagBroken ${gray} "${dye}_wool2" 0.25
-  layer_semitrans zigzagBroken2 ${light_gray} "${dye}_wool3" 0.25
-  layer_semitrans borderSolid ${gray} "${dye}_wool4" 0.5
-  layer_semitrans borderDotted ${light_gray} "${dye}_wool5" 0.5
-  stack "block/${dye}_wool"
+  push empty "${!dye}" "${dye}_wool1" "${!dye}"
+  push_semitrans zigzagBroken ${gray} "${dye}_wool2" 0.25
+  push_semitrans zigzagBroken2 ${light_gray} "${dye}_wool3" 0.25
+  push_semitrans borderSolid ${gray} "${dye}_wool4" 0.5
+  push_semitrans borderDotted ${light_gray} "${dye}_wool5" 0.5
+  out_stack "block/${dye}_wool"
 done
 
 # Tnt
 
-layer tntSticksSide ${tnt} tnt10 ${tnt_s}
-layer borderDotted ${tnt_h} tnt15
-layer tntStripe ${white} tnt20
-layer tntSign ${black} tnt30
-stack block/tnt_side
+push tntSticksSide ${tnt} tnt10 ${tnt_s}
+push borderDotted ${tnt_h} tnt15
+push tntStripe ${white} tnt20
+push tntSign ${black} tnt30
+out_stack block/tnt_side
 
-layer tntSticksEnd ${red} tnt1 ${black}
-stack block/tnt_bottom
+out_layer tntSticksEnd ${red} block/tnt_bottom ${black}
 
-copy block/tnt_bottom tnt1
-layer tntFuzes ${black} tnt2
-stack block/tnt_top
+push_copy block/tnt_bottom tnt1
+push tntFuzes ${black} tnt2
+out_stack block/tnt_top
 
 # Flowers
 
-layer flowerStemTall ${flower_stem} tallstem1
-layer flowerStemTallBorder ${flower_stem_h} tallstem2
-layer flowerStemBottomBorder ${flower_stem_s} tallstem3
-stack block/sunflower_bottom
+push flowerStemTall ${flower_stem} tallstem1
+push flowerStemTallBorder ${flower_stem_h} tallstem2
+push flowerStemBottomBorder ${flower_stem_s} tallstem3
+out_stack block/sunflower_bottom
 
-layer flowerStemShort ${flower_stem} shortstem1
-layer flowerStemShortBorder ${flower_stem_h} shortstem2
-layer flowerStemBottomBorder ${flower_stem_s} shortstem3
-stack block/sunflower_top
+push flowerStemShort ${flower_stem} shortstem1
+push flowerStemShortBorder ${flower_stem_h} shortstem2
+push flowerStemBottomBorder ${flower_stem_s} shortstem3
+out_stack block/sunflower_top
 
-layer sunflowerPetals ${yellow} sunflower1
-layer sunflowerPistil ${black} sunflower2
-stack block/sunflower_front
+push sunflowerPetals ${yellow} sunflower1
+push sunflowerPistil ${black} sunflower2
+out_stack block/sunflower_front
 
-layer sunflowerPetals ${flower_stem} sunflowerBack1
-stack block/sunflower_back
+out_layer sunflowerPetals block/sunflower_back sunflowerBack1
 
 # Crops
 
-layer bambooThick ${sugarcane_s} sugarcane1
-layer bambooThin ${sugarcane_h} sugarcane2
-layer bambooThinMinusBorder ${sugarcane} sugarcane3
-stack block/sugar_cane
+push bambooThick ${sugarcane_s} sugarcane1
+push bambooThin ${sugarcane_h} sugarcane2
+push bambooThinMinusBorder ${sugarcane} sugarcane3
+out_stack block/sugar_cane
 
-layer wart0 ${crimson_wart_s} wart0
-stack block/nether_wart_stage0
+out_layer wart0 ${crimson_wart_s} block/nether_wart_stage0
 
-layer wart1 ${crimson_wart_s} wart1
-stack block/nether_wart_stage1
+out_layer wart1 ${crimson_wart_s} block/nether_wart_stage1
 
-layer wart2 ${crimson_wart_s} wart2
-layer wart2a ${crimson_wart_h} wart2a
-stack block/nether_wart_stage2
+push wart2 ${crimson_wart_s} wart2
+push wart2a ${crimson_wart_h} wart2a
+out_stack block/nether_wart_stage2
 
-layer carrots0 ${veg_leaves_s} carrots0
-stack block/carrots_stage0
+out_layer carrots0 ${veg_leaves_s} block/carrots_stage0
 
-layer carrots1 ${veg_leaves_s} carrots1
-stack block/carrots_stage1
+out_layer carrots1 ${veg_leaves_s} block/carrots_stage1
 
-layer carrots2 ${veg_leaves_s} carrots2
-stack block/carrots_stage2
+out_layer carrots2 ${veg_leaves_s} block/carrots_stage2
 
-layer carrots3Stems ${veg_leaves_h} carrots3a
-layer rootVeg ${carrot} carrots3b
-stack block/carrots_stage3
+push carrots3Stems ${veg_leaves_h} carrots3a
+push rootVeg ${carrot} carrots3b
+out_stack block/carrots_stage3
 
-layer beets0 ${veg_leaves_s} beets0
-stack block/beetroots_stage0
+out_layer beets0 ${veg_leaves_s} block/beetroots_stage0
 
-layer beets1 ${veg_leaves_s} beets1
-stack block/beetroots_stage1
+out_layer beets1 ${veg_leaves_s} block/beetroots_stage1
 
-layer beets2 ${veg_leaves_s} beets2
-stack block/beetroots_stage2
+out_layer beets2 ${veg_leaves_s} block/beetroots_stage2
 
-layer beets3Stems ${veg_leaves_h} beets3a
-layer rootVeg ${beetroot} beets3b
-stack block/beetroots_stage3
+push beets3Stems ${veg_leaves_h} beets3a
+push rootVeg ${beetroot} beets3b
+out_stack block/beetroots_stage3
 
-layer potato0 ${veg_leaves_s} potato0
-stack block/potatoes_stage0
+out_layer potato0 ${veg_leaves_s} block/potatoes_stage0
 
-layer potato1 ${veg_leaves_s} potato1
-stack block/potatoes_stage1
+out_layer potato1 ${veg_leaves_s} block/potatoes_stage1
 
-layer potato2 ${veg_leaves_s} potato2
-stack block/potatoes_stage2
+out_layer potato2 ${veg_leaves_s} block/potatoes_stage2
 
-layer flowerStemShort ${veg_leaves_h} potato3
-layer potato ${potato} potato3a
-stack block/potatoes_stage3
+push flowerStemShort ${veg_leaves_h} potato3
+push potato ${potato} potato3a
+out_stack block/potatoes_stage3
 
 for wheatStage in $(seq 0 6); do
-  layer "wheat${wheatStage}" ${wheat_s} "wheat${wheatStage}layer1"
-  layer "wheatTexture${wheatStage}" ${wheat} "wheat${wheatStage}layer2"
-  stack "block/wheat_stage${wheatStage}"
+  push "wheat${wheatStage}" ${wheat_s} "wheat${wheatStage}layer1"
+  push "wheatTexture${wheatStage}" ${wheat} "wheat${wheatStage}layer2"
+  out_stack "block/wheat_stage${wheatStage}"
 done
 
-layer "wheatFull" ${wheat_h} "wheatfull1"
-layer "wheatTextureFull" ${wheat_s} "wheatfull2"
-stack "block/wheat_stage7"
+push "wheatFull" ${wheat_h} "wheatfull1"
+push "wheatTextureFull" ${wheat_s} "wheatfull2"
+out_stack "block/wheat_stage7"
 
 # Lily pads and leaves are biome-colored starting from gray, like grass blocks
 
-layer lilyPad ${grass_s} pad1
-layer lilyPadInterior ${grass_h} pad2
-stack block/lily_pad
+push lilyPad ${grass_s} pad1
+push lilyPadInterior ${grass_h} pad2
+out_stack block/lily_pad
 
-layer leaves1 ${grass_s} leavesa1
-layer leaves1a ${grass_h} leavesa2
-stack block/acacia_leaves
+push leaves1 ${grass_s} leavesa1
+push leaves1a ${grass_h} leavesa2
+out_stack block/acacia_leaves
 
-layer leaves2 ${grass_h} leavesb1
-layer leaves2a ${grass_s} leavesb2
-stack block/birch_leaves
+push leaves2 ${grass_h} leavesb1
+push leaves2a ${grass_s} leavesb2
+out_stack block/birch_leaves
 
-layer leaves3 ${grass_s} leavesd1
-layer leaves3a ${grass_h} leavesd2
-stack block/dark_oak_leaves
+push leaves3 ${grass_s} leavesd1
+push leaves3a ${grass_h} leavesd2
+out_stack block/dark_oak_leaves
 
-layer leaves4 ${grass_s} leaveso1
-layer leaves4a ${grass_h} leaveso2
-stack block/oak_leaves
+push leaves4 ${grass_s} leaveso1
+push leaves4a ${grass_h} leaveso2
+out_stack block/oak_leaves
 
-layer leaves5 ${grass_h} leavesm1
-layer leaves5a ${grass} leavesm2
-layer leaves5b ${grass_s} leavesm3
-stack block/mangrove_leaves
+push leaves5 ${grass_h} leavesm1
+push leaves5a ${grass} leavesm2
+push leaves5b ${grass_s} leavesm3
+out_stack block/mangrove_leaves
 
-layer leaves6 ${grass_h} leavesj1
-layer leaves6a ${grass_s} leavesj2
-stack block/jungle_leaves
+push leaves6 ${grass_h} leavesj1
+push leaves6a ${grass_s} leavesj2
+out_stack block/jungle_leaves
 
-layer leaves3 ${grass_h} leavess1
-layer leaves3b ${grass_s} leavess2
-stack block/spruce_leaves
+push leaves3 ${grass_h} leavess1
+push leaves3b ${grass_s} leavess2
+out_stack block/spruce_leaves
 
 # Protruding grass
 
-layer bottomPart ${grass_s} tallgrassb0
-layer grassTall ${grass} tallgrassb1
-stack block/tall_grass_bottom
+push bottomPart ${grass_s} tallgrassb0
+push grassTall ${grass} tallgrassb1
+out_stack block/tall_grass_bottom
 
-layer grassVeryShort ${grass} tallgrasst0
-stack block/tall_grass_top
+out_layer grassVeryShort ${grass} block/tall_grass_top
 
-layer grassShort ${grass} grass0
-stack block/grass
+out_layer grassShort ${grass} block/grass
 
 # Nether fungus wart blocks
 
-layer leaves6 ${crimson_wart_s} cwart1 ${crimson_wart}
-layer leaves6a ${crimson_wart_h} cwart2
-layer borderRoundDots ${crimson_wart_h} cwart3
-stack block/nether_wart_block
+push leaves6 ${crimson_wart_s} cwart1 ${crimson_wart}
+push leaves6a ${crimson_wart_h} cwart2
+push borderRoundDots ${crimson_wart_h} cwart3
+out_stack block/nether_wart_block
 
-layer leaves3 ${warped_wart_s} wwart1 ${warped_wart}
-layer leaves3a ${warped_wart_h} wwart2
-layer leaves3b ${warped_wart_h} wwart3
-layer borderSolid ${warped_wart_s} wwart4
-layer borderShortDashes ${warped_wart_h} wwart5
-stack block/warped_wart_block
+push leaves3 ${warped_wart_s} wwart1 ${warped_wart}
+push leaves3a ${warped_wart_h} wwart2
+push leaves3b ${warped_wart_h} wwart3
+push borderSolid ${warped_wart_s} wwart4
+push borderShortDashes ${warped_wart_h} wwart5
+out_stack block/warped_wart_block
 
 # Mushrooms & fungi
 
-layer mushroomStem $mushroom_stem mush1
-layer mushroomCapRed $mushroom_red_cap mush2
-stack block/red_mushroom
+push mushroomStem $mushroom_stem mush1
+push mushroomCapRed $mushroom_red_cap mush2
+out_stack block/red_mushroom
 
-layer mushroomStem $mushroom_stem bmush1
-layer mushroomCapBrown $mushroom_brown_cap bmush2
-stack block/brown_mushroom
+push mushroomStem $mushroom_stem bmush1
+push mushroomCapBrown $mushroom_brown_cap bmush2
+out_stack block/brown_mushroom
 
-layer mushroomStem $bark_crimson_s cfungus1
-layer mushroomCapRed $crimson_wart cfungus2
-layer crimsonFungusSpots $fungus_spot cfungus3
-stack block/crimson_fungus
+push mushroomStem $bark_crimson_s cfungus1
+push mushroomCapRed $crimson_wart cfungus2
+push crimsonFungusSpots $fungus_spot cfungus3
+out_stack block/crimson_fungus
 
-layer mushroomStem $bark_warped_s cfungus1
-layer warpedFungusCap $warped_wart cfungus2
-layer warpedFungusSpots $fungus_spot cfungus3
-stack block/warped_fungus
+push mushroomStem $bark_warped_s cfungus1
+push warpedFungusCap $warped_wart cfungus2
+push warpedFungusSpots $fungus_spot cfungus3
+out_stack block/warped_fungus
 
-layer borderSolid ${shroomlight_h} sl0 ${shroomlight}
-layer checksSmall ${shroomlight_s} sl1
-layer shroomlightOn ${shroomlight_h} sl2
-stack block/shroomlight
+push borderSolid ${shroomlight_h} sl0 ${shroomlight}
+push checksSmall ${shroomlight_s} sl1
+push shroomlightOn ${shroomlight_h} sl2
+out_stack block/shroomlight
 
 # Redstone dust
 
-layer redstoneDot $white redstoneDot1
-stack block/redstone_dust_dot
+out_layer redstoneDot $white block/redstone_dust_dot
 
-layer redstoneLine $white redstoneLine1
-stack block/redstone_dust_line0
+out_layer redstoneLine $white block/redstone_dust_line0
 
-copy block/redstone_dust_line0 redstoneLine2
-stack block/redstone_dust_line1
+copy block/redstone_dust_line0 block/redstone_dust_line1
 
 # Target
 
-layer grassTall $target_h targetSide1 $target_s
-layer ringsCentralBullseye $redstone_s targetSide2
-stack block/target_side
+push grassTall $target_h targetSide1 $target_s
+push ringsCentralBullseye $redstone_s targetSide2
+out_stack block/target_side
 
-layer checksSmall $target_h targetTop1 $target_s
-layer ringsCentralBullseye $redstone_s targetTop2
-stack block/target_top
+push checksSmall $target_h targetTop1 $target_s
+push ringsCentralBullseye $redstone_s targetTop2
+out_stack block/target_top
 
 # Torches
 
-layer torchBase $wood_oak torch1
-layer torchShadow $wood_oak_s torch2
-layer_precolored torchFlameSmall torch3
-stack block/torch
+push torchBase $wood_oak torch1
+push torchShadow $wood_oak_s torch2
+push_precolored torchFlameSmall torch3
+out_stack block/torch
 
-layer torchBase $wood_oak storch1
-layer torchShadow $wood_oak_s storch2
-layer_precolored soulTorchFlameSmall storch3
-stack block/soul_torch
+push torchBase $wood_oak storch1
+push torchShadow $wood_oak_s storch2
+push_precolored soulTorchFlameSmall storch3
+out_stack block/soul_torch
 
-layer torchBase $wood_oak rtorch1
-layer torchShadow $wood_oak_s rtorch2
-layer torchRedstoneHead $black rtorch3
-stack block/redstone_torch_off
+push torchBase $wood_oak rtorch1
+push torchShadow $wood_oak_s rtorch2
+push torchRedstoneHead $black rtorch3
+out_stack block/redstone_torch_off
 
-layer torchBase $wood_oak artorch1
-layer torchShadow $wood_oak_s artorch2
-layer torchRedstoneHead ${redstone_h} artorch3
-layer torchRedstoneHeadShadow ${redstone_s} artorch4
-stack block/redstone_torch
+push torchBase $wood_oak artorch1
+push torchShadow $wood_oak_s artorch2
+push torchRedstoneHead ${redstone_h} artorch3
+push torchRedstoneHeadShadow ${redstone_s} artorch4
+out_stack block/redstone_torch
 
 # S090. UNBREAKABLE BLOCKS
 
-layer borderSolid $bedrock_s bedrock1 $bedrock
-layer borderLongDashes $bedrock_h bedrock2
-layer strokeTopLeftBottomRight2 $bedrock_s bedrock3
-layer strokeBottomLeftTopRight2 $bedrock_h bedrock4
-stack block/bedrock
+push borderSolid $bedrock_s bedrock1 $bedrock
+push borderLongDashes $bedrock_h bedrock2
+push strokeTopLeftBottomRight2 $bedrock_s bedrock3
+push strokeBottomLeftTopRight2 $bedrock_h bedrock4
+out_stack block/bedrock
 
-copy block/end_stone endPortalSide1
-layer endPortalFrameSide $structure_block_bg endPortalSide2
-stack block/end_portal_frame_side
+push_copy block/end_stone endPortalSide1
+push endPortalFrameSide $structure_block_bg endPortalSide2
+out_stack block/end_portal_frame_side
 
-copy block/end_stone endPortalTop1
-layer endPortalFrameTop $structure_block_bg endPortalTop2
-layer railDetector $black endPortalTop3
-stack block/end_portal_frame_top
+push_copy block/end_stone endPortalTop1
+push endPortalFrameTop $structure_block_bg endPortalTop2
+push railDetector $black endPortalTop3
+out_stack block/end_portal_frame_top
 
 # Command blocks
 
@@ -1571,115 +1558,114 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
   shadow=${type}_s
   highlight=${type}_h
 
-  layer diagonalChecksTopLeftBottomRight "${!shadow}" "${type}_cbb1" "${!type}"
-  layer diagonalChecksBottomLeftTopRight "${!highlight}" "${type}_cbb2"
-  layer diagonalOutlineChecksTopLeftBottomRight "${!highlight}" "${type}_cbb3"
-  layer diagonalOutlineChecksBottomLeftTopRight "${!shadow}" "${type}_cbb4"
-  stack "block/${type}_basebase"
+  push diagonalChecksTopLeftBottomRight "${!shadow}" "${type}_cbb1" "${!type}"
+  push diagonalChecksBottomLeftTopRight "${!highlight}" "${type}_cbb2"
+  push diagonalOutlineChecksTopLeftBottomRight "${!highlight}" "${type}_cbb3"
+  push diagonalOutlineChecksBottomLeftTopRight "${!shadow}" "${type}_cbb4"
+  out_stack "block/${type}_basebase"
 done
 
-move block/command_block_basebase block/command_block_base
+rename_out block/command_block_basebase block/command_block_base
 
-copy block/chain_command_block_basebase chcb1
-layer_precolored commandBlockChains chcb2
-stack block/chain_command_block_base
-donewith block/chain_command_block_basebase
+push_copy block/chain_command_block_basebase chcb1
+push_precolored commandBlockChains chcb2
+out_stack block/chain_command_block_base
+done_with_out block/chain_command_block_basebase
 
-copy block/repeating_command_block_basebase rcb1
-layer loopArrow $black rcb2
-stack block/repeating_command_block_base
-donewith block/repeating_command_block_basebase
+push_copy block/repeating_command_block_basebase rcb1
+push loopArrow $black rcb2
+out_stack block/repeating_command_block_base
+done_with_out block/repeating_command_block_basebase
 
 for type in "${CMD_BLOCK_TYPES[@]}"; do
   shadow=${type}_s
   highlight=${type}_h
 
-  copy "block/${type}_base" "${type}_frontbase1"
-  layer commandBlockOctagon $black "${type}_frontbase2"
-  layer craftingGridSpacesCross $white "${type}_frontbase3"
-  stack "block/${type}_front_base"
+  push_copy "block/${type}_base" "${type}_frontbase1"
+  push commandBlockOctagon $black "${type}_frontbase2"
+  push craftingGridSpacesCross $white "${type}_frontbase3"
+  out_stack "block/${type}_front_base"
 
   for frame in $(seq 1 4); do
-    copy "block/${type}_front_base" "${type}_${frame}_front1"
-    layer "dotsInCross${frame}" $command_block_dot "${type}_${frame}_front2"
-    stack "block/${type}_front_${frame}"
+    push_copy "block/${type}_front_base" "${type}_${frame}_front1"
+    push "dotsInCross${frame}" $command_block_dot "${type}_${frame}_front2"
+    out_stack "block/${type}_front_${frame}"
   done
-  donewith "block/${type}_front_base"
+  done_with_out "block/${type}_front_base"
   animate4 "block/${type}_front"
 
-  copy "block/${type}_base" "${type}_backbase1"
-  layer commandBlockSquare $black "${type}_backbase2"
-  layer craftingGridSpaces $white "${type}_backbase3"
-  stack "block/${type}_back_base"
+  push_copy "block/${type}_base" "${type}_backbase1"
+  push commandBlockSquare $black "${type}_backbase2"
+  push craftingGridSpaces $white "${type}_backbase3"
+  out_stack "block/${type}_back_base"
 
   for frame in $(seq 1 4); do
-    copy "block/${type}_back_base" "${type}_${frame}_back1"
-    layer "glider${frame}" $command_block_dot "${type}_${frame}_back2"
-    stack "block/${type}_back_${frame}"
+    push_copy "block/${type}_back_base" "${type}_${frame}_back1"
+    push "glider${frame}" $command_block_dot "${type}_${frame}_back2"
+    out_stack "block/${type}_back_${frame}"
   done
-  donewith "block/${type}_back_base"
+  done_with_out "block/${type}_back_base"
   animate4 "block/${type}_back"
 
-  copy "block/${type}_base" "${type}_sidebase1"
-  layer commandBlockArrowUnconditional $black "${type}_sidebase2"
-  layer craftingGridSpaces $white "${type}_sidebase3"
-  stack "block/${type}_side_base"
+  push_copy "block/${type}_base" "${type}_sidebase1"
+  push commandBlockArrowUnconditional $black "${type}_sidebase2"
+  push craftingGridSpaces $white "${type}_sidebase3"
+  out_stack "block/${type}_side_base"
 
   for frame in $(seq 1 4); do
-    copy "block/${type}_side_base" "${type}_${frame}_side1"
-    layer "glider${frame}" $command_block_dot "${type}_${frame}_side2"
-    stack "block/${type}_side_${frame}"
+    push_copy "block/${type}_side_base" "${type}_${frame}_side1"
+    push "glider${frame}" $command_block_dot "${type}_${frame}_side2"
+    out_stack "block/${type}_side_${frame}"
   done
-  donewith "block/${type}_side_base"
+  done_with_out "block/${type}_side_base"
   animate4 "block/${type}_side"
 
-  copy "block/${type}_base" "${type}_condbase1"
-  layer commandBlockArrow $black "${type}_condbase2"
-  layer craftingGridSpaces $white "${type}_condbase3"
-  stack "block/${type}_conditional_base"
-  donewith "block/${type}_base"
+  push_copy "block/${type}_base" "${type}_condbase1"
+  push commandBlockArrow $black "${type}_condbase2"
+  push craftingGridSpaces $white "${type}_condbase3"
+  out_stack "block/${type}_conditional_base"
+  done_with_out "block/${type}_base"
 
   for frame in $(seq 1 4); do
-    copy "block/${type}_conditional_base" "${type}_${frame}_cond1"
-    layer "glider${frame}" $command_block_dot "${type}_${frame}_cond2"
-    stack "block/${type}_conditional_${frame}"
+    push_copy "block/${type}_conditional_base" "${type}_${frame}_cond1"
+    push "glider${frame}" $command_block_dot "${type}_${frame}_cond2"
+    out_stack "block/${type}_conditional_${frame}"
   done
-  donewith "block/${type}_conditional_base"
+  done_with_out "block/${type}_conditional_base"
   animate4 "block/${type}_conditional"
 done
 
 # Structure & jigsaw blocks
 
-layer empty $structure_block_fg sb1 $structure_block_bg
-layer_semitrans borderDotted $structure_block_fg sb2 0.25
-stack block/jigsaw_bottom
+push empty $structure_block_fg sb1 $structure_block_bg
+push_semitrans borderDotted $structure_block_fg sb2 0.25
+out_stack block/jigsaw_bottom
 
-layer cornerCrosshairs $structure_block_fg sbc1 $structure_block_bg
-stack block/structure_block_corner
+out_layer cornerCrosshairs $structure_block_fg block/structure_block_corner $structure_block_bg
 
-copy block/jigsaw_bottom sbd1
-layer data $structure_block_fg sbd2
-stack block/structure_block_data
+push_copy block/jigsaw_bottom sbd1
+push data $structure_block_fg sbd2
+out_stack block/structure_block_data
 
-copy block/jigsaw_bottom sbl1
-layer folderLoad $structure_block_fg sbl2
-stack block/structure_block_load
+push_copy block/jigsaw_bottom sbl1
+push folderLoad $structure_block_fg sbl2
+out_stack block/structure_block_load
 
-copy block/jigsaw_bottom sbs1
-layer folderSave $structure_block_fg sbs2
-stack block/structure_block_save
+push_copy block/jigsaw_bottom sbs1
+push folderSave $structure_block_fg sbs2
+out_stack block/structure_block_save
 
-copy block/jigsaw_bottom jbt1
-layer jigsaw $structure_block_fg jbt2
-stack block/jigsaw_top
+push_copy block/jigsaw_bottom jbt1
+push jigsaw $structure_block_fg jbt2
+out_stack block/jigsaw_top
 
-copy block/jigsaw_bottom jbs1
-layer arrowUp $structure_block_fg jbs2
-stack block/jigsaw_side
+push_copy block/jigsaw_bottom jbs1
+push arrowUp $structure_block_fg jbs2
+out_stack block/jigsaw_side
 
-copy block/jigsaw_bottom jbl1
-layer jigsawLock $structure_block_fg jbl2
-stack block/jigsaw_lock
+push_copy block/jigsaw_bottom jbl1
+push jigsawLock $structure_block_fg jbl2
+out_stack block/jigsaw_lock
 
 # S100. ITEMS NOT USED IN BLOCK TEXTURES
 
@@ -1687,26 +1673,26 @@ stack block/jigsaw_lock
 
 i=0
 for disc in "${NORMAL_MUSIC_DISCS[@]}"; do
-  layer musicDisc ${music_disc} "disc_${disc}_1"
-  layer musicDiscGroove ${music_disc_s} "disc_${disc}_2"
-  layer musicDiscLabel "${!DISC_LABELS[$i]}" "disc_${disc}_3"
-  stack "item/music_disc_${disc}"
+  push musicDisc ${music_disc} "disc_${disc}_1"
+  push musicDiscGroove ${music_disc_s} "disc_${disc}_2"
+  push musicDiscLabel "${!DISC_LABELS[$i]}" "disc_${disc}_3"
+  out_stack "item/music_disc_${disc}"
   i=$((i+1))
 done
 
-layer musicDiscBroken ${music_disc_s} disc_11_1
-layer musicDiscGrooveBroken ${music_disc_h} disc_11_2
-stack "item/music_disc_11"
+push musicDiscBroken ${music_disc_s} disc_11_1
+push musicDiscGrooveBroken ${music_disc_h} disc_11_2
+out_stack "item/music_disc_11"
 
 # S200. PARTICLES
 
-layer note ${grass_h} note_1
-stack "particle/note"
+out_layer note ${grass_h} "particle/note"
+
+# S900. PACKAGING
 
 zip -r "debug-${SIZE}.zip" "$DEBUGDIR"
 zip -r "layers-${SIZE}.zip" "$PNG_DIRECTORY"
 
-# S900. PACKAGING
 ZIP_FILE="OcHD-${SIZE}x${SIZE}.zip"
 cd "${OUTROOT}" || exit 1
 rm "${ZIP_FILE}" 2>/dev/null || true
