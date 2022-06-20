@@ -386,7 +386,7 @@ out_layer () {
 push_precolored_ () {
   join_conversion_job "$1"
   ln -T "$PNG_DIRECTORY/$1.png" "$TMPDIR/$2.png"
-  echo "Wrote precolored layer $3"
+  echo "Wrote precolored layer $2"
 }
 export -f push_precolored_
 
@@ -407,7 +407,7 @@ push_semitrans_ () {
                   -background "$4" -alpha remove \
                   -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png"
   fi
-  echo "Wrote layer $3"
+  echo "Wrote semitransparent layer $3"
 }
 export -f push_semitrans_
 
