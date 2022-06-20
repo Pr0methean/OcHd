@@ -426,6 +426,7 @@ out_stack_ () {
   done
   OUTFILE="${OUTDIR}/$1.png"
   if [ ${#layers[@]} -eq 1 ]; then
+    echo "Copying ${layer_files[0]} to output $1"
     ln -T "${layer_files[0]}" "${OUTFILE}"
   else
     echo "Building output $1 from layers: ${layer_files[*]}"
