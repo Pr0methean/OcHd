@@ -358,7 +358,7 @@ push_ () {
 export -f push_
 
 push () {
-  sem --id "layer_$3" push_ "$@"
+  sem -q --id "layer_$3" 'push_ "$@"'
   layers+=("$3")
 }
 
@@ -378,7 +378,7 @@ out_layer_ () {
 export -f out_layer_
 
 out_layer () {
-  sem --id "out_$3" out_layer_ "$@"
+  sem -q --id "out_$3" 'out_layer_ "$@"'
 }
 
 push_precolored_ () {
@@ -389,7 +389,7 @@ push_precolored_ () {
 export -f push_precolored_
 
 push_precolored () {
-  sem --id "layer_$2" push_precolored_ "$@"
+  sem -q --id "layer_$2" 'push_precolored_ "$@"'
   layers+=("$2")
 }
 
@@ -410,7 +410,7 @@ push_semitrans_ () {
 export -f push_semitrans_
 
 push_semitrans () {
-  sem --id "layer_$3" push_semitrans_ "$@"
+  sem -q --id "layer_$3" 'push_semitrans_ "$@"'
   layers+=("$3")
 }
 
@@ -453,7 +453,7 @@ push_copy_ () {
 export -f push_copy_
 
 push_copy () {
-  sem --id "layer_$2" push_copy_ "$@"
+  sem --id "layer_$2" push_copy_ "$1" "$2"
   layers+=("$2")
 }
 
@@ -464,7 +464,7 @@ copy_ () {
 export -f copy_
 
 copy () {
-  sem --id "out_$2" copy_ "$@"
+  sem --id "out_$2" copy_ "$1" "$2"
 }
 
 rename_out_ () {
@@ -474,7 +474,7 @@ rename_out_ () {
 export -f rename_out_
 
 rename_out () {
-  sem --id "out_$2" rename_out_ "$@"
+  sem --id "out_$2" rename_out_ "$1" "$2"
 }
 
 done_with_out () {
@@ -500,7 +500,7 @@ animate4_ () {
 export -f animate4_
 
 animate4 () {
-  sem --id "out_$1" animate4_ "$@"
+  sem --id "out_$1" animate4_ "$1" "$2"
 }
 
 convert_ () {
