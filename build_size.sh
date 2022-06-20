@@ -360,7 +360,7 @@ push () {
     join_conversion_job "$1"
     if [ -z ${4+x} ]; then
       magick "$PNG_DIRECTORY/$1.png" \
-                -fill $2 -colorize 100% \
+                -fill "$2" -colorize 100% \
                 "$TMPDIR/$3.png" &
     else
       magick "$PNG_DIRECTORY/$1.png" \
@@ -377,7 +377,7 @@ out_layer () {
     join_conversion_job "$1"
     if [ -z ${4+x} ]; then
       magick "$PNG_DIRECTORY/$1.png" \
-                -fill $2 -colorize 100% \
+                -fill "$2" -colorize 100% \
                 "$OUTDIR/$3.png"
     else
       magick "$PNG_DIRECTORY/$1.png" \
@@ -404,7 +404,7 @@ push_semitrans () {
     join_conversion_job "$1"
     if [ -z ${5+x} ]; then
       magick "$PNG_DIRECTORY/$1.png" \
-                -fill $2 -colorize 100% \
+                -fill "$2" -colorize 100% \
                 -alpha set -background none -channel A -evaluate multiply "$4" +channel "$TMPDIR/$3.png"
     else
       magick "$PNG_DIRECTORY/$1.png" \
@@ -429,7 +429,7 @@ out_stack () {
       join_job "$job"
     done
     if [ ${#my_layers[@]} -eq 1 ]; then
-      ln -T $TMPDIR/*.png "${OUTFILE}"
+      ln -T "${my_layers[0]}" "${OUTFILE}"
     else
       magick "${my_layers[@]/#/-}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
     fi
@@ -953,8 +953,8 @@ for oxidation_state in "${OXIDATION_STATES[@]}"; do
   highlight="${oxidation_state}_copper_h"
 
   push streaks "${!highlight}" "${oxidation_state}_copper_block0" "${!color}"
-  push borderSolidTopLeft ${!highlight} "${oxidation_state}_copper_block2"
-  push borderSolidBottomRight ${!shadow} "${oxidation_state}_copper_block3"
+  push borderSolidTopLeft "${!highlight}" "${oxidation_state}_copper_block2"
+  push borderSolidBottomRight "${!shadow}" "${oxidation_state}_copper_block3"
   push copper2oxide "${!shadow}" "${oxidation_state}_copper_block4"
   out_stack "block/${oxidation_state}_copper"
 
@@ -1722,6 +1722,7 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
     push_copy "block/${type}_conditional_base" "${type}_${frame}_cond1"
     push "glider${frame}" $command_block_dot "${type}_${frame}_cond2"
     out_stack "block/${type}_conditional_${frame}"
+  done
   animate4 "block/${type}_conditional" "block/${type}_conditional_base"
 done
 
