@@ -345,7 +345,7 @@ join_output_job () {
 export -f join_output_job
 
 push_ () {
-  echo "push_ arguments: $*"
+  echo "push_ arguments: input $1, fill $2, output $3, background $4"
   join_conversion_job "$1"
   if [ -z ${4+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" -fill "$2" -colorize 100% "$TMPDIR/$3.png"
@@ -359,7 +359,6 @@ push_ () {
 export -f push_
 
 push () {
-  args=("$@")
   if [ -z ${4+x} ]; then
     sem --id "layer_$3" push_ "$1" "$2" "$3"
   else
@@ -369,7 +368,7 @@ push () {
 }
 
 out_layer_ () {
-  echo "out_layer_ arguments: $*"
+  echo "out_layer_ arguments: input $1, fill $2, output $3, background $4"
   join_conversion_job "$1"
   if [ -z ${4+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" \
@@ -405,7 +404,7 @@ push_precolored () {
 }
 
 push_semitrans_ () {
-  echo "push_semitrans_ arguments: $*"
+  echo "push_semitrans_ arguments: input $1, fill $2, output $3, $4, $5"
   join_conversion_job "$1"
   if [ -z ${5+x} ]; then
     magick "$PNG_DIRECTORY/$1.png" \
@@ -433,7 +432,7 @@ push_semitrans () {
 out_stack_ () {
   layers=($2)
   layer_files=()
-  echo "Starting output job $1 using layers: ${layers[*]}"
+  echo "Starting output job $1 using layers: $2"
   for layer in "${layers[@]}"; do
     layer_files+=("$TMPDIR/$layer.png")
     echo "Waiting for layer job $layer"
