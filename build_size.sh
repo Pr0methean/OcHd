@@ -358,7 +358,7 @@ push_ () {
 export -f push_
 
 push () {
-  sem -q --id "layer_$3" 'push_ "$@"'
+  sem --id "layer_$3" push_ "$@"
   layers+=("$3")
 }
 
@@ -378,7 +378,7 @@ out_layer_ () {
 export -f out_layer_
 
 out_layer () {
-  sem -q --id "out_$3" 'out_layer_ "$@"'
+  sem --id "out_$3" out_layer_ "$@"
 }
 
 push_precolored_ () {
@@ -389,7 +389,7 @@ push_precolored_ () {
 export -f push_precolored_
 
 push_precolored () {
-  sem -q --id "layer_$2" 'push_precolored_ "$@"'
+  sem --id "layer_$2" push_precolored_ "$1" "$2"
   layers+=("$2")
 }
 
@@ -410,7 +410,7 @@ push_semitrans_ () {
 export -f push_semitrans_
 
 push_semitrans () {
-  sem -q --id "layer_$3" 'push_semitrans_ "$@"'
+  sem --id "layer_$3" push_semitrans_ "$@"
   layers+=("$3")
 }
 
