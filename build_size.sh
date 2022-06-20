@@ -430,7 +430,7 @@ push_semitrans () {
 }
 
 out_stack_ () {
-  layers=("${@:2}")
+  layers=($2)
   layer_files=()
   echo "Starting output job $1 using layers: ${layers[*]}"
   for layer in "${layers[@]}"; do
@@ -454,8 +454,7 @@ out_stack_ () {
 export -f out_stack_
 
 out_stack () {
-  sem --id "out_$1" out_stack_ "$1" "${layers[@]}"
-  layers=()
+  sem --id "out_$1" out_stack_ "$1" "${layers[*]}"
 }
 
 push_copy_ () {
