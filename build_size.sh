@@ -445,6 +445,7 @@ out_stack () {
   layer_jobs=()
   export my_layers=("${layers[@]}")
   layers=()
+  echo "Scheduling output job $1 using layers: $my_layers"
   sem --id "out_$1" out_stack_ "$@"
 }
 
