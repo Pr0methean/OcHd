@@ -512,7 +512,7 @@ cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
   echo "Launching conversion job for ${SHORTNAME}"
-  sem --joblog --id "convert_${SHORTNAME}" sem --joblog --id inkscape --fg -j4% inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0
+  sem --id "convert_${SHORTNAME}" sem --id inkscape --fg -j4% inkscape -w "$SIZE" -h "$SIZE" "$file" -o "../$PNG_DIRECTORY/$SHORTNAME.png" -y 0.0
 done
 cd ..
 
