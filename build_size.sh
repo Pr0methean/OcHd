@@ -332,15 +332,26 @@ declare -A out_jobs
 declare -A conversion_jobs
 layers=()
 
-join_job () {
+join_job_ () {
   while (ps -p "$1" > /dev/null); do
     sleep 10
   done
 }
 
+join_job () {
+  echo "Joining job with id $pid"
+  join_job "$pid"
+}
+
+join_conversion_job () {
+  pid="${conversion_jobs[$1]}"
+  echo "Joining conversion job for $1 (id $pid)"
+  join_job_ "$pid"
+}
+
 push () {
   {
-    join_job "${conversion_jobs[$1]}"
+    join_conversion_job "$1"
     if [ -z ${4+x} ]; then
       magick "$PNG_DIRECTORY/$1.png" \
                 -fill $2 -colorize 100% \
@@ -357,7 +368,7 @@ push () {
 
 out_layer () {
   {
-    join_job "${conversion_jobs[$1]}"
+    join_conversion_job "$1"
     if [ -z ${4+x} ]; then
       magick "$PNG_DIRECTORY/$1.png" \
                 -fill $2 -colorize 100% \
@@ -373,7 +384,7 @@ out_layer () {
 
 push_precolored () {
   {
-    join_job "${conversion_jobs[$1]}"
+    join_conversion_job "$1"
     ln -T "$PNG_DIRECTORY/$1.png" "$TMPDIR/$2.png"
   } &
   layer_jobs+=($!)
@@ -383,7 +394,7 @@ push_precolored () {
 
 push_semitrans () {
   {
-    join_job "${conversion_jobs[$1]}"
+    join_conversion_job "$1"
     if [ -z ${5+x} ]; then
       magick "$PNG_DIRECTORY/$1.png" \
                 -fill $2 -colorize 100% \
