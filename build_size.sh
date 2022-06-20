@@ -361,9 +361,9 @@ export -f push_
 push () {
   echo "push arguments: input $1, fill $2, output $3"
   if [ -z ${4+x} ]; then
-    sem --id "layer_$3" push_ ::: "$1" ::: "$2" ::: "$3"
+    sem --id "layer_$3" --max-args 3 push_ "$1" "$2" "$3"
   else
-    sem --id "layer_$3" push_ ::: "$1" ::: "$2" ::: "$3" ::: "$4"
+    sem --id "layer_$3" --max-args 4 push_ "$1" "$2" "$3" "$4"
   fi
   layers+=("$3")
 }
@@ -387,9 +387,9 @@ export -f out_layer_
 out_layer () {
   echo "out_layer_ arguments: input $1, fill $2, output $3"
   if [ -z ${4+x} ]; then
-    sem --id "out_$3" out_layer_ ::: "$1" ::: "$2" ::: "$3"
+    sem --id "out_$3" --max-args 3 out_layer_ "$1" "$2" "$3"
   else
-    sem --id "out_$3" out_layer_ ::: "$1" ::: "$2" ::: "$3" ::: "$4"
+    sem --id "out_$3" --max-args 4 out_layer_ "$1" "$2" "$3" "$4"
   fi
 }
 
@@ -401,7 +401,7 @@ push_precolored_ () {
 export -f push_precolored_
 
 push_precolored () {
-  sem --id "layer_$2" --max-args 2 push_precolored_ ::: "$1" ::: "$2"
+  sem --id "layer_$2" --max-args 2 push_precolored_ "$1" "$2"
   layers+=("$2")
 }
 
@@ -425,9 +425,9 @@ export -f push_semitrans_
 push_semitrans () {
   echo "push_semitrans arguments: input $1, fill $2, output $3, $4"
   if [ -z ${5+x} ]; then
-    sem --id "layer_$3" push_semitrans_ ::: "$1" ::: "$2" ::: "$3" ::: "$4"
+    sem --id "layer_$3" --max-args 4 push_semitrans_ "$1" "$2" "$3" "$4"
   else
-    sem --id "layer_$3" push_semitrans_ ::: "$1" ::: "$2" ::: "$3" ::: "$4" ::: "$5"
+    sem --id "layer_$3" --max-args 5 push_semitrans_ "$1" "$2" "$3" "$4" "$5"
   fi
   layers+=("$3")
 }
@@ -458,7 +458,7 @@ export -f out_stack_
 
 out_stack () {
   echo "out_stack args: out file $1, layers ${layers[*]}"
-  sem --id "out_$1" out_stack_ ::: "$1" ::: "${layers[*]}"
+  sem --id "out_$1" --max-args 2 out_stack_ "$1" "${layers[*]}"
   layers=()
 }
 
@@ -473,7 +473,7 @@ export -f push_copy_
 
 push_copy () {
   echo "push_copy args: old file $1, new file $2"
-  sem --id "layer_$2" push_copy_ ::: "$1" ::: "$2"
+  sem --id "layer_$2" --max-args 2 push_copy_ "$1" "$2"
   layers+=("$2")
 }
 
@@ -485,7 +485,7 @@ export -f copy_
 
 copy () {
   echo "copy args: old file $1, new file $2"
-  sem --id "out_$2" copy_ ::: "$1" ::: "$2"
+  sem --id "out_$2" --max-args 2 copy_ "$1" "$2"
 }
 
 rename_out_ () {
@@ -496,7 +496,7 @@ export -f rename_out_
 
 rename_out () {
   echo "rename_out args: old file $1, new file $2"
-  sem --id "out_$2" rename_out_ ::: "$1" ::: "$2"
+  sem --id "out_$2" --max-args 2 rename_out_ "$1" "$2"
 }
 
 done_with_out () {
@@ -523,12 +523,12 @@ export -f animate4_
 
 animate4 () {
   echo "animate4 args: output file $1, scrap file $2"
-  sem --id "out_$1" animate4_ ::: "$1" ::: "$2"
+  sem --id "out_$1" --max-args 2 animate4_ "$1" "$2"
 }
 
 convert_ () {
   echo "Starting conversion job $1"
-  sem --id inkscape --fg -j4% inkscape ::: -w ::: "$SIZE" ::: -h ::: "$SIZE" ::: "$SVG_DIRECTORY/$1.svg" ::: -o ::: "$PNG_DIRECTORY/$1.png" ::: -y ::: 0.0
+  sem --id inkscape --fg -j4% --max-args 99 inkscape -w "$SIZE" -h "$SIZE" "$SVG_DIRECTORY/$1.svg" -o "$PNG_DIRECTORY/$1.png" -y 0.0
   echo "Finished conversion job $1"
 }
 export -f convert_
@@ -561,7 +561,7 @@ cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
   echo "Scheduling conversion job for ${SHORTNAME}"
-  sem --id "convert_$SHORTNAME" convert_ ::: "$SHORTNAME"
+  sem --id "convert_$SHORTNAME" convert_ "$SHORTNAME"
 done
 cd ..
 
