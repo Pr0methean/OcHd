@@ -375,7 +375,7 @@ out_layer_ () {
                   -fill "$2" -colorize 100% \
                   -background "$4" -alpha remove -alpha off "$OUTDIR/$3.png"
   fi
-  echo "Wrote output file $3"
+  echo "Wrote single-layer output file $3"
 }
 export -f out_layer_
 
@@ -430,9 +430,9 @@ out_stack_ () {
     ln -T "${layer_files[0]}" "${OUTFILE}"
   else
     echo "Building output $1 from layers: ${layer_files[*]}"
-    magick "${layer_files[@]/#/-}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
+    magick "${layer_files[@]}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
   fi
-  echo "Wrote image ${OUTFILE}"
+  echo "Wrote output file $1"
   for layer in "${layer_files[@]}"; do
     mv "$layer" "$DEBUGDIR"
   done
