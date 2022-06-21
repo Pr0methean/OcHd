@@ -326,7 +326,7 @@ music_disc_h='515151'
 music_disc='404040'
 music_disc_s='212121'
 
-# S004. SUBROUTINES
+# S002. SUBROUTINES
 export SHELL=$(type -p bash)
 export MAX_TASKS=1
 layers=()
@@ -393,6 +393,12 @@ animate4 () {
   parallel -m --id "out_$1" ./task_scripts/animate4.sh "$@"
   echo "SCHEDULED out_$1"
 }
+
+# S004. DIAGNOSTIC OUTPUT
+inkscape --version
+magick --version
+convert --version
+parallel --version
 
 # S005. DIRECTORY SETUP
 
