@@ -332,24 +332,24 @@ layers=()
 
 push () {
   echo "push arguments: input $1, fill $2, output $3"
-  parallel -m --id "layer_$3" ./task_scripts/paint_layer.sh $@
+  parallel -m --id "layer_$3" ./task_scripts/paint_layer.sh "$@"
   layers+=("$3")
 }
 
 out_layer () {
   echo "out_layer arguments: input $1, fill $2, output $3"
-  parallel -m --id "out_$3" ./task_scripts/paint_single_layer.sh $@
+  parallel -m --id "out_$3" ./task_scripts/paint_single_layer.sh "$@"
 }
 
 push_precolored () {
-  echo "push_precolored arguments: $1 $2"
-  parallel -m --id "layer_$2" ./task_scripts/copy_precolored_layer.sh $@
+  echo "push_precolored arguments: input $1, output $2"
+  parallel -m --id "layer_$2" ./task_scripts/copy_precolored_layer.sh "$@"
   layers+=("$2")
 }
 
 push_semitrans () {
   echo "push_semitrans arguments: input $1, fill $2, output $3, $4"
-  parallel -m --id "layer_$3" ./task_scripts/paint_semitrans_layer.sh $@
+  parallel -m --id "layer_$3" ./task_scripts/paint_semitrans_layer.sh "$@"
   layers+=("$3")
 }
 
@@ -361,30 +361,30 @@ out_stack () {
 
 push_copy () {
   echo "push_copy args: old file $1, new file $2"
-  parallel -m --id "layer_$2" ./task_scripts/copy_out_to_layer.sh $@
+  parallel -m --id "layer_$2" ./task_scripts/copy_out_to_layer.sh "$@"
   layers+=("$2")
 }
 
 push_move () {
   echo "push_move args: old file $1, new file $2"
-  parallel -m --id "layer_$2" ./task_scripts/move_out_to_layer.sh $@
+  parallel -m --id "layer_$2" ./task_scripts/move_out_to_layer.sh "$@"
   layers+=("$2")
 }
 
 
 copy () {
   echo "copy args: old file $1, new file $2"
-  parallel -m --id "out_$2" ./task_scripts/copy_out_to_out.sh $@
+  parallel -m --id "out_$2" ./task_scripts/copy_out_to_out.sh "$@"
 }
 
 rename_out () {
   echo "rename_out args: old file $1, new file $2"
-  parallel -m --id "out_$2" ./task_scripts/rename_out_to_out.sh $@
+  parallel -m --id "out_$2" ./task_scripts/rename_out_to_out.sh "$@"
 }
 
 animate4 () {
   echo "animate4 args: output file $1, scrap file $2"
-  parallel -m --id "out_$1" ./task_scripts/animate4.sh $@
+  parallel -m --id "out_$1" ./task_scripts/animate4.sh "$@"
 }
 
 # S005. DIRECTORY SETUP
