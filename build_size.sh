@@ -331,60 +331,60 @@ export SHELL=$(type -p bash)
 layers=()
 
 push () {
-  echo "push arguments: input $1, fill $2, output $3"
   parallel -m --id "layer_$3" ./task_scripts/paint_layer.sh "$@"
+  echo "SCHEDULED layer_$3"
   layers+=("$3")
 }
 
 out_layer () {
-  echo "out_layer arguments: input $1, fill $2, output $3"
   parallel -m --id "out_$3" ./task_scripts/paint_single_layer.sh "$@"
+  echo "SCHEDULED out_$3"
 }
 
 push_precolored () {
-  echo "push_precolored arguments: input $1, output $2"
   parallel -m --id "layer_$2" ./task_scripts/copy_precolored_layer.sh "$@"
+  echo "SCHEDULED layer_$2"
   layers+=("$2")
 }
 
 push_semitrans () {
-  echo "push_semitrans arguments: input $1, fill $2, output $3, $4"
   parallel -m --id "layer_$3" ./task_scripts/paint_semitrans_layer.sh "$@"
+  echo "SCHEDULED layer_$3"
   layers+=("$3")
 }
 
 out_stack () {
-  echo "out_stack args: out file $1, layers ${layers[*]}"
   parallel -m --id "out_$1" ./task_scripts/render_stack.sh "$1" "${layers[*]}"
+  echo "SCHEDULED out_$1"
   layers=()
 }
 
 push_copy () {
-  echo "push_copy args: old file $1, new file $2"
   parallel -m --id "layer_$2" ./task_scripts/copy_out_to_layer.sh "$@"
+  echo "SCHEDULED layer_$2"
   layers+=("$2")
 }
 
 push_move () {
-  echo "push_move args: old file $1, new file $2"
   parallel -m --id "layer_$2" ./task_scripts/move_out_to_layer.sh "$@"
+  echo "SCHEDULED layer_$2"
   layers+=("$2")
 }
 
 
 copy () {
-  echo "copy args: old file $1, new file $2"
   parallel -m --id "out_$2" ./task_scripts/copy_out_to_out.sh "$@"
+  echo "SCHEDULED out_$2"
 }
 
 rename_out () {
-  echo "rename_out args: old file $1, new file $2"
   parallel -m --id -q "out_$2" ./task_scripts/rename_out_to_out.sh "$@"
+  echo "SCHEDULED out_$2"
 }
 
 animate4 () {
-  echo "animate4 args: output file $1, scrap file $2"
   parallel -m --id "out_$1" ./task_scripts/animate4.sh "$@"
+  echo "SCHEDULED out_$1"
 }
 
 # S005. DIRECTORY SETUP
@@ -410,12 +410,11 @@ mkdir -p "$PNG_DIRECTORY"
 
 # S006. CONVERT LAYERS TO PNG
 
-echo "Converting layers to PNG..."
 cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
-  echo "Scheduling conversion job for ${SHORTNAME}"
   parallel -m --id "convert_$SHORTNAME" ../task_scripts/convert.sh "$SHORTNAME"
+  echo "SCHEDULED convert_$SHORTNAME"
 done
 cd ..
 
@@ -1664,7 +1663,7 @@ out_stack block/mycelium_side
 
 # S900. PACKAGING
 
-echo "All jobs launched; waiting for them to finish..."
+echo "JOINING all remaining jobs"
 sem --wait --progress
 
 zip -r "debug-${SIZE}.zip" "$DEBUGDIR"
