@@ -366,6 +366,12 @@ push_copy () {
   layers+=("$2")
 }
 
+push_copy_of_top () {
+  parallel -m --id "layer_$2" ./task_scripts/copy_top_of_out_to_layer.sh "$@"
+  echo "SCHEDULED layer_$2"
+  layers+=("$2")
+}
+
 push_move () {
   parallel -m --id "layer_$2" ./task_scripts/move_out_to_layer.sh "$@"
   echo "SCHEDULED layer_$2"
