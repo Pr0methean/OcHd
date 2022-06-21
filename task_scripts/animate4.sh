@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "animate4_ arguments: out file $1, scrap file $2"
+echo "animate4_ arguments: out file $1, scrap file $2; full args: $*"
 ./task_scripts/join_job.sh "out_${1}_1"
 ./task_scripts/join_job.sh "out_${1}_2"
 ./task_scripts/join_job.sh "out_${1}_3"

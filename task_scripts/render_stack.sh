@@ -1,7 +1,7 @@
-
+#!/usr/bin/env bash
 my_layers=($2)
 layer_files=()
-echo "out_stack_ args: out file $1, layers ${layers[*]}"
+echo "out_stack_ args: out file $1, layers ${my_layers[*]}"
 for layer in "${my_layers[@]}"; do
   layer_files+=("$TMPDIR/$layer.png")
   echo "Waiting for layer job $layer"

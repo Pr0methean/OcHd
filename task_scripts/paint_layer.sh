@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "push_ arguments: input $1, fill $2, output $3"
+echo "push_ arguments: input $1, fill $2, output $3; full args: $*"
 ./task_scripts/join_job.sh "convert_$1"
 if [ -z ${4+x} ]; then
   magick "$PNG_DIRECTORY/$1.png" -fill "$2" -colorize 100% "$TMPDIR/$3.png"

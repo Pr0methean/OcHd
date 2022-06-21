@@ -498,16 +498,6 @@ push diagonalOutlineChecksTopLeftBottomRight ${mycelium_h} mycelium3
 push diagonalOutlineChecksBottomLeftTopRight ${mycelium_s} mycelium4
 out_stack block/mycelium_top
 
-{
-  join_output_job block/mycelium_top
-  push_copy block/dirt mycelium_side1
-  magick "${OUTDIR}/block/mycelium_top.png" -crop '100%x34.375%' "${TMPDIR}/mycelium_side2.png"
-  # FIXME: Find a way to not output these
-  rm "${TMPDIR}/mycelium_side2-1.png"
-  rm "${TMPDIR}/mycelium_side2-2.png"
-  out_stack block/mycelium_side
-} &
-
 push strokeTopLeftBottomRight4 ${moss_h} moss1 ${moss}
 push strokeBottomLeftTopRight4 ${moss_s} moss2
 push borderSolid ${moss_h} moss3
@@ -1663,6 +1653,14 @@ out_stack "item/music_disc_11"
 # S200. PARTICLES
 
 out_layer note ${grass_h} "particle/note"
+
+# S899. CUSTOM SCRIPTS THAT CAN'T BE PARALLELIZED
+
+push_copy block/dirt mycelium_side1
+./taskScripts/join_job.sh out_block/mycelium_top
+sem --id 'layers_mycelium_side2' convert "${OUTDIR}/block/mycelium_top.png" -crop '100%x34.375%' "${TMPDIR}/mycelium_side2.png"
+layers+=('mycelium_side2')
+out_stack block/mycelium_side
 
 # S900. PACKAGING
 
