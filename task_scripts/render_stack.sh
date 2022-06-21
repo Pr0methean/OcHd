@@ -14,7 +14,7 @@ if [ ${#my_layers[@]} -eq 1 ]; then
 else
   parallel -m --id memory --fg -j"$MAX_TASKS" magick "${layer_files[@]}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
 fi
-echo "FINISHED out_$1"
 for layer in "${layer_files[@]}"; do
   mv "$layer" "$DEBUGDIR"
 done
+echo "FINISHED out_$1"
