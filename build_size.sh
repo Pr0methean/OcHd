@@ -328,62 +328,69 @@ music_disc_s='212121'
 
 # S004. SUBROUTINES
 export SHELL=$(type -p bash)
+MAX_TASKS=64
 layers=()
 
 push () {
-  parallel -m --id "layer_$3" ./task_scripts/paint_layer.sh "$@"
+  parallel -m --id "layer_$3" parallel -m --id "memory" -j$MAX_TASKS ./task_scripts/paint_layer.sh "$@"
   echo "SCHEDULED layer_$3"
   layers+=("$3")
 }
 
 out_layer () {
-  parallel -m --id "out_$3" ./task_scripts/paint_single_layer.sh "$@"
+  parallel -m --id "out_$3" parallel -m --id "memory" -j$MAX_TASKS ./task_scripts/paint_single_layer.sh "$@"
   echo "SCHEDULED out_$3"
 }
 
 push_precolored () {
-  parallel -m --id "layer_$2" ./task_scripts/copy_precolored_layer.sh "$@"
+  parallel -m --id "layer_$2" parallel -m --id "memory" -j$MAX_TASKS ./task_scripts/copy_precolored_layer.sh "$@"
   echo "SCHEDULED layer_$2"
   layers+=("$2")
 }
 
 push_semitrans () {
-  parallel -m --id "layer_$3" ./task_scripts/paint_semitrans_layer.sh "$@"
+  parallel -m --id "layer_$3" parallel -m --id "memory" -j$MAX_TASKS ./task_scripts/paint_semitrans_layer.sh "$@"
   echo "SCHEDULED layer_$3"
   layers+=("$3")
 }
 
 out_stack () {
-  parallel -m --id "out_$1" ./task_scripts/render_stack.sh "$1" "${layers[*]}"
+  parallel -m --id "out_$1" parallel -m --id "memory" -j$MAX_TASKS ./task_scripts/render_stack.sh "$1" "${layers[*]}"
   echo "SCHEDULED out_$1"
   layers=()
 }
 
 push_copy () {
-  parallel -m --id "layer_$2" ./task_scripts/copy_out_to_layer.sh "$@"
+  parallel -m --id "layer_$2" parallel -m --id "memory" -j$MAX_TASKS ./task_scripts/copy_out_to_layer.sh "$@"
+  echo "SCHEDULED layer_$2"
+  layers+=("$2")
+}
+
+push_copy_of_top () {
+  parallel -m --id "layer_$2" parallel -m --id "memory" -j$MAX_TASKS ./task_scripts/copy_top_of_out_to_layer.sh "$@"
   echo "SCHEDULED layer_$2"
   layers+=("$2")
 }
 
 push_move () {
-  parallel -m --id "layer_$2" ./task_scripts/move_out_to_layer.sh "$@"
+  parallel -m --id "layer_$2" parallel -m --id "memory" -j$MAX_TASKS ./task_scripts/move_out_to_layer.sh "$@"
   echo "SCHEDULED layer_$2"
   layers+=("$2")
 }
 
 
 copy () {
-  parallel -m --id "out_$2" ./task_scripts/copy_out_to_out.sh "$@"
+  parallel -m --id "out_$2" parallel -m --id "memory" -j$MAX_TASKS ./task_scripts/copy_out_to_out.sh "$@"
   echo "SCHEDULED out_$2"
 }
 
 rename_out () {
-  parallel -m --id -q "out_$2" ./task_scripts/rename_out_to_out.sh "$@"
+  parallel -m --id -q "out_$2" parallel -m --id "memory" -j$MAX_TASKS ./task_scripts/rename_out_to_out.sh "$@"
   echo "SCHEDULED out_$2"
 }
 
 animate4 () {
-  parallel -m --id "out_$1" ./task_scripts/animate4.sh "$@"
+  parallel -m --id "out_$1" parallel -m --id "memory" -j$MAX_TASKS ./task_scripts/animate4.sh "$@"
   echo "SCHEDULED out_$1"
 }
 
@@ -496,6 +503,10 @@ push diagonalChecksBottomLeftTopRight ${mycelium_h} mycelium2
 push diagonalOutlineChecksTopLeftBottomRight ${mycelium_h} mycelium3
 push diagonalOutlineChecksBottomLeftTopRight ${mycelium_s} mycelium4
 out_stack block/mycelium_top
+
+push_copy block/dirt mycelium_side1
+push_copy_of_top block/mycelium_top mycelium_side2
+out_stack block/mycelium_side
 
 push strokeTopLeftBottomRight4 ${moss_h} moss1 ${moss}
 push strokeBottomLeftTopRight4 ${moss_s} moss2
@@ -1652,14 +1663,6 @@ out_stack "item/music_disc_11"
 # S200. PARTICLES
 
 out_layer note ${grass_h} "particle/note"
-
-# S899. CUSTOM SCRIPTS THAT CAN'T BE PARALLELIZED
-
-push_copy block/dirt mycelium_side1
-./taskScripts/join_job.sh out_block/mycelium_top
-sem --id 'layers_mycelium_side2' convert "${OUTDIR}/block/mycelium_top.png" -crop '100%x34.375%' "${TMPDIR}/mycelium_side2.png"
-layers+=('mycelium_side2')
-out_stack block/mycelium_side
 
 # S900. PACKAGING
 
