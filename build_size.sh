@@ -328,7 +328,7 @@ music_disc_s='212121'
 
 # S004. SUBROUTINES
 export SHELL=$(type -p bash)
-export MAX_TASKS=32
+export MAX_TASKS=1
 layers=()
 
 push () {
