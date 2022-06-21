@@ -12,7 +12,7 @@ OUTFILE="${OUTDIR}/$1.png"
 if [ ${#my_layers[@]} -eq 1 ]; then
   ln -T "${layer_files[0]}" "${OUTFILE}"
 else
-  magick "${layer_files[@]}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
+  parallel -m --id memory --fg -j"$MAX_TASKS" magick "${layer_files[@]}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
 fi
 echo "FINISHED out_$1"
 for layer in "${layer_files[@]}"; do

@@ -4,7 +4,7 @@
 ./task_scripts/join_job.sh "out_${1}_3"
 ./task_scripts/join_job.sh "out_${1}_4"
 echo "STARTING out_$1"
-convert "${OUTDIR}/${1}_1.png" "${OUTDIR}/${1}_2.png" "${OUTDIR}/${1}_3.png" "${OUTDIR}/${1}_4.png" -append "${OUTDIR}/${1}.png"
+parallel -m --id memory --fg -j"$MAX_TASKS" convert "${OUTDIR}/${1}_1.png" "${OUTDIR}/${1}_2.png" "${OUTDIR}/${1}_3.png" "${OUTDIR}/${1}_4.png" -append "${OUTDIR}/${1}.png"
 mv "${OUTDIR}/${1}_1.png" "$DEBUGDIR"
 mv "${OUTDIR}/${1}_2.png" "$DEBUGDIR"
 mv "${OUTDIR}/${1}_3.png" "$DEBUGDIR"
