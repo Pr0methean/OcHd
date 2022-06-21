@@ -359,12 +359,9 @@ push_ () {
 export -f push_
 
 push () {
+  job="push_ $@"
   echo "push arguments: input $1, fill $2, output $3"
-  if [ -z ${4+x} ]; then
-    parallel -m --id "layer_$3" "push_ $1 $2 $3"
-  else
-    parallel -m --id "layer_$3" "push_ $1 $2 $3 $4"
-  fi
+  parallel -m --id "layer_$3" "$job"
   layers+=("$3")
 }
 
@@ -385,12 +382,9 @@ out_layer_ () {
 export -f out_layer_
 
 out_layer () {
+  job="out_layer_ $@"
   echo "out_layer arguments: input $1, fill $2, output $3"
-  if [ -z ${4+x} ]; then
-    parallel -m --id "out_$3" "out_layer_ $1 $2 $3"
-  else
-    parallel -m --id "out_$3" "out_layer_ $1 $2 $3 $4"
-  fi
+  parallel -m --id "out_$3" "$job"
 }
 
 push_precolored_ () {
@@ -401,7 +395,8 @@ push_precolored_ () {
 export -f push_precolored_
 
 push_precolored () {
-  parallel -m --id "layer_$2" "push_precolored_ $1 $2"
+  job="push_precolored_ $1 $2"
+  parallel -m --id "layer_$2" "$job"
   layers+=("$2")
 }
 
@@ -424,11 +419,8 @@ export -f push_semitrans_
 
 push_semitrans () {
   echo "push_semitrans arguments: input $1, fill $2, output $3, $4"
-  if [ -z ${5+x} ]; then
-    parallel -m --id "layer_$3" "push_semitrans_ $1 $2 $3 $4"
-  else
-    parallel -m --id "layer_$3" "push_semitrans_ $1 $2 $3 $4 $5"
-  fi
+  job="push_semitrans_ $@"
+  parallel -m --id "layer_$3" "$job"
   layers+=("$3")
 }
 
@@ -458,7 +450,8 @@ export -f out_stack_
 
 out_stack () {
   echo "out_stack args: out file $1, layers ${layers[*]}"
-  parallel -m --id "out_$1" "out_stack_ $1 ${layers[*]}"
+  job="out_stack_ $1 ${layers[*]}"
+  parallel -m --id "out_$1" "$job"
   layers=()
 }
 
@@ -473,7 +466,8 @@ export -f push_copy_
 
 push_copy () {
   echo "push_copy args: old file $1, new file $2"
-  parallel -m --id "layer_$2" "push_copy_ $1 $2"
+  job="push_copy_ $1 $2"
+  parallel -m --id "layer_$2" "$job"
   layers+=("$2")
 }
 
@@ -486,7 +480,8 @@ export -f copy_
 
 copy () {
   echo "copy args: old file $1, new file $2"
-  parallel -m --id "out_$2" "copy_ $1 $2"
+  job="copy_ $1 $2"
+  parallel -m --id "out_$2" "$job"
 }
 
 rename_out_ () {
@@ -497,7 +492,8 @@ export -f rename_out_
 
 rename_out () {
   echo "rename_out args: old file $1, new file $2"
-  parallel -m --id "out_$2" "rename_out_ $1 $2"
+  job="rename_out_ $1 $2"
+  parallel -m --id "out_$2" "$job"
 }
 
 done_with_out () {
@@ -524,7 +520,8 @@ export -f animate4_
 
 animate4 () {
   echo "animate4 args: output file $1, scrap file $2"
-  parallel -m --id "out_$1" "animate4_ $1 $2"
+  job="animate4_ $1 $2"
+  parallel -m --id "out_$1" "$job"
 }
 
 convert_ () {
