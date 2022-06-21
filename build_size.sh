@@ -415,7 +415,7 @@ cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
   echo "Scheduling conversion job for ${SHORTNAME}"
-  parallel -m --id "convert_$SHORTNAME" ./task_scripts/convert.sh "$SHORTNAME"
+  parallel -m --id "convert_$SHORTNAME" ../task_scripts/convert.sh "$SHORTNAME"
 done
 cd ..
 
