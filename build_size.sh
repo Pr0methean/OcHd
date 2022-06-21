@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -euo pipefail
 
@@ -330,206 +330,62 @@ music_disc_s='#212121'
 export SHELL=$(type -p bash)
 layers=()
 
-join_conversion_job () {
-  echo "Waiting for conversion job $1"
-  sem --wait --id "convert_$1"
-  echo "Done waiting for conversion job $1"
-}
-export -f join_conversion_job
-
-join_output_job () {
-  echo "Waiting for output job $1"
-  sem --wait --id "out_$1"
-  echo "Done waiting for output job $1"
-}
-export -f join_output_job
-
-push_ () {
-  echo "push_ arguments: input $1, fill $2, output $3"
-  join_conversion_job "$1"
-  if [ -z ${4+x} ]; then
-    magick "$PNG_DIRECTORY/$1.png" -fill "$2" -colorize 100% "$TMPDIR/$3.png"
-  else
-    magick "$PNG_DIRECTORY/$1.png" \
-                  -fill "$2" -colorize 100% \
-                  -background "$4" -alpha remove -alpha off "$TMPDIR/$3.png"
-  fi
-  echo "Wrote layer $3"
-}
-export -f push_
-
 push () {
-  job="push_ $@"
   echo "push arguments: input $1, fill $2, output $3"
-  parallel -m --id "layer_$3" "$job"
+  parallel -m --id "layer_$3" ./task_scripts/paint_layer.sh $@
   layers+=("$3")
 }
 
-out_layer_ () {
-  echo "out_layer_ arguments: input $1, fill $2, output $3"
-  join_conversion_job "$1"
-  if [ -z ${4+x} ]; then
-    magick "$PNG_DIRECTORY/$1.png" \
-              -fill "$2" -colorize 100% \
-              "$OUTDIR/$3.png"
-  else
-    magick "$PNG_DIRECTORY/$1.png" \
-                  -fill "$2" -colorize 100% \
-                  -background "$4" -alpha remove -alpha off "$OUTDIR/$3.png"
-  fi
-  echo "Wrote single-layer output file $3"
-}
-export -f out_layer_
-
 out_layer () {
-  job="out_layer_ $@"
   echo "out_layer arguments: input $1, fill $2, output $3"
-  parallel -m --id "out_$3" "$job"
+  parallel -m --id "out_$3" ./task_scripts/paint_single_layer.sh $@
 }
-
-push_precolored_ () {
-  join_conversion_job "$1"
-  ln -T "$PNG_DIRECTORY/$1.png" "$TMPDIR/$2.png"
-  echo "Wrote precolored layer $2"
-}
-export -f push_precolored_
 
 push_precolored () {
-  job="push_precolored_ $1 $2"
-  parallel -m --id "layer_$2" "$job"
+  echo "push_precolored arguments: $1 $2"
+  parallel -m --id "layer_$2" ./task_scripts/copy_precolored_layer.sh $@
   layers+=("$2")
 }
-
-push_semitrans_ () {
-  echo "push_semitrans_ arguments: input $1, fill $2, output $3, $4"
-  join_conversion_job "$1"
-  if [ -z ${5+x} ]; then
-    magick "$PNG_DIRECTORY/$1.png" \
-              -fill "$2" -colorize 100% \
-              -alpha set -background none -channel A -evaluate multiply "$4" +channel "$TMPDIR/$3.png"
-  else
-    magick "$PNG_DIRECTORY/$1.png" \
-                  -fill "$2" -colorize 100% \
-                  -background "$4" -alpha remove \
-                  -alpha set -background none -channel A -evaluate multiply "$5" +channel "$TMPDIR/$3.png"
-  fi
-  echo "Wrote semitransparent layer $3"
-}
-export -f push_semitrans_
 
 push_semitrans () {
   echo "push_semitrans arguments: input $1, fill $2, output $3, $4"
-  job="push_semitrans_ $@"
-  parallel -m --id "layer_$3" "$job"
+  parallel -m --id "layer_$3" ./task_scripts/paint_semitrans_layer.sh $@
   layers+=("$3")
 }
 
-out_stack_ () {
-  my_layers=($2)
-  layer_files=()
-  echo "out_stack_ args: out file $1, layers ${layers[*]}"
-  for layer in "${my_layers[@]}"; do
-    layer_files+=("$TMPDIR/$layer.png")
-    echo "Waiting for layer job $layer"
-    sem --wait --id "layer_$layer"
-  done
-  OUTFILE="${OUTDIR}/$1.png"
-  if [ ${#my_layers[@]} -eq 1 ]; then
-    echo "Copying ${layer_files[0]} to output $1"
-    ln -T "${layer_files[0]}" "${OUTFILE}"
-  else
-    echo "Building output $1 from layers: ${layer_files[*]}"
-    magick "${layer_files[@]}"  -colorspace sRGB -background none -layers flatten -set colorspace RGBA "${OUTFILE}"
-  fi
-  echo "Wrote output file $1"
-  for layer in "${layer_files[@]}"; do
-    mv "$layer" "$DEBUGDIR"
-  done
-}
-export -f out_stack_
-
 out_stack () {
   echo "out_stack args: out file $1, layers ${layers[*]}"
-  job="out_stack_ $1 ${layers[*]}"
-  parallel -m --id "out_$1" "$job"
+  parallel -m --id "out_$1" ./task_scripts/render_stack.sh "$1" "${layers[*]}"
   layers=()
 }
 
-push_copy_ () {
-  echo "Waiting for output job $1"
-  join_output_job "$1"
-  echo "Done waiting for output job $1"
-  ln -T "$OUTDIR/$1.png" "$TMPDIR/$2.png"
-  echo "Copied output $1 to layer $2"
-}
-export -f push_copy_
-
 push_copy () {
   echo "push_copy args: old file $1, new file $2"
-  job="push_copy_ $1 $2"
-  parallel -m --id "layer_$2" "$job"
+  parallel -m --id "layer_$2" ./task_scripts/copy_out_to_layer.sh $@
   layers+=("$2")
 }
 
-copy_ () {
-  echo "copy_ args: old file $1, new file $2"
-  join_output_job "$1"
-  ln -T "$OUTDIR/$1.png" "$OUTDIR/$2.png"
+push_move () {
+  echo "push_move args: old file $1, new file $2"
+  parallel -m --id "layer_$2" ./task_scripts/move_out_to_layer.sh $@
+  layers+=("$2")
 }
-export -f copy_
+
 
 copy () {
   echo "copy args: old file $1, new file $2"
-  job="copy_ $1 $2"
-  parallel -m --id "out_$2" "$job"
+  parallel -m --id "out_$2" ./task_scripts/copy_out_to_out.sh $@
 }
-
-rename_out_ () {
-  join_output_job "$1"
-  mv "$OUTDIR/$1.png" "$OUTDIR/$2.png"
-}
-export -f rename_out_
 
 rename_out () {
   echo "rename_out args: old file $1, new file $2"
-  job="rename_out_ $1 $2"
-  parallel -m --id "out_$2" "$job"
+  parallel -m --id "out_$2" ./task_scripts/rename_out_to_out.sh $@
 }
-
-done_with_out () {
-  mv "${OUTDIR}/${1}.png" "${DEBUGDIR}"
-}
-export -f done_with_out
-
-animate4_ () {
-  echo "Waiting for frames of $1"
-  join_output_job "${1}_1"
-  join_output_job "${1}_2"
-  join_output_job "${1}_3"
-  join_output_job "${1}_4"
-  echo "Frames ready; creating animated texture $1"
-  convert "${OUTDIR}/${1}_1.png" "${OUTDIR}/${1}_2.png" "${OUTDIR}/${1}_3.png" "${OUTDIR}/${1}_4.png" -append "${OUTDIR}/${1}.png"
-  done_with_out "${1}_1"
-  done_with_out "${1}_2"
-  done_with_out "${1}_3"
-  done_with_out "${1}_4"
-  done_with_out "$2"
-  echo "Wrote animated texture $1"
-}
-export -f animate4_
 
 animate4 () {
   echo "animate4 args: output file $1, scrap file $2"
-  job="animate4_ $1 $2"
-  parallel -m --id "out_$1" "$job"
+  parallel -m --id "out_$1" ./task_scripts/animate4.sh $@
 }
-
-convert_ () {
-  echo "Starting conversion job $1"
-  parallel -m --id inkscape --fg -j4% "inkscape -w $SIZE -h $SIZE $SVG_DIRECTORY/$1.svg -o $PNG_DIRECTORY/$1.png -y 0.0"
-  echo "Finished conversion job $1"
-}
-export -f convert_
 
 # S005. DIRECTORY SETUP
 
@@ -559,7 +415,7 @@ cd svg
 for file in *.svg; do
   SHORTNAME="${file%.svg}"
   echo "Scheduling conversion job for ${SHORTNAME}"
-  parallel -m --id "convert_$SHORTNAME" "convert_ $SHORTNAME"
+  parallel -m --id "convert_$SHORTNAME" ./task_scripts/convert.sh "$SHORTNAME"
 done
 cd ..
 
@@ -1694,21 +1550,13 @@ done
 
 rename_out block/command_block_basebase block/command_block_base
 
-push_copy block/chain_command_block_basebase chcb1
+push_move block/chain_command_block_basebase chcb1
 push_precolored commandBlockChains chcb2
 out_stack block/chain_command_block_base
-{
-  join_output_job block/chain_command_block_base
-  done_with_out block/chain_command_block_basebase
-} &
 
-push_copy block/repeating_command_block_basebase rcb1
+push_move block/repeating_command_block_basebase rcb1
 push loopArrow $black rcb2
 out_stack block/repeating_command_block_base
-{
-  join_output_job block/repeating_command_block_base
-  done_with_out block/repeating_command_block_basebase
-} &
 
 for type in "${CMD_BLOCK_TYPES[@]}"; do
   shadow=${type}_s
@@ -1750,14 +1598,10 @@ for type in "${CMD_BLOCK_TYPES[@]}"; do
   done
   animate4 "block/${type}_side" "block/${type}_side_base"
 
-  push_copy "block/${type}_base" "${type}_condbase1"
+  push_move "block/${type}_base" "${type}_condbase1"
   push commandBlockArrow $black "${type}_condbase2"
   push craftingGridSpaces $white "${type}_condbase3"
   out_stack "block/${type}_conditional_base"
-  {
-    join_output_job "block/${type}_conditional_base"
-    done_with_out "block/${type}_base"
-  } &
 
   for frame in $(seq 1 4); do
     push_copy "block/${type}_conditional_base" "${type}_${frame}_cond1"
